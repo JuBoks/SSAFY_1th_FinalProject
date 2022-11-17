@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.user.model.dao.UserDao">
+
+	<insert id="insert" parameterType="userDto">
+		INSERT INTO user(USER_ID, USER_PWD, USER_NAME, USER_ADDR, USER_PHONE, USER_AUTH)
+		VALUES(#{userId}, #{userPwd}, #{userName}, #{userAddr}, #{userPhone}, #{userAuth})
+	</insert>
+	
+	<select id="login" parameterType="userDto" resultType="userDto">
+		SELECT USER_ID, USER_PWD, USER_NAME, USER_ADDR, USER_PHONE, USER_AUTH
+		FROM user
+		WHERE USER_ID = #{userId} AND USER_PWD = #{userPwd}
+	</select>
+	
+	<select id="select" parameterType="string" resultType="userDto">
+		SELECT USER_ID,USER_PWD,USER_NAME,USER_ADDR,USER_PHONE,USER_AUTH
+		FROM user
+		WHERE USER_ID = #{id}
+	</select>
+	
+	<update id="update" parameterType="userDto">
+		UPDATE user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="userName != null">user_name = #{userName},</if>
+			<if test="userPwd != null">user_pwd = #{userPwd},</if>
+			<if test="userAddr != null">user_addr = #{userAddr},</if>
+			<if test="userPhone != null">user_phone = #{userPhone},</if>
+			<if test="userAuth != null">user_auth = #{userAuth},</if>
+		</trim>
+		WHERE USER_ID = #{userId} 
+	</update>
+	
+	<delete id="delete" parameterType="string">
+		DELETE FROM user
+		WHERE USER_ID = #{userId}
+	</delete>
+	
+	<delete id="deleteAll">
+		DELETE FROM user
+	</delete>
+	
+	<select id="selectAll" parameterType="map" resultType="userDto">
+		SELECT USER_ID, USER_NAME, USER_ADDR, USER_PHONE, USER_AUTH
+		FROM user
+		<where>
+			<if test="userId != null and userId !=''">
+				AND USER_ID LIKE CONCAT('%', #{userId} ,'%')
+			</if>
+		</where>
+		ORDER BY USER_AUTH ASC, USER_ID ASC
+		<if test="start != null and spl != null">
+			LIMIT #{start}, #{spl}
+		</if>
+	</select>
+	
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(*)
+		FROM user
+	</select>
+	
+	<select id="getCountUserList" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM user
+		<where>
+			<if test="userId != null and userId !=''">
+				user_id LIKE CONCAT('%', #{userId} ,'%')
+			</if>
+		</where>
+	</select>
+	
+</mapper>

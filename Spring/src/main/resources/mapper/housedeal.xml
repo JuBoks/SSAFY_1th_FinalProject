@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.housedeal.model.dao.HouseDealDao">
+
+	<select id="select" parameterType="long" resultType="houseDealDto">
+		SELECT no, dealAmount, dealYear, dealMonth, dealDay, area, floor, cancelDealType, aptCode
+		FROM housedeal
+		WHERE aptCode = #{aptCode}
+	</select>
+	
+	<insert id="insert" parameterType="houseDealDto">
+		<selectKey resultType="long" keyProperty="no" order="BEFORE">
+			SELECT no+1
+			FROM housedeal 
+			ORDER BY no DESC 
+			LIMIT 1
+		</selectKey>
+		INSERT INTO housedeal(no, dealAmount, dealYear, dealMonth, dealDay, area, floor, cancelDealType, aptCode)
+		VALUES(#{no}, #{dealAmount}, #{dealYear}, #{dealMonth}, #{dealDay}, #{area}, #{floor}, #{cancelDealType}, #{aptCode})
+	</insert>
+	
+	<update id="update" parameterType="houseDealDto">
+		UPDATE housedeal
+		SET
+			dealAmount = #{dealAmount}, 
+		    dealYear = #{dealYear}, 
+		    dealMonth = #{dealMonth}, 
+		    dealDay = #{dealDay}, 
+		    area = #{area}, 
+		    floor = #{floor}, 
+		    cancelDealType = #{cancelDealType}
+		WHERE aptCode = #{aptCode}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM housedeal
+		WHERE aptCode = #{aptCode}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.board.model.dao.BoardDao">
+
+	<insert id="writeArticle" parameterType="boardDto">
+		INSERT INTO board (user_id, subject, content, hit, register_time)
+		VALUES (#{userId}, #{subject}, #{content}, 0, NOW())
+		<selectKey resultType="int" keyProperty="articleNo" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<select id="listArticle" parameterType="map" resultType="boardDto">
+		SELECT article_no, user_id, subject, content, hit, register_time
+		FROM board
+		<where>
+			<if test="key != null and key == 'subject'">
+				AND subject LIKE CONCAT('%', #{word} ,'%')
+			</if>
+			<if test="key != null and key == 'precise'">
+				AND content LIKE CONCAT('%', #{word} ,'%')
+			</if>
+			<if test="key != null and key == 'userid'">
+				AND user_id LIKE CONCAT('%', #{word} ,'%')
+			</if>
+		</where>
+		ORDER BY article_no DESC
+		LIMIT #{start}, #{spl}
+	</select>
+
+	<select id="getArticle" parameterType="int" resultType="boardDto">
+		select article_no, user_id, subject, content, hit, register_time
+		from board
+		where article_no = #{articleNo}
+	</select> 
+	
+	<update id="updateHit" parameterType="int">
+		UPDATE board
+		SET hit = hit + 1
+		WHERE article_no = #{articleNo}
+	</update>
+	
+	<update id="modifyArticle" parameterType="boardDto">
+		UPDATE board
+		SET subject = #{subject}, content = #{content}
+		WHERE article_no = #{articleNo}
+	</update>
+	
+	<delete id="deleteArticle" parameterType="int">
+		DELETE FROM board
+		WHERE article_no = #{articleNo}
+	</delete>
+	
+	<select id="getCountBoardList" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM board
+		<where>
+			<if test="key != null and key == 'subject'">
+				AND subject LIKE CONCAT('%', #{word} ,'%')
+			</if>
+			<if test="key != null and key == 'precise'">
+				AND content LIKE CONCAT('%', #{word} ,'%')
+			</if>
+			<if test="key != null and key == 'userid'">
+				AND user_id LIKE CONCAT('%', #{word} ,'%')
+			</if>
+		</where>
+		
+	</select>
+	
+	<delete id="deleteAll">
+		DELETE FROM board
+	</delete>
+	
+	
+</mapper>

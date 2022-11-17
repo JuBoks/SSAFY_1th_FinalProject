@@ -1,4 +1,4 @@
-# FinalProject
+# pjt07_bug04_08_07
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://lab.ssafy.com/juyeong0206/finalproject.git
+git remote add origin https://lab.ssafy.com/juyeong0206/pjt07_bug04_08_07.git
 git branch -M master
 git push -uf origin master
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://lab.ssafy.com/juyeong0206/finalproject/-/settings/integrations)
+- [ ] [Set up project integrations](https://lab.ssafy.com/juyeong0206/pjt07_bug04_08_07/-/settings/integrations)
 
 ## Collaborate with your team
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.aptinfo.model.dao.AptInfoDao">
+
+	<select id="listAptInfo" parameterType="string" resultType="aptInfoDto">
+		SELECT aptCode, buildYear, roadName, roadNameBonbun, roadNameBubun, roadNameSeq, roadNameBasementCode, roadNameCode, dong,
+		bonbun, bubun, sigunguCode, eubmyundongCode, dongCode, landCode, apartmentName, jibun, lng, lat
+		FROM houseinfo
+		WHERE dongCode = #{dongCode}
+	</select>
+	
+	<insert id="insert" parameterType="aptInfoDto">
+		INSERT INTO houseinfo(aptCode, buildYear, roadName, roadNameBonbun, roadNameBubun, roadNameSeq, roadNameBasementCode, roadNameCode, dong,
+		bonbun, bubun, sigunguCode, eubmyundongCode, dongCode, landCode, apartmentName, jibun, lng, lat) VALUES
+		(#{aptCode}, #{buildYear}, #{roadName}, #{roadNameBonbun}, #{roadNameBubun}, #{roadNameSeq}, #{roadNameBasementCode}, #{roadNameCode}, #{dong},
+		#{bonbun},#{bubun},#{sigunguCode},#{eubmyundongCode},#{dongCode},#{landCode},#{apartmentName},#{jibun},#{lng},#{lat})
+	</insert>
+	
+	<update id="update" parameterType="aptInfoDto">
+		UPDATE houseinfo
+		SET
+			aptCode = #{aptCode}, 
+		    buildYear = #{buildYear}, 
+		    roadName = #{roadName}, 
+		    roadNameBonbun = #{roadNameBonbun}, 
+		    roadNameBubun = #{roadNameBubun}, 
+		    roadNameSeq = #{roadNameSeq}, 
+		    roadNameBasementCode = #{roadNameBasementCode},
+		    roadNameCode = #{roadNameCode},
+		    dong = #{dong},
+		    bonbun = #{bonbun},
+		    bubun = #{bubun},
+		    sigunguCode = #{sigunguCode},
+		    eubmyundongCode = #{eubmyundongCode},
+		    dongCode = #{dongCode},
+		    landCode = #{landCode},
+		    apartmentName = #{apartmentName},
+		    jibun = #{jibun},
+		    lng = #{lng},
+		    lat = #{lat}
+		WHERE aptCode = #{aptCode}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM houseinfo
+		WHERE aptCode = #{aptCode}
+	</delete>
+	
+</mapper>

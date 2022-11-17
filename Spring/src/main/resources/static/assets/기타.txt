@@ -1,0 +1,4 @@
+1. board pagination 처리하기
+2. board jsp 에서 scrollbar 사라졌다가 나타났다가 하는 버그 처리하기
+3. validation check 하나도 없음... (처리해야 함...)
+4. loading 안 뜸..
