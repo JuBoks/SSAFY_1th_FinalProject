@@ -7,9 +7,12 @@
 
 <script>
 import { mapActions } from "vuex";
+
+const boardStore = "boardStore";
+
 export default {
   methods: {
-    ...mapActions(["deleteArticle"]),
+    ...mapActions(boardStore, ["deleteArticle"]),
   },
   created() {
     if (confirm("삭제하시겠습니까?")) {

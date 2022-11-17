@@ -71,6 +71,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
+const boardStore = "boardStore";
+
 export default {
   data() {
     return {
@@ -86,14 +88,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["articles", "articlesPerPage", "totalArticles"]),
+    ...mapGetters(boardStore, ["articles", "articlesPerPage", "totalArticles"]),
   },
   // Dynamic module loading을 통해 component를 불러옴
   components: {
     "list-row": () => import("@/components/board/include/ListRow.vue"),
   },
   methods: {
-    ...mapActions(["getArticles", "getArticleCount"]),
+    ...mapActions(boardStore, ["getArticles", "getArticleCount"]),
     movePage: function () {
       this.$router.push({ name: "BoardCreate" });
     },

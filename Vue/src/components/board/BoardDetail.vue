@@ -43,6 +43,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+const boardStore = "boardStore";
+
 export default {
   // Dynamic module loading을 통해 component를 불러옴
   components: {
@@ -50,7 +52,7 @@ export default {
   },
   // 서버로부터 isbn 번호 받기 전에는 0으로 설정
   methods: {
-    ...mapActions(["getArticle"]),
+    ...mapActions(boardStore, ["getArticle"]),
     listBoard() {
       this.$router.push({ name: "BoardList" });
     },
@@ -68,7 +70,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["article"]),
+    ...mapGetters(boardStore, ["article"]),
   },
   created() {
     const articleNo = this.$route.params.articleNo;
