@@ -1,7 +1,7 @@
 <template>
   <b-list-group-item class="flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{ comment.userName }}</h5>
+      <h5 class="mb-1">{{ comment.userId }}</h5>
       <small class="text-muted">{{ comment.commentTime }}</small>
     </div>
 

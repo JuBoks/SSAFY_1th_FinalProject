@@ -3,7 +3,7 @@
     <b-input-group style="width: 240px" prepend="작성자">
       <b-form-input
         placeholder="작성자 입력..."
-        v-model="userName"></b-form-input>
+        v-model="userId"></b-form-input>
     </b-input-group>
     <b-input-group>
       <b-form-textarea
