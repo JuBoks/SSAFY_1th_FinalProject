@@ -20,6 +20,10 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+
+const boardStore = "boardStore";
+
+
 export default {
   data() {
     return {
@@ -28,11 +32,11 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["createComment", "getComments"]),
+    ...mapActions(boardStore,["createComment", "getComments"]),
     write() {
       const payload = {
         comment: {
-          isbn: this.book.isbn,
+          articleNo: this.article.articleNo,
           userName: this.userName,
           comment: this.comment,
         },
@@ -42,7 +46,7 @@ export default {
           this.comment = "";
 
           // 서버에 입력한 내용이 포함된 댓글 목록 요청하기
-          this.getComments(this.book.isbn);
+          this.getComments(this.article.articleNo);
 
           // Bootstrap Vue를 이용하여 메시지 출력(Toast)
           this.$bvToast.toast("댓글이 등록되었습니다.", {
@@ -59,7 +63,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["book"]),
+    ...mapGetters(boardStore,["article"]),
   },
 };
 </script>

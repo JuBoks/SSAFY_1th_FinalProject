@@ -20,6 +20,7 @@ const boardStore = {
     article: {},
     articlesPerPage: 10, // 한 페이지의 글의 개수(안바뀜)
     totalArticles: 0, // 총 글의 개수
+    comments: [],
   },
   getters: {
     articles(state) {
@@ -33,6 +34,9 @@ const boardStore = {
     },
     totalArticles(state) {
       return state.totalArticles;
+    },
+    comments(state) {
+      return state.comments;
     },
   },
   mutations: {
@@ -50,6 +54,16 @@ const boardStore = {
     },
     ARTICLE_COUNT(state, payload) {
       state.totalArticles = payload.count;
+    },
+    COMMENTS(state, payload) {
+      console.log("페이로드");
+      console.log(payload);
+      payload.comments.map((comment) => {
+        const obj = moment(comment.commentTime, "YYYY-MM-DD hh:mm:ss"); // 변경 전 양식으로 Moment 객체 생성
+        comment.commentTime = obj.format("MM-DD HH:mm"); // 원하는 형식으로 변경 후 commentTime 갱신
+        return comment;
+      });
+      state.comments = payload.comments;
     },
   },
   actions: {
@@ -152,6 +166,71 @@ const boardStore = {
           case 200:
             alert("삭제가 완료되었습니다.");
             //this.$router.push({ name: "BookList" });
+            payload.callback();
+            break;
+
+          case 400:
+          case 500:
+            alertMessage(response.status);
+            break;
+        }
+      });
+    },
+
+    getComments(context, articleNo) {
+      http.get(`/comment/${articleNo}`).then((response) => {
+        switch (response.status) {
+          case 200:
+            context.commit({
+              type: "COMMENTS",
+              comments: response.data,
+            });
+            break;
+          case 400:
+          case 500:
+            alertMessage(response.status);
+            break;
+        }
+      });
+    },
+    createComment(context, payload) {
+      console.log(payload.comment);
+      http.post("/comment", payload.comment).then((response) => {
+        switch (response.status) {
+          case 200:
+            payload.callback();
+            break;
+
+          case 400:
+          case 500:
+            alertMessage(response.status);
+            break;
+        }
+      });
+    },
+
+    modifyComment(context, payload) {
+      console.log(payload, "modify_action");
+      http
+        .put(`/comment/${payload.comment.commentNo}`, payload.comment)
+        .then((response) => {
+          switch (response.status) {
+            case 200:
+              payload.callback();
+              break;
+
+            case 400:
+            case 500:
+              alertMessage(response.status);
+              break;
+          }
+        });
+    },
+
+    deleteComment(context, payload) {
+      http.delete(`/comment/${payload.commentNo}`).then((response) => {
+        switch (response.status) {
+          case 200:
             payload.callback();
             break;
 

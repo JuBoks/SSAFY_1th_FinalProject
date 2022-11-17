@@ -52,13 +52,20 @@
 
 <script>
 import { mapActions } from "vuex";
+
+const boardStore = "boardStore";
+
 export default {
   props: {
-    isbn: String,
+    articleNo: Number,
     comment: Object,
   },
   methods: {
-    ...mapActions(["modifyComment", "getComments", "deleteComment"]),
+    ...mapActions(boardStore, [
+      "modifyComment",
+      "getComments",
+      "deleteComment",
+    ]),
     showModalModify() {
       this.$refs[`comment-${this.comment.commentNo}`].show();
     },
@@ -77,7 +84,8 @@ export default {
           this.input.comment = "";
 
           // 댓글 목록 갱신하기
-          this.getComments(this.isbn);
+          console.log(this.articleNo, "돼라");
+          this.getComments(this.articleNo);
 
           // 모달창 숨기기
           this.hideModalModify();
@@ -112,7 +120,7 @@ export default {
         commentNo: this.comment.commentNo,
         callback: () => {
           // 댓글 목록 갱신
-          this.getComments(this.isbn);
+          this.getComments(this.articleNo);
 
           // 삭제 완료 Toast 출력
           setTimeout(() => {

@@ -16,6 +16,7 @@ public class ExceptionController {
 	
 	@ExceptionHandler(Exception.class)
 	public String handlerException(Exception ex, Model model) {
+		ex.printStackTrace();
 		logger.error("Exception 발생 : {}", ex.getMessage());
 		
 		model.addAttribute("msg", "처리중 예외가 발생하였습니다.");
@@ -25,6 +26,7 @@ public class ExceptionController {
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String handle404(Exception ex, Model model) {
+		ex.printStackTrace();
 		logger.error("404 발생 : {}", "404 page not found");
 		
 		model.addAttribute("msg", "요청하신 파일은 존재하지 않습니다.");

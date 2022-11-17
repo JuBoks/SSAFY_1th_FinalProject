@@ -29,15 +29,15 @@
       </b-col>
     </b-row>
     <view-detail :article="article"></view-detail>
-    <!-- <comment-write></comment-write> -->
+    <comment-write></comment-write>
 
-    <!-- <b-list-group>
+    <b-list-group>
       <comment-row
         v-for="comment in comments"
         :key="comment.commentNo"
-        :isbn="book.isbn"
+        :articleNo="article.articleNo"
         :comment="comment"></comment-row>
-    </b-list-group> -->
+    </b-list-group>
   </b-container>
 </template>
 
@@ -49,10 +49,12 @@ export default {
   // Dynamic module loading을 통해 component를 불러옴
   components: {
     "view-detail": () => import("@/components/board/include/ViewDetail.vue"),
+    "comment-write": () => import("@/components/board/include/CommentWrite"),
+     "comment-row": () => import("@/components/board/include/CommentRow.vue"),
   },
   // 서버로부터 isbn 번호 받기 전에는 0으로 설정
   methods: {
-    ...mapActions(boardStore, ["getArticle"]),
+    ...mapActions(boardStore, ["getArticle", "getComments"]),
     listBoard() {
       this.$router.push({ name: "BoardList" });
     },
@@ -70,13 +72,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(boardStore, ["article"]),
+    ...mapGetters(boardStore, ["article", "comments"]),
   },
   created() {
     const articleNo = this.$route.params.articleNo;
     // action 함수 호출
     this.getArticle(articleNo);
-    // this.getComments(isbn);
+    this.getComments(articleNo);
   },
 };
 </script>

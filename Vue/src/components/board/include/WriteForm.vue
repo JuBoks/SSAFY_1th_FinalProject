@@ -58,6 +58,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+const boardStore = "boardStore";
 
 export default {
   props: {
@@ -65,7 +66,7 @@ export default {
     type: { type: String },
   },
   methods: {
-    ...mapActions(["createArticle", "modifyArticle", "getArticle"]),
+    ...mapActions(boardStore, ["createArticle", "modifyArticle", "getArticle"]),
     validate() {
       let isValid = true;
       let errMsg = "";
@@ -101,7 +102,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["article"]),
+    ...mapGetters(boardStore, ["article"]),
     input() {
       if (this.type == "modify") {
         // 브라우저 새로고침을 하게되면 state에 저장된 데이터가 사라짐
