@@ -14,4 +14,5 @@ public interface CommentDao {
 
 	int delete(int commentNo);
 	
+	int deleteByArticle(int articleNo);
 }

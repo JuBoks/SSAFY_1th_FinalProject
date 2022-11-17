@@ -7,8 +7,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.board.model.dao.BoardDao;
+import com.ssafy.board.model.dao.CommentDao;
 import com.ssafy.board.model.dto.BoardDto;
 import com.ssafy.util.PageNavigation;
 import com.ssafy.util.SizeConstant;
@@ -16,13 +18,12 @@ import com.ssafy.util.SizeConstant;
 @Service
 public class BoardServiceImpl implements BoardService {
 	
+	@Autowired
 	private BoardDao boardDao;
 	
 	@Autowired
-	private BoardServiceImpl(BoardDao boardDao) {
-		this.boardDao = boardDao;
-	}
-
+	private CommentDao commentDao;
+	
 
 	@Override
 	public List<BoardDto> listArticle(Map<String, Object> map) throws Exception {
@@ -168,8 +169,10 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	@Transactional
 	public boolean deleteArticle(int articleNo) throws Exception {
-		return boardDao.deleteArticle(articleNo) ==1;
+		commentDao.deleteByArticle(articleNo);
+		return boardDao.deleteArticle(articleNo) == 1;
 	}
 	
 	@Override

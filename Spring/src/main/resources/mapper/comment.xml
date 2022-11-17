@@ -31,5 +31,11 @@
 		FROM comments
 		WHERE comment_no = #{commentNo}
 	</delete>
+	
+	<delete id="deleteByArticle" parameterType="int">
+		DELETE
+		FROM comments
+		WHERE article_no = #{articleNo}
+	</delete>
 
 </mapper>
