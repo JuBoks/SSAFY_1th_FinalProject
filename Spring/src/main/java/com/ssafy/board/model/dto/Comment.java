@@ -7,7 +7,7 @@ public class Comment {
 	//@ApiModelProperty(value = "글번호")
 	private int commentNo;
 	//@ApiModelProperty(value = "작성자이름")
-	private String userName;
+	private String userId;
 	//@ApiModelProperty(value = "도서평")
 	private String comment;
 	//@ApiModelProperty(value = "작성시각")
@@ -15,18 +15,17 @@ public class Comment {
 	//@ApiModelProperty(value = "글 번호", example = n번 글)
 	private Integer articleNo;
 	
-	
 	public int getCommentNo() {
 		return commentNo;
 	}
 	public void setCommentNo(int commentNo) {
 		this.commentNo = commentNo;
 	}
-	public String getUserName() {
-		return userName;
+	public String getUserId() {
+		return userId;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getComment() {
 		return comment;
@@ -46,14 +45,24 @@ public class Comment {
 	public void setArticleNo(Integer articleNo) {
 		this.articleNo = articleNo;
 	}
-	
-	public Comment(int commentNo, String userName, String comment, String commentTime, Integer articleNo) {
-		this.commentNo = commentNo;
-		this.userName = userName;
-		this.comment = comment;
-		this.commentTime = commentTime;
-		this.articleNo = articleNo;
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Comment [commentNo=");
+		builder.append(commentNo);
+		builder.append(", userId=");
+		builder.append(userId);
+		builder.append(", comment=");
+		builder.append(comment);
+		builder.append(", commentTime=");
+		builder.append(commentTime);
+		builder.append(", articleNo=");
+		builder.append(articleNo);
+		builder.append("]");
+		return builder.toString();
 	}
+	
+	
 
 	
 }

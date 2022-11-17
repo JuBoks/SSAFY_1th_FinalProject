@@ -40,7 +40,6 @@ public class CommentRestController {
 			return new ResponseEntity<List<Comment>>(listComment, HttpStatus.OK);
 		}
 		catch (Exception e) {
-			System.out.println("앙 리스트 에러띠");
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -51,8 +50,10 @@ public class CommentRestController {
 		logger.debug("createComment - 호출");
 
 		try {
+			System.out.println(commentDto);
+			System.out.println("아아아아아ㅏ");
 			boolean isWrite = commentService.create(commentDto);
-
+			
 			if (isWrite) {
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			}

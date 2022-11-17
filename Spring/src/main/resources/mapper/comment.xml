@@ -6,7 +6,7 @@
 
 	<!-- isbn에 해당하는 댓글 조회 -->
 	<select id="list" resultType="Comment" parameterType="int">
-		SELECT comment_no, user_name, comment, comment_time, article_no
+		SELECT comment_no, user_id, comment, comment_time, article_no
 		FROM comments
 		WHERE article_no = #{articleNo}
 		ORDER BY comment_time DESC
@@ -14,8 +14,8 @@
 
 	<!-- 댓글 등록 -->
 	<insert id="create" parameterType="Comment">
-		INSERT INTO comments(user_name, comment, comment_time, article_no)
-		VALUES (#{userName}, #{comment}, NOW(), #{articleNo})
+		INSERT INTO comments(user_id, comment, comment_time, article_no)
+		VALUES (#{userId}, #{comment}, NOW(), #{articleNo})
 	</insert>
 	
 	<!-- 댓글 수정 -->

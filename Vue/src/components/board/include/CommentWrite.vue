@@ -23,26 +23,25 @@ import { mapActions, mapGetters } from "vuex";
 
 const boardStore = "boardStore";
 
-
 export default {
   data() {
     return {
-      userName: "",
+      userId: "",
       comment: "",
     };
   },
   methods: {
-    ...mapActions(boardStore,["createComment", "getComments"]),
+    ...mapActions(boardStore, ["createComment", "getComments"]),
     write() {
       const payload = {
         comment: {
           articleNo: this.article.articleNo,
-          userName: this.userName,
+          userId: this.userId,
           comment: this.comment,
         },
         callback: () => {
           // 기존 입력한 내용 지우기
-          this.userName = "";
+          this.userId = "";
           this.comment = "";
 
           // 서버에 입력한 내용이 포함된 댓글 목록 요청하기
@@ -63,7 +62,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(boardStore,["article"]),
+    ...mapGetters(boardStore, ["article"]),
   },
 };
 </script>
