@@ -31,8 +31,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="aptToggle"
-            id="filter-apt"
-          >
+            id="filter-apt">
             아파트</b-button
           >
         </b-nav-item>
@@ -53,9 +52,12 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+
+const mapStore = "mapStore";
+
 export default {
   computed: {
-    ...mapGetters(["aptFilterBtn"]),
+    ...mapGetters(mapStore, ["aptFilterBtn"]),
     aptToggle: {
       get() {
         return this.aptFilterBtn;
@@ -67,7 +69,7 @@ export default {
   },
   mounted() {},
   methods: {
-    ...mapActions(["toggleAptFilter"]),
+    ...mapActions(mapStore, ["toggleAptFilter"]),
   },
 };
 </script>

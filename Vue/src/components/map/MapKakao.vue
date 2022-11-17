@@ -8,8 +8,7 @@
         text-field="text"
         :options="sido"
         :text="selectedSidoName"
-        @change="onSidoChanged"
-      ></b-form-select>
+        @change="onSidoChanged"></b-form-select>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedGugun"
@@ -17,8 +16,7 @@
         text-field="text"
         :options="gugun"
         :value="null"
-        @change="onGugunChanged"
-      ></b-form-select>
+        @change="onGugunChanged"></b-form-select>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedDong"
@@ -26,8 +24,7 @@
         text-field="text"
         :options="dong"
         :value="null"
-        @change="onDongChanged"
-      ></b-form-select>
+        @change="onDongChanged"></b-form-select>
       <!-- <b-button @click="search()">검색</b-button> -->
     </b-form>
 
@@ -39,6 +36,8 @@
 import * as http from "@/util/http-common";
 import * as Kakao from "@/util/kakao.js";
 import { mapActions } from "vuex";
+
+const mapStore = "mapStore";
 
 export default {
   props: {
@@ -77,7 +76,7 @@ export default {
     //this.map.setCenterAddr();
   },
   methods: {
-    ...mapActions(["updateAptInfoList"]),
+    ...mapActions(mapStore, ["updateAptInfoList"]),
 
     async onSidoChanged() {
       this.gugun = [{ text: "구/군", value: null }];

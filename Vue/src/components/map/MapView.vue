@@ -10,8 +10,7 @@
         <map-view-row
           v-for="(info, index) in aptInfoList"
           :key="index"
-          :info="info"
-        ></map-view-row>
+          :info="info"></map-view-row>
       </b-list-group>
       <template v-else>
         <div class="text-center">검색 결과가 없습니다.</div>
@@ -27,6 +26,8 @@
 import MapKakao from "@/components/map/MapKakao.vue";
 import { mapGetters } from "vuex";
 
+const mapStore = "mapStore";
+
 export default {
   components: {
     MapKakao,
@@ -38,7 +39,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["aptInfoList"]),
+    ...mapGetters(mapStore, ["aptInfoList"]),
   },
   methods: {
     closeNav() {
