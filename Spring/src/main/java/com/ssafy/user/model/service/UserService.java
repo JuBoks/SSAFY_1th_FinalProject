@@ -25,4 +25,14 @@ public interface UserService {
 	int getUserCount() throws SQLException;
 
 	PageNavigation makePageNavigation(Map<String, Object> map) throws Exception;
+
+	void saveRefreshToken(String userid, String refreshToken) throws Exception;
+
+	UserDto userInfo(String userid) throws Exception;
+
+	void deleRefreshToken(String userid) throws SQLException;
+
+	Object getRefreshToken(String userId) throws SQLException;
+	
 }
+

@@ -15,7 +15,7 @@
       </b-navbar-nav>
       <!-- right nav items -->
       <b-navbar-nav class="ml-auto">
-        <template v-if="loginUser">
+        <template v-if="avail">
           <!-- <b-nav-item><span>내정보</span></b-nav-item> -->
           <b-nav-item
             ><span @click="showModalLogout">로그아웃</span></b-nav-item
@@ -48,31 +48,33 @@
       </div>
       <!-- 수정 모달 창 Footer 작성 -->
       <div class="text-right">
-        <b-button variant="primary" @click="doLogin">로그인</b-button>
+        <b-button variant="primary" @click="confirm">로그인</b-button>
       </div>
     </b-modal>
   </b-navbar>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 const userStore = "userStore";
-
 export default {
   data() {
     return {
+      avail: "",
       input: {
-        userId: "admin",
-        userPwd: "1234",
+        userId: "",
+        userPwd: "",
       },
     };
   },
   computed: {
     ...mapGetters(userStore, ["loginUser"]),
+    ...mapState(userStore, ["isLogin", "isLoginError", "userInfo"]),
   },
+
   methods: {
-    ...mapActions(userStore, ["login", "logout"]),
+    ...mapActions(userStore, ["login", "userLogout"]),
 
     showModalLogin() {
       this.$refs["modalLogin"].show();
@@ -87,20 +89,28 @@ export default {
         })
         .then((value) => {
           if (value) {
-            this.logout(() => {
-              this.$router.push({ name: "Home" }).catch(() => {});
-            });
+            this.avail = "";
+            console.log("userId", this.input.userId);
+            this.userLogout(this.input.userId);
           }
         });
     },
-    async doLogin() {
-      const payload = {
-        input: this.input,
-        callback: () => {
-          this.hideModalLogin();
-        },
-      };
-      this.login(payload);
+
+    ...mapActions(userStore, ["userConfirm", "getUserInfo"]),
+    async confirm() {
+      await this.userConfirm(this.input);
+      let token = sessionStorage.getItem("access-token");
+      console.log("1. confirm() token >> " + token);
+      if (this.isLogin) {
+        await this.getUserInfo(token);
+        this.avail = "yes";
+        console.log(this.avail);
+        console.log("4. confirm() userInfo :: ", this.userInfo);
+        this.hideModalLogin();
+      }
+    },
+    movePage() {
+      this.$router.push({ name: "join" });
     },
   },
 };

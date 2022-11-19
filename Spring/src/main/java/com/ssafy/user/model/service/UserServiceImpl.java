@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.user.model.dao.UserDao;
-import com.ssafy.user.model.dao.UserDaoImpl;
 import com.ssafy.user.model.dto.UserDto;
 import com.ssafy.util.PageNavigation;
 import com.ssafy.util.SizeConstant;
@@ -100,6 +100,34 @@ public class UserServiceImpl implements UserService {
 		pageNavigation.makeNavigator();
 
 		return pageNavigation;
+	}
+
+	@Override
+	public void saveRefreshToken(String userid, String refreshToken) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userid", userid);
+		map.put("token", refreshToken);
+		System.out.println(userid);
+		userDao.saveRefreshToken(map);
+		System.out.println("DAO로 출발");
+	}
+
+	@Override
+	public UserDto userInfo(String userid) throws Exception {
+		return userDao.userInfo(userid);
+	}
+
+	@Override
+	public void deleRefreshToken(String userid) throws SQLException {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userid", userid);
+		map.put("token", null);
+		userDao.deleteRefreshToken(map);
+	}
+
+	@Override
+	public Object getRefreshToken(String userId) throws SQLException {
+		return userDao.getRefreshToken(userId);
 	}
 
 }

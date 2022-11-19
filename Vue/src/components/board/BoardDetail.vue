@@ -50,7 +50,7 @@ export default {
   components: {
     "view-detail": () => import("@/components/board/include/ViewDetail.vue"),
     "comment-write": () => import("@/components/board/include/CommentWrite"),
-     "comment-row": () => import("@/components/board/include/CommentRow.vue"),
+    "comment-row": () => import("@/components/board/include/CommentRow.vue"),
   },
   // 서버로부터 isbn 번호 받기 전에는 0으로 설정
   methods: {

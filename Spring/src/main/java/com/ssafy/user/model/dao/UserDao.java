@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSessionException;
+
 import com.ssafy.user.model.dto.UserDto;
 
 public interface UserDao {
@@ -25,5 +27,12 @@ public interface UserDao {
 	int selectCount() throws SQLException;
 
 	int getCountUserList(Map<String, Object> map) throws SQLException; // 글 전체 개수 가져오기
-	
+
+	void saveRefreshToken(Map<String, String> map) throws SQLException;
+
+	UserDto userInfo(String userid)throws SQLException;
+
+	void deleteRefreshToken(Map<String, String> map)throws SQLException;
+
+	Object getRefreshToken(String userId)throws SQLException;
 }

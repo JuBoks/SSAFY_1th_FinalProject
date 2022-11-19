@@ -70,4 +70,28 @@
 		</where>
 	</select>
 	
+	<update id="saveRefreshToken" parameterType="map">
+		UPDATE user
+		SET TOKEN = #{token}
+		WHERE USER_ID = #{userid}
+	</update>
+	
+	<select id="userInfo" parameterType="string" resultType="userDto">
+		SELECT *
+		FROM user
+		WHERE USER_ID = #{userid}
+	</select>
+	
+	<update id="deleteRefreshToken" parameterType="map">
+		UPDATE user
+		SET token = #{token, jdbcType=VARCHAR}
+		where USER_ID = #{userid}
+	</update>
+	
+	<select id="getRefreshToken" parameterType="string" resultType="string">
+		SELECT token
+		FROM user
+		WHERE USER_ID = #{userid}
+	</select>
+	
 </mapper>
