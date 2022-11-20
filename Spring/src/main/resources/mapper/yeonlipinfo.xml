@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.yeonlipinfo.model.dao.YeonlipInfoDao">
+
+	<select id="listYeonlipInfo" parameterType="string" resultType="yeonlipInfoDto">
+		SELECT 	yeonlipCode, yeonlipName, buildYear, roadName, bunji, sidoCode, gugunCode, dongCode
+		FROM	yeonlip_info
+		WHERE	dongCode = #{dongCode}
+	</select>
+	
+	<select id="search" parameterType="int" resultType="yeonlipInfoDto">
+		SELECT 	yeonlipCode, yeonlipName, buildYear, roadName, bunji, sidoCode, gugunCode, dongCode
+		FROM	yeonlip_info
+		WHERE	yeonlipCode = #{yeonlipCode}
+	</select>
+	
+	<insert id="insert" parameterType="yeonlipInfoDto">
+		INSERT INTO yeonlip_info(yeonlipName, buildYear, roadName, bunji, sidoCode, gugunCode, dongCode)
+		VALUES
+			(#{yeonlipName},#{buildYear},#{roadName},#{bunji},#{sidoCode},#{gugunCode},#{dongCode})
+		<selectKey resultType="int" keyProperty="yeonlipCode" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="yeonlipInfoDto">
+		UPDATE yeonlip_info
+		<trim prefix="set" suffixOverrides=",">
+			<if test="yeonlipName != null">yeonlipName = #{yeonlipName},</if>
+			<if test="buildYear != null">buildYear = #{buildYear},</if>
+			<if test="roadName != null">roadName = #{roadName},</if>
+			<if test="bunji != null">bunji = #{bunji},</if>
+			<if test="sidoCode != null">sidoCode = #{sidoCode},</if>
+			<if test="gugunCode != null">gugunCode = #{gugunCode},</if>
+			<if test="dongCode != null">dongCode = #{dongCode},</if>
+		</trim>
+		WHERE yeonlipCode = #{yeonlipCode}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM yeonlip_info
+		WHERE yeonlipCode = #{yeonlipCode}
+	</delete>
+	
+</mapper>

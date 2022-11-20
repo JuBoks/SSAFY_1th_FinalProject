@@ -1,9 +1,9 @@
-package com.ssafy.aptinfo.model.dto;
+package com.ssafy.yeonlipinfo.model.dto;
 
-public class AptInfoDto {
+public class YeonlipInfoDto {
 	
-	private Integer aptCode;
-	private String apartmentName;
+	private Integer yeonlipCode;
+	private String yeonlipName;
 	private String buildYear;
 	private String roadName;
 	private String bunji;
@@ -11,81 +11,95 @@ public class AptInfoDto {
 	private String gugunCode;
 	private String dongCode;
 	
-	public AptInfoDto() { }
-	
+	public YeonlipInfoDto() {}
 
-	public AptInfoDto(String apartmentName, String buildYear, String roadName, String bunji, String dongCode) {
-		this.apartmentName = apartmentName;
+	public YeonlipInfoDto(String yeonlipName, String buildYear, String roadName, String bunji, String dongCode) {
+		this.yeonlipName = yeonlipName;
 		this.buildYear = buildYear;
 		this.roadName = roadName;
 		this.bunji = bunji;
 		this.dongCode = dongCode;
 	}
 
-	public AptInfoDto(Integer aptCode, String apartmentName, String buildYear, String roadName, String bunji,
+	public YeonlipInfoDto(Integer yeonlipCode, String yeonlipName, String buildYear, String roadName, String bunji,
 			String sidoCode, String gugunCode, String dongCode) {
-		this(apartmentName, buildYear, roadName, bunji, dongCode);
-		this.aptCode = aptCode;
+		this(yeonlipName, buildYear, roadName, bunji, dongCode);
+		this.yeonlipCode = yeonlipCode;
 		this.sidoCode = sidoCode;
 		this.gugunCode = gugunCode;
 	}
-	
-	public Integer getAptCode() {
-		return aptCode;
+
+	public Integer getYeonlipCode() {
+		return yeonlipCode;
 	}
-	public void setAptCode(Integer aptCode) {
-		this.aptCode = aptCode;
+
+	public void setYeonlipCode(Integer yeonlipCode) {
+		this.yeonlipCode = yeonlipCode;
 	}
-	public String getApartmentName() {
-		return apartmentName;
+
+	public String getYeonlipName() {
+		return yeonlipName;
 	}
-	public void setApartmentName(String apartmentName) {
-		this.apartmentName = apartmentName;
+
+	public void setYeonlipName(String yeonlipName) {
+		this.yeonlipName = yeonlipName;
 	}
+
 	public String getBuildYear() {
 		return buildYear;
 	}
+
 	public void setBuildYear(String buildYear) {
 		this.buildYear = buildYear;
 	}
+
 	public String getRoadName() {
 		return roadName;
 	}
+
 	public void setRoadName(String roadName) {
 		this.roadName = roadName;
 	}
+
 	public String getBunji() {
 		return bunji;
 	}
+
 	public void setBunji(String bunji) {
 		this.bunji = bunji;
 	}
+
 	public String getSidoCode() {
 		return sidoCode;
 	}
+
 	public void setSidoCode(String sidoCode) {
 		this.sidoCode = sidoCode;
 	}
+
 	public String getGugunCode() {
 		return gugunCode;
 	}
+
 	public void setGugunCode(String gugunCode) {
 		this.gugunCode = gugunCode;
 	}
+
 	public String getDongCode() {
 		return dongCode;
 	}
+
 	public void setDongCode(String dongCode) {
 		this.dongCode = dongCode;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("AptInfoDto [aptCode=");
-		builder.append(aptCode);
-		builder.append(", apartmentName=");
-		builder.append(apartmentName);
+		builder.append("YeonlipInfoDto [yeonlipCode=");
+		builder.append(yeonlipCode);
+		builder.append(", yeonlipName=");
+		builder.append(yeonlipName);
 		builder.append(", buildYear=");
 		builder.append(buildYear);
 		builder.append(", roadName=");

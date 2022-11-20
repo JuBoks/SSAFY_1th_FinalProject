@@ -22,16 +22,6 @@ public class AptInfoRestController {
 	@Autowired
 	private AptInfoService aptInfoService;
 	
-	@GetMapping
-	public ResponseEntity<?> test() {
-		try {
-			System.out.println("dddd");
-			return new ResponseEntity<Void>( HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
 	@GetMapping("/{dongCode}")
 	public ResponseEntity<?> getAptByDong(@PathVariable("dongCode") String dongCode) {
 		try {

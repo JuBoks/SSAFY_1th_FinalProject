@@ -8,9 +8,11 @@ public interface AptInfoDao {
 
 	List<AptInfoDto> listAptInfo(String dongCode);
 	
-	int insert(AptInfoDto houseInfoDto);
+	AptInfoDto search(int aptCode);
 	
-	int update(AptInfoDto houseInfoDto);
+	int insert(AptInfoDto aptInfoDto);
 	
-	int delete(Long aptCode);
+	int update(AptInfoDto aptInfoDto);
+	
+	int delete(int aptCode);
 }

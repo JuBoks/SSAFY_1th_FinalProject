@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.yeonlipdeal.model.dao.YeonlipDealDao">
+
+	<select id="listYeonlipDeal" parameterType="int" resultType="yeonlipDealDto">
+		SELECT 	no, dealAmount, dealYear, dealMonth, dealDay, area, landArea, floor, cancelDealDay, yeonlipCode
+		FROM	yeonlip_deal
+		WHERE	yeonlipCode = #{yeonlipCode}
+	</select>
+	
+	<select id="search" parameterType="long" resultType="yeonlipDealDto">
+		SELECT 	no, dealAmount, dealYear, dealMonth, dealDay, area, landArea, floor, cancelDealDay, yeonlipCode
+		FROM	yeonlip_deal
+		WHERE	no = #{no}
+	</select>
+	
+	<insert id="insert" parameterType="yeonlipDealDto">
+		INSERT INTO yeonlip_deal(dealAmount, dealYear, dealMonth, dealDay, area, landArea, floor, cancelDealDay, yeonlipCode)
+		VALUES
+			(#{dealAmount},#{dealYear},#{dealMonth},#{dealDay},#{area},#{landArea},#{floor},#{cancelDealDay}, #{yeonlipCode})
+		<selectKey resultType="long" keyProperty="no" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="yeonlipDealDto">
+		UPDATE yeonlip_deal
+		<trim prefix="set" suffixOverrides=",">
+			<if test="dealAmount != null">dealAmount = #{dealAmount},</if>
+			<if test="dealYear != null">dealYear = #{dealYear},</if>
+			<if test="dealMonth != null">dealMonth = #{dealMonth},</if>
+			<if test="dealDay != null">dealDay = #{dealDay},</if>
+			<if test="area != null">area = #{area},</if>
+			<if test="landArea != null">landArea = #{landArea},</if>
+			<if test="floor != null">floor = #{floor},</if>
+			<if test="cancelDealDay != null">cancelDealDay = #{cancelDealDay},</if>
+			<if test="yeonlipCode != null">yeonlipCode = #{yeonlipCode},</if>
+		</trim>
+		WHERE no = #{no}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM yeonlip_deal
+		WHERE no = #{no}
+	</delete>
+	
+</mapper>

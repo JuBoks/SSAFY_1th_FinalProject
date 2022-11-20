@@ -103,6 +103,7 @@ export class Map {
   // }
 
   addAptCluster(markerList) {
+    console.log("markerList", markerList);
     window.aptMarkers.push(...markerList);
     window.clusters.addMarkers(markerList);
   }
@@ -113,15 +114,31 @@ export class Map {
   // }
 }
 
+export async function getLatLngByAddr(addr) {
+  return new Promise((resolve, reject) => {
+    window.geocoder.addressSearch(addr, function (result, status) {
+      // 정상적으로 검색이 완료됐으면
+      if (status === kakao.maps.services.Status.OK) {
+        // 마커가 표시될 위치입니다
+        const coord = new kakao.maps.LatLng(result[0].y, result[0].x);
+        resolve(coord);
+      } else {
+        reject();
+      }
+    });
+  });
+}
+
 export async function AptMarkers(list) {
   let bounds = new kakao.maps.LatLngBounds();
   let markers = [];
-  list.forEach((el) => {
+  list.forEach(async (el) => {
     // 마커 이미지 지정
     const image = new kakao.maps.MarkerImage(APT_MARKER_IMG, new kakao.maps.Size(40, 40));
 
     // 마커 위치 생성
-    const position = new kakao.maps.LatLng(el.lat, el.lng);
+    const addr = el.roadName + " " + el.apartmentName;
+    const position = await getLatLngByAddr(addr);
 
     // 마커 생성
     const marker = new kakao.maps.Marker({

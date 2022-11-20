@@ -4,46 +4,42 @@
 <mapper namespace="com.ssafy.aptinfo.model.dao.AptInfoDao">
 
 	<select id="listAptInfo" parameterType="string" resultType="aptInfoDto">
-		SELECT aptCode, buildYear, roadName, roadNameBonbun, roadNameBubun, roadNameSeq, roadNameBasementCode, roadNameCode, dong,
-		bonbun, bubun, sigunguCode, eubmyundongCode, dongCode, landCode, apartmentName, jibun, lng, lat
-		FROM houseinfo
-		WHERE dongCode = #{dongCode}
+		SELECT 	aptCode, apartmentName, buildYear, roadName, bunji, sidoCode, gugunCode, dongCode
+		FROM	apt_info
+		WHERE	dongCode = #{dongCode}
+	</select>
+	
+	<select id="search" parameterType="int" resultType="aptInfoDto">
+		SELECT 	aptCode, apartmentName, buildYear, roadName, bunji, sidoCode, gugunCode, dongCode
+		FROM	apt_info
+		WHERE	aptCode = #{aptCode}
 	</select>
 	
 	<insert id="insert" parameterType="aptInfoDto">
-		INSERT INTO houseinfo(aptCode, buildYear, roadName, roadNameBonbun, roadNameBubun, roadNameSeq, roadNameBasementCode, roadNameCode, dong,
-		bonbun, bubun, sigunguCode, eubmyundongCode, dongCode, landCode, apartmentName, jibun, lng, lat) VALUES
-		(#{aptCode}, #{buildYear}, #{roadName}, #{roadNameBonbun}, #{roadNameBubun}, #{roadNameSeq}, #{roadNameBasementCode}, #{roadNameCode}, #{dong},
-		#{bonbun},#{bubun},#{sigunguCode},#{eubmyundongCode},#{dongCode},#{landCode},#{apartmentName},#{jibun},#{lng},#{lat})
+		INSERT INTO apt_info(apartmentName, buildYear, roadName, bunji, sidoCode, gugunCode, dongCode)
+		VALUES
+			(#{apartmentName},#{buildYear},#{roadName},#{bunji},#{sidoCode},#{gugunCode},#{dongCode})
+		<selectKey resultType="int" keyProperty="aptCode" order="AFTER">
+			select last_insert_id()
+		</selectKey>
 	</insert>
 	
 	<update id="update" parameterType="aptInfoDto">
-		UPDATE houseinfo
-		SET
-			aptCode = #{aptCode}, 
-		    buildYear = #{buildYear}, 
-		    roadName = #{roadName}, 
-		    roadNameBonbun = #{roadNameBonbun}, 
-		    roadNameBubun = #{roadNameBubun}, 
-		    roadNameSeq = #{roadNameSeq}, 
-		    roadNameBasementCode = #{roadNameBasementCode},
-		    roadNameCode = #{roadNameCode},
-		    dong = #{dong},
-		    bonbun = #{bonbun},
-		    bubun = #{bubun},
-		    sigunguCode = #{sigunguCode},
-		    eubmyundongCode = #{eubmyundongCode},
-		    dongCode = #{dongCode},
-		    landCode = #{landCode},
-		    apartmentName = #{apartmentName},
-		    jibun = #{jibun},
-		    lng = #{lng},
-		    lat = #{lat}
+		UPDATE apt_info
+		<trim prefix="set" suffixOverrides=",">
+			<if test="apartmentName != null">apartmentName = #{apartmentName},</if>
+			<if test="buildYear != null">buildYear = #{buildYear},</if>
+			<if test="roadName != null">roadName = #{roadName},</if>
+			<if test="bunji != null">bunji = #{bunji},</if>
+			<if test="sidoCode != null">sidoCode = #{sidoCode},</if>
+			<if test="gugunCode != null">gugunCode = #{gugunCode},</if>
+			<if test="dongCode != null">dongCode = #{dongCode},</if>
+		</trim>
 		WHERE aptCode = #{aptCode}
 	</update>
 	
-	<delete id="delete" parameterType="long">
-		DELETE FROM houseinfo
+	<delete id="delete" parameterType="int">
+		DELETE FROM apt_info
 		WHERE aptCode = #{aptCode}
 	</delete>
 	
