@@ -1,0 +1,51 @@
+<template>
+  <b-tr class="text-center">
+    <b-td>{{ user.userId }}</b-td>
+    <b-th>{{ user.userName }}</b-th>
+    <b-td>{{ user.userAddr }}</b-td>
+    <b-td>{{ user.userPhone }}</b-td>
+    <b-td
+      ><b-button variant="info" size="sm" class="w-30" @click="moveModifyUser"
+        >유저수정</b-button
+      ></b-td
+    >
+    <b-td>
+      <b-button variant="danger" size="sm" class="w-30" @click="deleteu"
+        >유저삭제</b-button
+      >
+    </b-td>
+  </b-tr>
+</template>
+
+<script>
+import { mapActions } from "vuex";
+const adminStore = "adminStore";
+export default {
+  // 부모 component로 부터 전달받은 도서정보
+  props: {
+    user: Object,
+  },
+
+  methods: {
+    ...mapActions(adminStore, ["deleteUser", "modifyUser"]),
+    deleteu() {
+      this.deleteUser(this.user.userId);
+    },
+    // modifyu() {
+    //   // user 수정 후 callback 함수 필요시 지정해야함
+    //   this.modifyUser(this.user);
+    // },
+
+    moveModifyUser() {
+      this.$router.push({
+        name: "AdminModify",
+        params: {
+          userId: this.user.userId,
+        },
+      });
+    },
+  },
+};
+</script>
+
+<style scope></style>

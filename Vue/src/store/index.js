@@ -6,7 +6,7 @@ import persistedState from "vuex-persistedstate";
 import userStore from "@/store/modules/userStore";
 import boardStore from "@/store/modules/boardStore";
 import mapStore from "@/store/modules/mapStore";
-
+import adminStore from "@/store/modules/adminStore";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -14,6 +14,7 @@ export default new Vuex.Store({
     userStore,
     boardStore,
     mapStore,
+    adminStore,
   },
   // vuex-persistedstate 를 사용하기 위해 plugins 추가
   plugins: [

@@ -24,7 +24,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10 col-sm-12">
           <h2 class="my-3 py-3 bg-white text-center">
-            <div class="sky">사용자 목록</div>
+            <div class="sky">사용자 목록</div>	
           </h2>
         </div>
         <div class="col-lg-8 col-md-10 col-sm-12">

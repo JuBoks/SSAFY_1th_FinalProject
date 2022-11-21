@@ -16,14 +16,14 @@
       <!-- right nav items -->
       <b-navbar-nav class="ml-auto">
         <template v-if="avail">
-          <!-- <b-nav-item><span>내정보</span></b-nav-item> -->
+          <b-nav-item><span>내정보</span></b-nav-item>
           <b-nav-item
             ><span @click="showModalLogout">로그아웃</span></b-nav-item
           >
         </template>
         <template v-else>
           <b-nav-item><span @click="showModalLogin">로그인</span></b-nav-item>
-          <!-- <b-nav-item><span>회원가입</span></b-nav-item> -->
+          <b-nav-item><span to:>회원가입</span></b-nav-item>
         </template>
       </b-navbar-nav>
     </b-collapse>
@@ -100,12 +100,11 @@ export default {
     async confirm() {
       await this.userConfirm(this.input);
       let token = sessionStorage.getItem("access-token");
-      console.log("1. confirm() token >> " + token);
+      // console.log("1. confirm() token >> " + token);
       if (this.isLogin) {
         await this.getUserInfo(token);
         this.avail = "yes";
-        console.log(this.avail);
-        console.log("4. confirm() userInfo :: ", this.userInfo);
+        // console.log("4. confirm() userInfo :: ", this.userInfo);
         this.hideModalLogin();
       }
     },
