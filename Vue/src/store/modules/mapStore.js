@@ -8,6 +8,7 @@ const mapStore = {
     aptDealInfo: [], // 한 아파트에 대한 거래 정보들
     aptFilterBtn: true, // 아파트 마커 보여줄 버튼 활성화 여부
     panelOpen: false, // 좌측 리스트 panel 열림여부
+    aptDealInfoGroup: [["년도", "평균값"]], // 한 아파트에 대한 년월 기준으로 평균 매매값 
   },
   getters: {
     aptSelected(state) {
@@ -24,6 +25,9 @@ const mapStore = {
     },
     panelOpen(state) {
       return state.panelOpen;
+    },
+    aptDealInfoGroup(state) {
+      return state.aptDealInfoGroup;
     },
   },
   mutations: {
@@ -42,12 +46,27 @@ const mapStore = {
     PANEL_OPEN(state, payload) {
       state.panelOpen = payload.flag;
     },
+    APT_DEAL_INFO_GROUP(state, payload) {
+      state.aptDealInfoGroup = payload.aptDealInfoGroup;
+    },
   },
   actions: {
     setAptSelected({ commit }, aptSelected) {
       commit({
         type: "APT_SELECTED",
         aptSelected,
+      });
+    },
+    async getAptDealGroup({ commit }, aptCode) {
+      const { data } = await http.get(`/aptdeal/group/${aptCode}`);
+      // chart 에 맞게 데이터 넣기
+      let chartData = [["년도", "평균값"]];
+      for (let el of data) {
+        chartData.push([`${el.dealYear}.${el.dealMonth}`, Number(el.dealAvg)]);
+      }
+      commit({
+        type: "APT_DEAL_INFO_GROUP",
+        aptDealInfoGroup: chartData,
       });
     },
     async getAptDealInfo({ commit }, aptCode) {

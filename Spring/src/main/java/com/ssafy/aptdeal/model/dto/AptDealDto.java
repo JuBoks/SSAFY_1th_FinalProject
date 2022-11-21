@@ -12,6 +12,8 @@ public class AptDealDto {
 	private String cancelDealDay;
 	private int aptCode;
 	
+	private String dealAvg;
+	
 	public AptDealDto() {}
 	
 	public AptDealDto(String dealAmount, int dealYear, int dealMonth, int dealDay, String area, String floor,
@@ -86,7 +88,13 @@ public class AptDealDto {
 	public void setAptCode(int aptCode) {
 		this.aptCode = aptCode;
 	}
-	
+	public String getDealAvg() {
+		return dealAvg;
+	}
+	public void setDealAvg(String dealAvg) {
+		this.dealAvg = dealAvg;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -108,8 +116,10 @@ public class AptDealDto {
 		builder.append(cancelDealDay);
 		builder.append(", aptCode=");
 		builder.append(aptCode);
+		builder.append(", dealAvg=");
+		builder.append(dealAvg);
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

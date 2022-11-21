@@ -8,6 +8,8 @@ public interface AptDealService {
 
 	List<AptDealDto> listAptDeal(int aptCode) throws Exception;
 	
+	List<AptDealDto> listAptDealByYM(int aptCode) throws Exception;
+	
 	AptDealDto search(Long no) throws Exception;
 	
 	boolean insert(AptDealDto aptDealDto) throws Exception;

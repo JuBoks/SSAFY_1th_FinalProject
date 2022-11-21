@@ -9,7 +9,6 @@ export const chartData = [
 ];
 
 export const chartOptions = {
-  title: "Company Performance",
   curveType: "function",
   legend: { position: "bottom" },
   width: 450,

@@ -9,6 +9,13 @@
 		WHERE	aptCode = #{aptCode}
 	</select>
 	
+	<select id="listAptDealByYM" parameterType="int" resultType="aptDealDto">
+		SELECT	 dealYear, dealMonth, ROUND(AVG(dealAmount), 2) dealAvg
+		FROM	 apt_deal
+		WHERE	 aptCode = #{aptCode}
+		GROUP BY dealYear, dealMonth
+	</select>
+	
 	<select id="search" parameterType="long" resultType="aptDealDto">
 		SELECT 	no, dealAmount, dealYear, dealMonth, dealDay, area, floor, cancelDealDay, aptCode
 		FROM	apt_deal

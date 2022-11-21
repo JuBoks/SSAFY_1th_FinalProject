@@ -4,8 +4,9 @@
 
 <script>
 import { GChart } from "vue-google-charts/legacy";
+import { mapGetters } from "vuex";
 
-import { chartType, chartData, chartOptions, chartEvents } from "@/util/chart";
+const mapStore = "mapStore";
 
 export default {
   name: "GoogleChart",
@@ -14,11 +15,30 @@ export default {
   },
   data() {
     return {
-      type: chartType,
-      data: chartData,
-      options: chartOptions,
-      events: chartEvents,
+      type: "LineChart",
+      data: this.aptDealInfoGroup,
+      options: {
+        curveType: "function",
+        legend: { position: "bottom" },
+        width: 400,
+        height: 250,
+        crosshair: {
+          trigger: "both",
+          orientation: "vertical",
+        },
+      },
+      events: {
+        select: (el1, el2, el3) => {
+          console.log(el1, el2, el3);
+        },
+      },
     };
+  },
+  computed: {
+    ...mapGetters(mapStore, ["aptDealInfoGroup"]),
+  },
+  created() {
+    this.data = this.aptDealInfoGroup;
   },
   methods: {
     selectRow(el1, el2, el3) {

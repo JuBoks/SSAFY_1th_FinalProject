@@ -10,6 +10,8 @@ public interface AptDealDao {
 	
 	List<AptDealDto> listAptDeal(int aptCode) throws SQLException;
 	
+	List<AptDealDto> listAptDealByYM(int aptCode) throws SQLException;
+	
 	AptDealDto search(Long no) throws SQLException;
 	
 	int insert(AptDealDto aptDealDto) throws SQLException;

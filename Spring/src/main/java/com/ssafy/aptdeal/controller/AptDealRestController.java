@@ -25,8 +25,18 @@ public class AptDealRestController {
 	@GetMapping("/{aptCode}")
 	public ResponseEntity<?> getAptDealInfo(@PathVariable("aptCode") Integer aptCode) {
 		try {
-			System.out.println("aptCode :: " + aptCode);
 			List<AptDealDto> list = aptDealService.listAptDeal(aptCode);
+			return new ResponseEntity<List<AptDealDto>>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/group/{aptCode}")
+	public ResponseEntity<?> getAptDealByYearMonth(@PathVariable("aptCode") Integer aptCode) {
+		try {
+			List<AptDealDto> list = aptDealService.listAptDealByYM(aptCode);
 			return new ResponseEntity<List<AptDealDto>>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

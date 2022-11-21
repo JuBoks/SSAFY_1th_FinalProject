@@ -7,7 +7,8 @@
       @row-unhovered="onRowUnhovered"
       @row-clicked="onRowClicked"
       :items="aptInfoList"
-      :fields="fields"></b-table>
+      :fields="fields"
+    ></b-table>
     <template v-else>
       <div class="text-center">검색 결과가 없습니다.</div>
     </template>
@@ -37,10 +38,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(mapStore, ["aptInfoList", "aptDealInfo"]),
+    ...mapGetters(mapStore, ["aptInfoList"]),
   },
   methods: {
-    ...mapActions(mapStore, ["getAptDealInfo", "setAptSelected"]),
+    ...mapActions(mapStore, ["getAptDealGroup", "setAptSelected"]),
     onRowHovered(item) {
       item.position && window.map.panTo(item.position);
       item.onHover && item.onHover();
@@ -48,10 +49,9 @@ export default {
     onRowUnhovered(item) {
       item.onHoverout && item.onHoverout();
     },
-    onRowClicked(item) {
+    async onRowClicked(item) {
       this.setAptSelected(item);
-      this.getAptDealInfo(item.aptCode);
-      console.log("aptDealInfo", this.aptDealInfo);
+      this.getAptDealGroup(item.aptCode);
       this.$router.push({ name: "MapInfo" });
     },
   },

@@ -18,6 +18,11 @@ public class AptDealServiceImpl implements AptDealService {
 	public List<AptDealDto> listAptDeal(int aptCode) throws Exception {
 		return aptDealDao.listAptDeal(aptCode);
 	}
+	
+	@Override
+	public List<AptDealDto> listAptDealByYM(int aptCode) throws Exception {
+		return aptDealDao.listAptDealByYM(aptCode);
+	}
 
 	@Override
 	public AptDealDto search(Long no) throws Exception {
