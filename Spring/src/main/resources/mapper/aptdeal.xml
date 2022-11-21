@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.aptdeal.model.dao.AptDealDao">
 
-	<select id="listAptDeal" parameterType="string" resultType="aptDealDto">
+	<select id="listAptDeal" parameterType="int" resultType="aptDealDto">
 		SELECT 	no, dealAmount, dealYear, dealMonth, dealDay, area, floor, cancelDealDay, aptCode
 		FROM	apt_deal
 		WHERE	aptCode = #{aptCode}

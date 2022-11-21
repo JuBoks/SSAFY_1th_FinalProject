@@ -21,6 +21,7 @@ export default {
   font-famliy: "NanumSquare", san-serif;
   font-size: 17px;
   line-height: 1.5;
+  box-sizing: border-box;
 }
 #app {
   height: 100vh;

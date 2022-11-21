@@ -26,6 +26,7 @@ public class AptInfoRestController {
 	public ResponseEntity<?> getAptByDong(@PathVariable("dongCode") String dongCode) {
 		try {
 			List<AptInfoDto> result = aptInfoService.getAptByDong(dongCode);
+			System.out.println(result);
 			return new ResponseEntity<List<AptInfoDto>>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);

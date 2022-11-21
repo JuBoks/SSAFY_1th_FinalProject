@@ -3,8 +3,11 @@ package com.ssafy;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -34,6 +37,15 @@ public class AptInfoTest extends AbstractTest {
 		aptInfoDto2 = new AptInfoDto("아파트테스트2", "2022", "도로명2", "번지2", "9876543210");
 	}
 	
+	@Test
+	public void searchTest() {
+		ArrayList<AptInfoDto> list = (ArrayList<AptInfoDto>) aptInfoService.getAptByDong("1111011000");
+		for(AptInfoDto apt : list) {
+			System.out.println(apt);
+		}
+	}
+	
+	@Ignore
 	@Test
 	public void test1_insertAndUpdateAndDeleteTest() {
 		

@@ -15,27 +15,27 @@ public class AptRentServiceImpl implements AptRentService {
 	private AptRentDao aptRentDao;
 
 	@Override
-	public List<AptRentDto> listAptRent(Integer aptCode) {
+	public List<AptRentDto> listAptRent(Integer aptCode) throws Exception {
 		return aptRentDao.listAptRent(aptCode);
 	}
 
 	@Override
-	public AptRentDto search(Long no) {
+	public AptRentDto search(Long no) throws Exception {
 		return aptRentDao.search(no);
 	}
 
 	@Override
-	public boolean insert(AptRentDto aptRentDto) {
+	public boolean insert(AptRentDto aptRentDto) throws Exception {
 		return aptRentDao.insert(aptRentDto) == 1;
 	}
 
 	@Override
-	public boolean update(AptRentDto aptRentDto) {
+	public boolean update(AptRentDto aptRentDto) throws Exception {
 		return aptRentDao.update(aptRentDto) == 1;
 	}
 
 	@Override
-	public boolean delete(Long no) {
+	public boolean delete(Long no) throws Exception {
 		return aptRentDao.delete(no) == 1;
 	}
 

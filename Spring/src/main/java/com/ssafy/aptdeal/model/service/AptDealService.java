@@ -6,14 +6,14 @@ import com.ssafy.aptdeal.model.dto.AptDealDto;
 
 public interface AptDealService {
 
-	List<AptDealDto> listAptDeal(int aptCode);
+	List<AptDealDto> listAptDeal(int aptCode) throws Exception;
 	
-	AptDealDto search(Long no);
+	AptDealDto search(Long no) throws Exception;
 	
-	boolean insert(AptDealDto aptDealDto);
+	boolean insert(AptDealDto aptDealDto) throws Exception;
 	
-	boolean update(AptDealDto aptDealDto);
+	boolean update(AptDealDto aptDealDto) throws Exception;
 	
-	boolean delete(Long no);
+	boolean delete(Long no) throws Exception;
 	
 }

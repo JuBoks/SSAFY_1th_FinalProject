@@ -6,14 +6,14 @@ import com.ssafy.aptinfo.model.dto.AptInfoDto;
 
 public interface AptInfoService {
 
-	List<AptInfoDto> getAptByDong(String dongCode);
+	List<AptInfoDto> getAptByDong(String dongCode) throws Exception;
 	
-	AptInfoDto search(int aptCode);
+	AptInfoDto search(int aptCode) throws Exception;
 	
-	boolean insert(AptInfoDto aptInfoDto);
+	boolean insert(AptInfoDto aptInfoDto) throws Exception;
 	
-	boolean update(AptInfoDto aptInfoDto);
+	boolean update(AptInfoDto aptInfoDto) throws Exception;
 	
-	boolean delete(int aptCode);
+	boolean delete(int aptCode) throws Exception;
 
 }

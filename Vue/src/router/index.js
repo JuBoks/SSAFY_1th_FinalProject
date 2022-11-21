@@ -34,6 +34,18 @@ const routes = [
     path: "/map",
     name: "Map",
     component: () => import("@/views/AppMap"),
+    children: [
+      {
+        path: "/map/list",
+        name: "MapList",
+        component: () => import("@/components/map/MapViewSidebarList"),
+      },
+      {
+        path: "/map/info",
+        name: "MapInfo",
+        component: () => import("@/components/map/MapViewSidebarInfo"),
+      },
+    ],
   },
   {
     path: "/main",

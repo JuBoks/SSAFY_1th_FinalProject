@@ -15,27 +15,27 @@ public class AptDealServiceImpl implements AptDealService {
 	private AptDealDao aptDealDao;
 	
 	@Override
-	public List<AptDealDto> listAptDeal(int aptCode) {
+	public List<AptDealDto> listAptDeal(int aptCode) throws Exception {
 		return aptDealDao.listAptDeal(aptCode);
 	}
 
 	@Override
-	public AptDealDto search(Long no) {
+	public AptDealDto search(Long no) throws Exception {
 		return aptDealDao.search(no);
 	}
 
 	@Override
-	public boolean insert(AptDealDto aptDealDto) {
+	public boolean insert(AptDealDto aptDealDto) throws Exception {
 		return aptDealDao.insert(aptDealDto) == 1;
 	}
 
 	@Override
-	public boolean update(AptDealDto aptDealDto) {
+	public boolean update(AptDealDto aptDealDto) throws Exception {
 		return aptDealDao.update(aptDealDto) == 1;
 	}
 
 	@Override
-	public boolean delete(Long no) {
+	public boolean delete(Long no) throws Exception {
 		return aptDealDao.delete(no) == 1;
 	}
 

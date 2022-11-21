@@ -16,27 +16,27 @@ public class YeonlipRentServiceImpl implements YeonlipRentService {
 	
 	
 	@Override
-	public List<YeonlipRentDto> listYeonlipRent(Integer yeonlipCode) {
+	public List<YeonlipRentDto> listYeonlipRent(Integer yeonlipCode) throws Exception {
 		return yeonlipRentDao.listYeonlipRent(yeonlipCode);
 	}
 
 	@Override
-	public YeonlipRentDto search(Long no) {
+	public YeonlipRentDto search(Long no) throws Exception {
 		return yeonlipRentDao.search(no);
 	}
 
 	@Override
-	public boolean insert(YeonlipRentDto yeonlipRentDto) {
+	public boolean insert(YeonlipRentDto yeonlipRentDto) throws Exception {
 		return yeonlipRentDao.insert(yeonlipRentDto) == 1;
 	}
 
 	@Override
-	public boolean update(YeonlipRentDto yeonlipRentDto) {
+	public boolean update(YeonlipRentDto yeonlipRentDto) throws Exception {
 		return yeonlipRentDao.update(yeonlipRentDto) == 1;
 	}
 
 	@Override
-	public boolean delete(Long no) {
+	public boolean delete(Long no) throws Exception {
 		return yeonlipRentDao.delete(no) == 1;
 	}
 	

@@ -1,26 +1,27 @@
 /* global kakao */
 const KAKAO_MAP_API_KEY = "fb37ee426ff3d4073d98482866d2228b";
 const KAKAO_MAP_URL = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${KAKAO_MAP_API_KEY}&libraries=services,clusterer,drawing`;
-const APT_MARKER_IMG = require('@/assets/img/apartment_marker.png');
+const APT_MARKER_IMG = require("@/assets/img/apartment_marker.png");
+const MARKER_WIDTH = 40;
+const MARKER_HEIGHT = 40;
+const OVER_MARKER_WIDTH = 38;
+const OVER_MARKER_HEIGHT = 50;
 
 export class Map {
   constructor() {
     window.aptMarkers = [];
     window.allianceMarkers = [];
+    window.mapInstance = this;
 
     // 맵 인스턴스 생성
-    if (window.kakao && window.kakao.maps) {
-      this.$initMap();
-    } else {
-      const script = document.createElement("script");
-      script.onload = () => {
-        kakao.maps.load(this.$initMap);
-        // geoCoder 인스턴스 생성
-        kakao.maps.load(this.$initGeocoder);
-      };
-      script.src = KAKAO_MAP_URL;
-      document.head.appendChild(script);
-    }
+    const script = document.createElement("script");
+    script.onload = () => {
+      kakao.maps.load(this.$initMap);
+      // geoCoder 인스턴스 생성
+      kakao.maps.load(this.$initGeocoder);
+    };
+    script.src = KAKAO_MAP_URL;
+    document.head.appendChild(script);
   }
 
   $initMap() {
@@ -38,7 +39,7 @@ export class Map {
     window.clusters = new kakao.maps.MarkerClusterer({
       map: window.map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
       averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-      minLevel: 3, // 클러스터 할 최소 지도 레벨
+      minLevel: 5, // 클러스터 할 최소 지도 레벨
     });
   }
 
@@ -103,7 +104,6 @@ export class Map {
   // }
 
   addAptCluster(markerList) {
-    console.log("markerList", markerList);
     window.aptMarkers.push(...markerList);
     window.clusters.addMarkers(markerList);
   }
@@ -112,9 +112,31 @@ export class Map {
   //   window.allianceMarkers.push(...markerList);
   //   window.clusters.addMarkers(markerList);
   // }
+  createRoadView(roadviewContainer, position) {
+    const roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+    const roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+
+    // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+    roadviewClient.getNearestPanoId(position, 50, function (panoId) {
+      panoId && roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+    });
+  }
 }
 
-export async function getLatLngByAddr(addr) {
+// export function createRoadView(roadviewContainer) {
+//   console.log("roadviewContainer", roadviewContainer);
+//   const roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+//   const roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+
+//   const position = new kakao.maps.LatLng(33.450701, 126.570667);
+
+//   // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+//   roadviewClient.getNearestPanoId(position, 50, function (panoId) {
+//     roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+//   });
+// }
+
+async function getLatLngByAddr(addr) {
   return new Promise((resolve, reject) => {
     window.geocoder.addressSearch(addr, function (result, status) {
       // 정상적으로 검색이 완료됐으면
@@ -132,77 +154,74 @@ export async function getLatLngByAddr(addr) {
 export async function AptMarkers(list) {
   let bounds = new kakao.maps.LatLngBounds();
   let markers = [];
-  list.forEach(async (el) => {
+  for (let el of list) {
     // 마커 이미지 지정
-    const image = new kakao.maps.MarkerImage(APT_MARKER_IMG, new kakao.maps.Size(40, 40));
+    const image = createMarkerImage(
+      APT_MARKER_IMG,
+      MARKER_WIDTH,
+      MARKER_HEIGHT
+    );
+    const overImage = createMarkerImage(
+      APT_MARKER_IMG,
+      OVER_MARKER_WIDTH,
+      OVER_MARKER_HEIGHT
+    );
 
     // 마커 위치 생성
-    const addr = el.roadName + " " + el.apartmentName;
+    const addr = `${el.sidoName} ${el.gugunName} ${el.dongName} ${el.bunji} ${el.apartmentName}`;
     const position = await getLatLngByAddr(addr);
 
     // 마커 생성
-    const marker = new kakao.maps.Marker({
+    let marker = new kakao.maps.Marker({
       position,
       image,
+    });
+
+    // 클릭 이벤트 추가
+    kakao.maps.event.addListener(marker, "click", function () {
+      // 1. 클릭 시 해당 매물로 지도 이동
+      window.map.panTo(position);
+      // 2. 상세 거래내역 왼쪽 리스트에 조회
+    });
+
+    // 마커에 mouseover 이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, "mouseover", function () {
+      // 클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면
+      // 마커의 이미지를 오버 이미지로 변경합니다
+      marker.setImage(overImage);
+    });
+    kakao.maps.event.addListener(marker, "mouseout", function () {
+      // 클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면
+      // 마커의 이미지를 오버 이미지로 변경합니다
+      marker.setImage(image);
     });
 
     // 화면에 모든 마커가 보이도록 bound 설정
     bounds.extend(position);
     window.map.setBounds(bounds);
-    // 클릭 이벤트 추가
+
+    // table 에서 필요한 변수 및 함수들 선언
+    el.position = position;
+    el.onHover = () => {
+      marker.setImage(overImage);
+    };
+    el.onHoverout = () => {
+      marker.setImage(image);
+    };
 
     // markers 에 push
     markers.push(marker);
-  });
-
-  // const markers = await Promise.all(promises);
+  }
 
   return markers;
 }
 
-// export async function AllianceMarkers(list) {
-//   const promises = [];
-//   list.forEach((el) => {
-//     promises.push(MApt(el.aptLat, el.aptLng));
-//   });
+// MakrerImage 객체를 생성하여 반환하는 함수입니다
+function createMarkerImage(markerImg, width, height) {
+  const markerImage = new kakao.maps.MarkerImage(
+    markerImg, // 마커 이미지 URL
+    new kakao.maps.Size(width, height) // 마커의 크기
+  );
 
-//   const markers = await Promise.all(promises);
-
-//   return markers;
-// }
-
-export async function MApt(lat, lng) {
-  // 마커 이미지 지정
-  // const image = new kakao.maps.MarkerImage(APT_MARKER_IMG, new kakao.maps.Size(64, 69), {
-  //   offset: new kakao.maps.Point(27, 69)
-  // });
-
-  //const position = await getPositionByAddr(addr);
-  console.log(lat, lng);
-  const position = new kakao.maps.LatLng(lat, lng);
-
-  // 마커를 생성합니다
-  const marker = new kakao.maps.Marker({
-    position,
-  });
-
-  // 화면에 모든 마커가 보이도록 bound 설정
-  
-
-
-  // 클릭 이벤트 달기
-
-  return marker;
+  return markerImage;
 }
-
-// async function getPositionByAddr(addr) {
-//   return new Promise(function (resolve, reject) {
-//     window.geocoder.addressSearch(addr, function (result, status) {
-//       if (status === kakao.maps.services.Status.OK) {
-//         resolve(new kakao.maps.LatLng(result[0].y, result[0].x));
-//       } else {
-//         reject(null);
-//       }
-//     });
-//   })
-// }

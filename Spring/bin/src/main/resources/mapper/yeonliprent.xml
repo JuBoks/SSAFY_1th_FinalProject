@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.yeonliprent.model.dao.YeonlipRentDao">
+
+	<select id="listYeonlipRent" parameterType="int" resultType="yeonlipRentDto">
+		SELECT	no, type, deposit, monthlyRent, dealYear, dealMonth, dealDay, area, floor, yeonlipCode
+		FROM	yeonlip_rent
+		WHERE	yeonlipCode = #{yeonlipCode}
+	</select>
+	
+	<select id="search" parameterType="long" resultType="yeonlipRentDto">
+		SELECT	no, type, deposit, monthlyRent, dealYear, dealMonth, dealDay, area, floor, yeonlipCode
+		FROM	yeonlip_rent
+		WHERE	no = #{no}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO yeonlip_rent(type, deposit, monthlyRent, dealYear, dealMonth, dealDay, area, floor, yeonlipCode)
+		VALUES
+			(#{type}, #{deposit}, #{monthlyRent}, #{dealYear}, #{dealMonth}, #{dealDay}, #{area}, #{floor}, #{yeonlipCode})
+		<selectKey resultType="long" keyProperty="no" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="yeonlipRentDto">
+		UPDATE yeonlip_rent
+		<trim prefix="set" suffixOverrides=",">
+			<if test="type != null">type = #{type},</if>
+			<if test="deposit != null">deposit = #{deposit},</if>
+			<if test="monthlyRent != null">monthlyRent = #{monthlyRent},</if>
+			<if test="dealYear != null">dealYear = #{dealYear},</if>
+			<if test="dealMonth != null">dealMonth = #{dealMonth},</if>
+			<if test="dealDay != null">dealDay = #{dealDay},</if>
+			<if test="area != null">area = #{area},</if>
+			<if test="floor != null">floor = #{floor},</if>
+			<if test="yeonlipCode != null">yeonlipCode = #{yeonlipCode},</if>
+		</trim>
+		WHERE no = #{no}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM yeonlip_rent
+		WHERE no = #{no}
+	</delete>
+	
+</mapper>

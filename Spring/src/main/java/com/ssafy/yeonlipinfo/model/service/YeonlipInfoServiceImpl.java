@@ -15,17 +15,17 @@ public class YeonlipInfoServiceImpl implements YeonlipInfoService {
 	private YeonlipInfoDao yeonlipInfoDao;
 	
 	@Override
-	public List<YeonlipInfoDto> listYeonlipInfo(String dongCode) {
+	public List<YeonlipInfoDto> listYeonlipInfo(String dongCode) throws Exception {
 		return yeonlipInfoDao.listYeonlipInfo(dongCode);
 	}
 
 	@Override
-	public YeonlipInfoDto search(Integer yeonlipCode) {
+	public YeonlipInfoDto search(Integer yeonlipCode) throws Exception {
 		return yeonlipInfoDao.search(yeonlipCode);
 	}
 
 	@Override
-	public boolean insert(YeonlipInfoDto yeonlipInfoDto) {
+	public boolean insert(YeonlipInfoDto yeonlipInfoDto) throws Exception {
 		// sidoCode, gugunCode 설정하기
 		String dongCode = yeonlipInfoDto.getDongCode();
 		if(dongCode != null) {
@@ -36,7 +36,7 @@ public class YeonlipInfoServiceImpl implements YeonlipInfoService {
 	}
 
 	@Override
-	public boolean update(YeonlipInfoDto yeonlipInfoDto) {
+	public boolean update(YeonlipInfoDto yeonlipInfoDto) throws Exception {
 		// sidoCode, gugunCode 설정하기
 		String dongCode = yeonlipInfoDto.getDongCode();
 		if(dongCode != null) {
@@ -47,7 +47,7 @@ public class YeonlipInfoServiceImpl implements YeonlipInfoService {
 	}
 
 	@Override
-	public boolean delete(Integer yeonlipCode) {
+	public boolean delete(Integer yeonlipCode) throws Exception {
 		return yeonlipInfoDao.delete(yeonlipCode) == 1;
 	}
 

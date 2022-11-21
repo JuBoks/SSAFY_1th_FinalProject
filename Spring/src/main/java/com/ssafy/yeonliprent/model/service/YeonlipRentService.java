@@ -6,14 +6,14 @@ import com.ssafy.yeonliprent.model.dto.YeonlipRentDto;
 
 public interface YeonlipRentService {
 	
-	List<YeonlipRentDto> listYeonlipRent(Integer yeonlipCode);
+	List<YeonlipRentDto> listYeonlipRent(Integer yeonlipCode) throws Exception;
 	
-	YeonlipRentDto search(Long no);
+	YeonlipRentDto search(Long no) throws Exception;
 	
-	boolean insert(YeonlipRentDto yeonlipRentDto);
+	boolean insert(YeonlipRentDto yeonlipRentDto) throws Exception;
 	
-	boolean update(YeonlipRentDto yeonlipRentDto);
+	boolean update(YeonlipRentDto yeonlipRentDto) throws Exception;
 	
-	boolean delete(Long no);
+	boolean delete(Long no) throws Exception;
 	
 }

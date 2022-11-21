@@ -15,17 +15,17 @@ public class AptInfoServiceImpl implements AptInfoService {
 	private AptInfoDao aptInfoDao;
 	
 	@Override
-	public List<AptInfoDto> getAptByDong(String dongCode) {
+	public List<AptInfoDto> getAptByDong(String dongCode) throws Exception {
 		return aptInfoDao.listAptInfo(dongCode);
 	}
 	
 	@Override
-	public AptInfoDto search(int aptCode) {
+	public AptInfoDto search(int aptCode) throws Exception {
 		return aptInfoDao.search(aptCode);
 	}
 
 	@Override
-	public boolean insert(AptInfoDto aptInfoDto) {
+	public boolean insert(AptInfoDto aptInfoDto) throws Exception {
 		// sidoCode, gugunCode 설정하기
 		String dongCode = aptInfoDto.getDongCode();
 		if(dongCode != null) {
@@ -36,7 +36,7 @@ public class AptInfoServiceImpl implements AptInfoService {
 	}
 
 	@Override
-	public boolean update(AptInfoDto aptInfoDto) {
+	public boolean update(AptInfoDto aptInfoDto) throws Exception {
 		// sidoCode, gugunCode 설정하기
 		String dongCode = aptInfoDto.getDongCode();
 		if(dongCode != null) {
@@ -47,7 +47,7 @@ public class AptInfoServiceImpl implements AptInfoService {
 	}
 
 	@Override
-	public boolean delete(int aptCode) {
+	public boolean delete(int aptCode) throws Exception {
 		return aptInfoDao.delete(aptCode) == 1;
 	}
 	

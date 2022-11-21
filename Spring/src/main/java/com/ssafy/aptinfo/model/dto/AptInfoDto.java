@@ -11,8 +11,11 @@ public class AptInfoDto {
 	private String gugunCode;
 	private String dongCode;
 	
-	public AptInfoDto() { }
+	private String sidoName;
+	private String gugunName;
+	private String dongName;
 	
+	public AptInfoDto() { }
 
 	public AptInfoDto(String apartmentName, String buildYear, String roadName, String bunji, String dongCode) {
 		this.apartmentName = apartmentName;
@@ -78,7 +81,25 @@ public class AptInfoDto {
 	public void setDongCode(String dongCode) {
 		this.dongCode = dongCode;
 	}
-	
+	public String getSidoName() {
+		return sidoName;
+	}
+	public void setSidoName(String sidoName) {
+		this.sidoName = sidoName;
+	}
+	public String getGugunName() {
+		return gugunName;
+	}
+	public void setGugunName(String gugunName) {
+		this.gugunName = gugunName;
+	}
+	public String getDongName() {
+		return dongName;
+	}
+	public void setDongName(String dongName) {
+		this.dongName = dongName;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -98,9 +119,14 @@ public class AptInfoDto {
 		builder.append(gugunCode);
 		builder.append(", dongCode=");
 		builder.append(dongCode);
+		builder.append(", sidoName=");
+		builder.append(sidoName);
+		builder.append(", gugunName=");
+		builder.append(gugunName);
+		builder.append(", dongName=");
+		builder.append(dongName);
 		builder.append("]");
 		return builder.toString();
 	}
-	
 	
 }
