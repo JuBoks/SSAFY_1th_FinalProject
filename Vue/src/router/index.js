@@ -40,10 +40,29 @@ const routes = [
     name: "Main",
     component: () => import("@/views/AppMain"),
   },
+
   {
     path: "/admin",
-    name: "Admin",
+    name: "admin",
     component: () => import("@/views/AppAdmin"),
+    redirect: "/admin/list",
+    children: [
+      {
+        path: "list",
+        name: "AdminList",
+        component: () => import("@/components/admin/AdminList.vue"),
+      },
+      {
+        path: "join",
+        name: "AdminJoin",
+        component: () => import("@/components/admin/AdminJoin.vue"),
+      },
+      {
+        path: "modify/:userId",
+        name: "AdminModify",
+        component: () => import("@/components/admin/AdminModify.vue"),
+      },
+    ],
   },
   {
     path: "/board",

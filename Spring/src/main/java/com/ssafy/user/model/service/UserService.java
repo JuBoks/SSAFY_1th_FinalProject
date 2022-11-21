@@ -20,7 +20,7 @@ public interface UserService {
 
 	boolean remove(String userId) throws SQLException;
 
-	List<UserDto> getUserList(Map<String, Object> map) throws SQLException;
+	public List<UserDto> getUserList(Map<String, Object> map) throws SQLException;
 
 	int getUserCount() throws SQLException;
 

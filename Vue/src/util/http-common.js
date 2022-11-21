@@ -43,3 +43,14 @@ export async function post(url, payload) {
       return null;
   }
 }
+
+export async function put(url, payload) {
+  const { status, data } = await http.put(url, payload);
+  switch (status) {
+    case 200:
+      return data;
+    case 500:
+      alert(ERROR_MSG_SERVER);
+      return null;
+  }
+}

@@ -84,7 +84,6 @@ export default {
           this.input.comment = "";
 
           // 댓글 목록 갱신하기
-          console.log(this.articleNo, "돼라");
           this.getComments(this.articleNo);
 
           // 모달창 숨기기

@@ -12,7 +12,6 @@ const userStore = {
   },
   getters: {
     loginUser(state) {
-      console.log("예스", state.loginUser);
       return state.loginUser;
     },
     checkToken: function (state) {
@@ -36,9 +35,9 @@ const userStore = {
     SET_IS_VALID_TOKEN: (state, isValidToken) => {
       state.isValidToken = isValidToken;
     },
-    SET_USER_INFO: (state, userInfo) => {
+    SET_USER_INFO: (state, loginUser) => {
       state.isLogin = true;
-      state.userInfo = userInfo;
+      state.loginUser = loginUser;
     },
   },
   actions: {
@@ -70,10 +69,10 @@ const userStore = {
     },
     async getUserInfo({ commit, dispatch }, token) {
       let decodeToken = jwtDecode(token);
-      console.log("commit", commit);
-      console.log("dispatch", dispatch);
-      console.log("decodeToken", decodeToken);
-      console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+      // console.log("commit", commit);
+      // console.log("dispatch", dispatch);
+      // console.log("decodeToken", decodeToken);
+      // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
       await findById(
         decodeToken.userid,
         ({ data }) => {
