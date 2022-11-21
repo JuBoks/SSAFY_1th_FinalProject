@@ -38,7 +38,7 @@ public class AptInfoTest extends AbstractTest {
 	}
 	
 	@Test
-	public void searchTest() {
+	public void searchTest() throws Exception {
 		ArrayList<AptInfoDto> list = (ArrayList<AptInfoDto>) aptInfoService.getAptByDong("1111011000");
 		for(AptInfoDto apt : list) {
 			System.out.println(apt);
@@ -47,7 +47,7 @@ public class AptInfoTest extends AbstractTest {
 	
 	@Ignore
 	@Test
-	public void test1_insertAndUpdateAndDeleteTest() {
+	public void test1_insertAndUpdateAndDeleteTest() throws Exception {
 		
 		// 삽입
 		aptInfoService.insert(aptInfoDto1);

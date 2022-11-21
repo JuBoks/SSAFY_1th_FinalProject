@@ -36,7 +36,7 @@ public class YeonlipRentTest extends AbstractTest {
 	}
 	
 	@Test
-	public void test1_insertAndUpdateAndDeleteTest() {
+	public void test1_insertAndUpdateAndDeleteTest() throws Exception {
 		
 		// 추가
 		yeonlipRentService.insert(yeonlipRentDto1);

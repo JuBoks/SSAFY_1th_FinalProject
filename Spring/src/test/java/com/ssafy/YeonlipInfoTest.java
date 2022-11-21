@@ -35,7 +35,7 @@ public class YeonlipInfoTest extends AbstractTest {
 	}
 	
 	@Test
-	public void test1_insertAndUpdateAndDeleteTest() {
+	public void test1_insertAndUpdateAndDeleteTest() throws Exception {
 		
 		// 삽입
 		yeonlipInfoService.insert(yeonlipInfoDto1);
