@@ -70,6 +70,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 const adminStore = "adminStore";
+const userStore = "userStore";
 
 export default {
   data() {
@@ -86,12 +87,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(adminStore, [
-      "users",
-      "usersPerPage",
-      "totalUsers",
-      "loginUser",
-    ]),
+    ...mapGetters(adminStore, ["users", "usersPerPage", "totalUsers"]),
+    ...mapGetters(userStore, ["loginUser"]),
   },
   // Dynamic module loading을 통해 component를 불러옴
   components: {

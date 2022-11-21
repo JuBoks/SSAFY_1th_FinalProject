@@ -1,7 +1,11 @@
 <template>
   <b-navbar class="px-3 app-nav" toggleable="md" variant="primary">
-    <b-navbar-brand href="/">
-      <img src="@/assets/img/logo_w.png" alt="logo" width="100px" />
+    <b-navbar-brand>
+      <img
+        src="@/assets/img/logo_w.png"
+        alt="logo"
+        @click="moveMap"
+        width="100px" />
     </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -16,14 +20,20 @@
       <!-- right nav items -->
       <b-navbar-nav class="ml-auto">
         <template v-if="avail">
-          <b-nav-item><span>내정보</span></b-nav-item>
+          <b-nav-item
+            ><span>반갑습니다.{{ this.loginUser.userId }}님</span></b-nav-item
+          >
+          <b-nav-item v-if="this.loginUser.userAuth"
+            ><span @click="moveAdmin"> 회원관리</span></b-nav-item
+          >
+          <b-nav-item><span @click="moveInfo">내정보</span></b-nav-item>
           <b-nav-item
             ><span @click="showModalLogout">로그아웃</span></b-nav-item
           >
         </template>
         <template v-else>
           <b-nav-item><span @click="showModalLogin">로그인</span></b-nav-item>
-          <b-nav-item><span to:>회원가입</span></b-nav-item>
+          <b-nav-item><span @click="movePage">회원가입</span></b-nav-item>
         </template>
       </b-navbar-nav>
     </b-collapse>
@@ -103,13 +113,24 @@ export default {
       // console.log("1. confirm() token >> " + token);
       if (this.isLogin) {
         await this.getUserInfo(token);
+        const auth = this.loginUser.userAuth;
+        console.log("이사람의 현재권한", auth);
         this.avail = "yes";
         // console.log("4. confirm() userInfo :: ", this.userInfo);
         this.hideModalLogin();
       }
     },
     movePage() {
-      this.$router.push({ name: "join" });
+      this.$router.push({ name: "AdminJoin" });
+    },
+    moveAdmin() {
+      this.$router.push({ name: "AdminList" });
+    },
+    moveMap() {
+      this.$router.push({ name: "Map" });
+    },
+    moveInfo() {
+      this.$router.push({ name: "MyInfo" });
     },
   },
 };

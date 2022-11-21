@@ -10,7 +10,7 @@
       <b-col class="text-left">
         <b-form>
           <b-form-group
-            v-if="type == 'create'"
+            v-if="type == 'create' && loginUser"
             label-cols="12"
             id="subject-group"
             label="권한:"
@@ -102,10 +102,10 @@
             variant="primary"
             class="m-1"
             @click="validate"
-            >글 등록</b-button
+            >사용자 등록</b-button
           >
           <b-button v-else variant="success" class="m-1" @click="validate"
-            >글 수정</b-button
+            >사용자 수정</b-button
           >
           <b-button variant="primary" class="m-1" @click="moveList"
             >목록</b-button
@@ -119,7 +119,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 const adminStore = "adminStore";
-
+const userStore = "userStore";
 export default {
   props: {
     // 부모 component로 부터 전달받은 type 정보를 받아옴
@@ -137,12 +137,12 @@ export default {
           this.$refs.userName.focus())
         : !this.input.userAddr
         ? ((isValid = false),
-          (errMsg = "주소을 입력해주세요."),
+          (errMsg = "주소를 입력해주세요."),
           this.$refs.userAddr.focus())
         : (isValid = true);
       !this.input.userPhone
         ? ((isValid = false),
-          (errMsg = "주소을 입력해주세요."),
+          (errMsg = "번호를 입력해주세요."),
           this.$refs.userPhone.focus())
         : (isValid = true);
 
@@ -159,13 +159,19 @@ export default {
       }
     },
     moveList() {
-      this.$router.push({ name: "AdminList" });
+      if (this.loginUser) {
+        this.$router.push({ name: "AdminList" });
+      } else {
+        this.$router.push({ name: "Map" });
+      }
     },
   },
   created() {
+    // console.log("사용자 등록 누르면 나오는 loginUser", this.loginUser.userAuth);
     console.log("writeForm", this.$route.params.userId);
   },
   computed: {
+    ...mapGetters(userStore, ["loginUser"]),
     ...mapGetters(adminStore, ["user"]),
     input() {
       if (this.type == "modify") {
@@ -178,7 +184,7 @@ export default {
       } else {
         // 등록화면일 경우
         return {
-          userAuth: null,
+          userAuth: 0,
           userId: "",
           userPwd: "",
           userName: "",

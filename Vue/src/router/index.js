@@ -31,6 +31,11 @@ const routes = [
     redirect: { name: "Map" },
   },
   {
+    path: "/MyInfo",
+    name: "MyInfo",
+    component: () => import("@/components/common/MyInfo"),
+  },
+  {
     path: "/map",
     name: "Map",
     component: () => import("@/views/AppMap"),
