@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'nav-open': panelOpen }" id="mySidebar" class="sidebar">
+  <div :class="{ 'nav-open': panelFlag }" id="mySidebar" class="sidebar">
     <div class="sidebar-header">
       <a href="javascript:void(0)" @click="goback">
         <span class="sidebar-header-btn">←</span>
@@ -7,7 +7,7 @@
       <span class="sidebar-header-name">{{
         this.aptSelected.apartmentName
       }}</span>
-      <a href="javascript:void(0)" class="closebtn" @click="closeNav">
+      <a href="javascript:void(0)" class="closebtn" @click="closePanel">
         <span class="sidebar-header-btn">×</span>
       </a>
     </div>
@@ -21,15 +21,16 @@ import { mapActions, mapGetters } from "vuex";
 const mapStore = "mapStore";
 
 export default {
+  props: ["panelFlag"],
   computed: {
-    ...mapGetters(mapStore, ["panelOpen", "aptSelected"]),
+    ...mapGetters(mapStore, ["aptSelected"]),
   },
 
   methods: {
     ...mapActions(mapStore, ["setPanelOpen"]),
 
-    closeNav() {
-      this.setPanelOpen(false);
+    closePanel() {
+      this.$parent.$emit("onPanelClose");
     },
     goback() {
       this.$router.go(-1);

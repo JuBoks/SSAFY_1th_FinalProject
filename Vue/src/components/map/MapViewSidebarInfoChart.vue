@@ -3,9 +3,10 @@
     class="gchart"
     ref="gchart"
     :type="type"
-    :data="data"
+    :data="aptDealInfoGroupChart"
     :options="options"
-    :events="events" />
+    :events="events"
+  />
 </template>
 
 <script>
@@ -22,7 +23,6 @@ export default {
   data() {
     return {
       type: "LineChart",
-      data: this.aptDealInfoGroupChart,
       options: {
         curveType: "function",
         legend: { position: "bottom" },
@@ -52,7 +52,8 @@ export default {
         select: () => {
           const selectedRow =
             this.$refs.gchart.chartObject.getSelection()[0].row + 1;
-          const [dealYear, dealMonth] = this.data[selectedRow][0].split(".");
+          const [dealYear, dealMonth] =
+            this.aptDealInfoGroupChart[selectedRow][0].split(".");
           const aptCode = this.aptSelected.aptCode;
 
           this.getAptDealByMonth({
@@ -72,19 +73,10 @@ export default {
       "aptSelectedDealByMonth",
     ]),
   },
-  mounted() {
-    let filter = [];
-    for (let i = 0; i < 13; i++) {
-      if (this.aptDealInfoGroupChart[i]) {
-        filter.push(this.aptDealInfoGroupChart[i]);
-      } else {
-        break;
-      }
-    }
-    this.data = filter;
-  },
   methods: {
     ...mapActions(mapStore, ["getAptDealByMonth"]),
   },
 };
 </script>
+<style scoped>
+</style>

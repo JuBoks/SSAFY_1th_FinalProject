@@ -1,6 +1,6 @@
 <template>
   <div class="map-container">
-    <map-view-sidebar></map-view-sidebar>
+    <map-view-sidebar :panelFlag="panelFlag"></map-view-sidebar>
     <div class="wh100">
       <map-kakao></map-kakao>
     </div>
@@ -18,6 +18,11 @@ export default {
     MapKakao,
     MapViewSidebar: () => import("@/components/map/MapViewSidebar.vue"),
   },
+  data() {
+    return {
+      panelFlag: false,
+    };
+  },
   computed: {
     ...mapGetters(mapStore, ["aptInfoList"]),
   },
@@ -26,6 +31,12 @@ export default {
   },
   created() {
     this.updateAptInfoList([]);
+    this.$on("onPanelOpen", () => {
+      this.panelFlag = true;
+    });
+    this.$on("onPanelClose", () => {
+      this.panelFlag = false;
+    });
   },
 };
 </script>

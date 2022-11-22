@@ -8,7 +8,8 @@
         text-field="text"
         :options="sido"
         :text="selectedSidoName"
-        @change="onSidoChanged"></b-form-select>
+        @change="onSidoChanged"
+      ></b-form-select>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedGugun"
@@ -16,7 +17,8 @@
         text-field="text"
         :options="gugun"
         :value="null"
-        @change="onGugunChanged"></b-form-select>
+        @change="onGugunChanged"
+      ></b-form-select>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedDong"
@@ -24,7 +26,8 @@
         text-field="text"
         :options="dong"
         :value="null"
-        @change="onDongChanged"></b-form-select>
+        @change="onDongChanged"
+      ></b-form-select>
       <!-- <b-button @click="search()">검색</b-button> -->
     </b-form>
 
@@ -75,7 +78,7 @@ export default {
     window.mapInstance = this.map;
   },
   methods: {
-    ...mapActions(mapStore, ["updateAptInfoList", "setPanelOpen", "init"]),
+    ...mapActions(mapStore, ["updateAptInfoList", "init"]),
 
     async onSidoChanged() {
       this.gugun = [{ text: "구/군", value: null }];
@@ -174,7 +177,7 @@ export default {
       }
 
       this.$route.name != "MapList" && this.$router.push({ name: "MapList" });
-      this.setPanelOpen(true);
+      this.$parent.$emit("onPanelOpen");
     },
   },
 };

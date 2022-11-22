@@ -151,67 +151,76 @@ async function getLatLngByAddr(addr) {
   });
 }
 
+async function AMark(el, bounds, markers) {
+  // 마커 이미지 지정
+  const image = createMarkerImage(
+    APT_MARKER_IMG,
+    MARKER_WIDTH,
+    MARKER_HEIGHT
+  );
+  const overImage = createMarkerImage(
+    APT_MARKER_IMG,
+    OVER_MARKER_WIDTH,
+    OVER_MARKER_HEIGHT
+  );
+
+  // 마커 위치 생성
+  const addr = `${el.sidoName} ${el.gugunName} ${el.dongName} ${el.bunji}`;
+  const position = await getLatLngByAddr(addr).catch(() => { });
+
+  if (!position) return;
+
+  // 마커 생성
+  let marker = new kakao.maps.Marker({
+    position,
+    image,
+  });
+
+  // 클릭 이벤트 추가
+  kakao.maps.event.addListener(marker, "click", function () {
+    // 1. 클릭 시 해당 매물로 지도 이동
+    window.map.panTo(position);
+    // 2. 상세 거래내역 왼쪽 리스트에 조회
+  });
+
+  // 마커에 mouseover 이벤트를 등록합니다
+  kakao.maps.event.addListener(marker, "mouseover", function () {
+    // 클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면
+    // 마커의 이미지를 오버 이미지로 변경합니다
+    marker.setImage(overImage);
+  });
+  kakao.maps.event.addListener(marker, "mouseout", function () {
+    // 클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면
+    // 마커의 이미지를 오버 이미지로 변경합니다
+    marker.setImage(image);
+  });
+
+  // 화면에 모든 마커가 보이도록 bound 설정
+  bounds.extend(position);
+  window.map.setBounds(bounds);
+
+  // table 에서 필요한 변수 및 함수들 선언
+  el.position = position;
+  el.onHover = () => {
+    marker.setImage(overImage);
+  };
+  el.onHoverout = () => {
+    marker.setImage(image);
+  };
+
+  // markers 에 push
+  markers.push(marker);
+}
+
 export async function AptMarkers(list) {
   let bounds = new kakao.maps.LatLngBounds();
   let markers = [];
+  let promiseArr = [];
   for (let el of list) {
-    // 마커 이미지 지정
-    const image = createMarkerImage(
-      APT_MARKER_IMG,
-      MARKER_WIDTH,
-      MARKER_HEIGHT
-    );
-    const overImage = createMarkerImage(
-      APT_MARKER_IMG,
-      OVER_MARKER_WIDTH,
-      OVER_MARKER_HEIGHT
-    );
-
-    // 마커 위치 생성
-    const addr = `${el.sidoName} ${el.gugunName} ${el.dongName} ${el.bunji} ${el.apartmentName}`;
-    const position = await getLatLngByAddr(addr);
-
-    // 마커 생성
-    let marker = new kakao.maps.Marker({
-      position,
-      image,
-    });
-
-    // 클릭 이벤트 추가
-    kakao.maps.event.addListener(marker, "click", function () {
-      // 1. 클릭 시 해당 매물로 지도 이동
-      window.map.panTo(position);
-      // 2. 상세 거래내역 왼쪽 리스트에 조회
-    });
-
-    // 마커에 mouseover 이벤트를 등록합니다
-    kakao.maps.event.addListener(marker, "mouseover", function () {
-      // 클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면
-      // 마커의 이미지를 오버 이미지로 변경합니다
-      marker.setImage(overImage);
-    });
-    kakao.maps.event.addListener(marker, "mouseout", function () {
-      // 클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면
-      // 마커의 이미지를 오버 이미지로 변경합니다
-      marker.setImage(image);
-    });
-
-    // 화면에 모든 마커가 보이도록 bound 설정
-    bounds.extend(position);
-    window.map.setBounds(bounds);
-
-    // table 에서 필요한 변수 및 함수들 선언
-    el.position = position;
-    el.onHover = () => {
-      marker.setImage(overImage);
-    };
-    el.onHoverout = () => {
-      marker.setImage(image);
-    };
-
-    // markers 에 push
-    markers.push(marker);
+    promiseArr.push(AMark(el, bounds, markers));
   }
+
+  await Promise.all(promiseArr);
 
   return markers;
 }

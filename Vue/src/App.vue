@@ -39,4 +39,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+div[id^="google-visualization-errors"] {
+  display: none !important;
+}
 </style>

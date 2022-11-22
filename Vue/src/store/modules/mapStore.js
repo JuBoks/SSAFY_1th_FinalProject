@@ -14,7 +14,6 @@ const mapStore = {
     aptInfoList: [], // 좌측 리스트에 출력할 정보들
     aptDealInfo: [], // 한 아파트에 대한 거래 정보들
     aptFilterBtn: true, // 아파트 마커 보여줄 버튼 활성화 여부
-    panelOpen: false, // 좌측 리스트 panel 열림여부
     aptDealInfoGroup: [], // 한 아파트에 대한 년월 기준으로 평균 매매값
     aptDealInfoGroupChart: [["년도", "매매평균값"]], // 한 아파트에 대한 거래 정보들 (차트용)
   },
@@ -36,9 +35,6 @@ const mapStore = {
     },
     aptFilterBtn(state) {
       return state.aptFilterBtn;
-    },
-    panelOpen(state) {
-      return state.panelOpen;
     },
     aptDealInfoGroup(state) {
       return state.aptDealInfoGroup;
@@ -66,9 +62,6 @@ const mapStore = {
     APT_FILTER_BTN(state, payload) {
       state.aptFilterBtn = payload.flag;
     },
-    PANEL_OPEN(state, payload) {
-      state.panelOpen = payload.flag;
-    },
     APT_DEAL_INFO_GROUP(state, payload) {
       state.aptDealInfoGroup = payload.aptDealInfoGroup;
     },
@@ -95,7 +88,9 @@ const mapStore = {
       apiGetAptDealGroup(aptCode, ({ data }) => {
         // chart 에 맞게 데이터 넣기
         let chartData = [["년도", "매매평균값"]];
-        for (let el of data) {
+        let length = data.length > 12 ? 12 : data.length;
+        for (let i = 0; i < length; i++) {
+          let el = data[i];
           chartData.push([
             `${el.dealYear}.${el.dealMonth}`,
             Number(el.dealAvg) / 10,
@@ -123,7 +118,11 @@ const mapStore = {
       console;
       apiGetAptDealByMonth(payload, ({ data }) => {
         const filter = data.map((el) => {
-          return { ...el, dealDate: `${el.dealYear}.${el.dealMonth}` };
+          let amount = el.dealAmount.replace(",", "");
+          amount = Number(amount);
+          console.log("amount", amount);
+          amount /= 10000;
+          return { ...el, dealDate: `${el.dealYear}.${el.dealMonth}`, dealAmount: `${amount}억` };
         });
         commit({
           type: "APT_SELECTED_BY_MONTH",
@@ -151,12 +150,6 @@ const mapStore = {
         flag,
       });
     },
-    setPanelOpen({ commit }, flag) {
-      commit({
-        type: "PANEL_OPEN",
-        flag,
-      });
-    },
     init({ commit }) {
       commit({
         type: "APT_SELECTED",
@@ -165,6 +158,10 @@ const mapStore = {
       commit({
         type: "APT_SELECTED_BY_MONTH",
         aptSelectedDealByMonth: [],
+      });
+      commit({
+        type: "APT_DEAL_INFO_GROUP_CHART",
+        aptDealInfoGroupChart: [],
       });
     },
   },
