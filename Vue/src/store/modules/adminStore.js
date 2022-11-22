@@ -12,7 +12,7 @@ function alertMessage(statusCode) {
   }
 }
 
-const boardStore = {
+const adminStore = {
   namespaced: true,
   state: {
     users: [],
@@ -60,6 +60,7 @@ const boardStore = {
         .then((response) => {
           switch (response.status) {
             case 200:
+              console.log("getUsers", response.data);
               context.commit({ type: "USERS", users: response.data });
               break;
 
@@ -71,13 +72,12 @@ const boardStore = {
           }
         });
     },
-    createUser(context, user) {
-      console.log("USER", user);
-      http.post("/admin", user).then((response) => {
+    createUser(context, payload) {
+      http.post("/admin", payload.userInfo).then((response) => {
         switch (response.status) {
           case 200:
             alert("등록 되었습니다.");
-            //this.moveList();
+            payload.callback();
             break;
 
           case 400:
@@ -88,7 +88,6 @@ const boardStore = {
       });
     },
     getUser(context, userId) {
-      console.log("getUser", userId);
       http.get(`/admin/${userId}`).then((response) => {
         switch (response.status) {
           case 200:
@@ -124,28 +123,29 @@ const boardStore = {
         }
       });
     },
-    modifyUser(context, user) {
-      console.log("유저객체", user);
-      console.log("유저객체아이디", user.userId);
-      http.put(`/admin/${user.userId}`, user).then((response) => {
-        switch (response.status) {
-          case 200:
-            alert("수정이 완료되었습니다.");
-            // user.callback();
-            break;
+    modifyUser(context, payload) {
+      http
+        .put(`/admin/${payload.userInfo.userId}`, payload.userInfo)
+        .then((response) => {
+          switch (response.status) {
+            case 200:
+              alert("수정이 완료되었습니다.");
+              payload.callback();
+              break;
 
-          case 400:
-          case 500:
-            alertMessage(response.status);
-            break;
-        }
-      });
+            case 400:
+            case 500:
+              alertMessage(response.status);
+              break;
+          }
+        });
     },
-    deleteUser(context, userId) {
-      http.delete(`/admin/${userId}`).then((response) => {
+    deleteUser(context, payload) {
+      http.delete(`/admin/${payload.userId}`).then((response) => {
         switch (response.status) {
           case 200:
             alert("삭제가 완료되었습니다.");
+            payload.callback();
             break;
 
           case 400:
@@ -158,4 +158,4 @@ const boardStore = {
   },
 };
 
-export default boardStore;
+export default adminStore;

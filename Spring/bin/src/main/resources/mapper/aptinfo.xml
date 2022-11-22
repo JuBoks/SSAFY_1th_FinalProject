@@ -4,9 +4,11 @@
 <mapper namespace="com.ssafy.aptinfo.model.dao.AptInfoDao">
 
 	<select id="listAptInfo" parameterType="string" resultType="aptInfoDto">
-		SELECT 	aptCode, apartmentName, buildYear, roadName, bunji, sidoCode, gugunCode, dongCode
-		FROM	apt_info
-		WHERE	dongCode = #{dongCode}
+		SELECT 	aptCode, apartmentName, buildYear, roadName, bunji, sidoCode, gugunCode, a.dongCode dongCode, d.sidoName sidoName, d.gugunName gugunName, d.dongName dongName
+		FROM	apt_info a
+		JOIN	dongcode d
+		ON		a.dongCode = d.dongCode 
+		WHERE	a.dongCode = #{dongCode}
 	</select>
 	
 	<select id="search" parameterType="int" resultType="aptInfoDto">

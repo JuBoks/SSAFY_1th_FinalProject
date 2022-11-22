@@ -10,24 +10,20 @@
       <b-col class="text-left">
         <b-form>
           <b-form-group
-            v-if="type == 'create' && loginUser"
             label-cols="12"
-            id="subject-group"
             label="권한:"
             label-for="userAuth"
-            description="0 & 1 입력">
-            <b-form-input
+            description="사용자권한 선택">
+            <b-form-select
               id="userAuth"
               ref="userAuth"
               v-model="input.userAuth"
-              type="text"
-              required
-              placeholder=" 1은 일반/0은 관리자" />
+              :options="authOption"
+              required />
           </b-form-group>
           <b-form-group
             v-if="type == 'create'"
             label-cols="12"
-            id="subject-group"
             label="아이디:"
             label-for="userName"
             description="아이디 입력">
@@ -40,9 +36,7 @@
               placeholder="아이디 입력..." />
           </b-form-group>
           <b-form-group
-            v-if="type == 'create'"
             label-cols="12"
-            id="subject-group"
             label="비밀번호:"
             label-for="userPwd"
             description="비밀번호 입력">
@@ -50,13 +44,12 @@
               id="userPwd"
               ref="userPwd"
               v-model="input.userPwd"
-              type="text"
+              type="password"
               required
               placeholder="비밀번호 입력..." />
           </b-form-group>
           <b-form-group
             label-cols="12"
-            id="subject-group"
             label="이름:"
             label-for="userName"
             description="이름 변경">
@@ -70,7 +63,6 @@
           </b-form-group>
           <b-form-group
             label-cols="12"
-            id="subject-group"
             label="주소:"
             label-for="subject"
             description="주소를 입력하세요.">
@@ -84,7 +76,6 @@
           </b-form-group>
           <b-form-group
             label-cols="12"
-            id="subject-group"
             label="연락처:"
             label-for="userPhone"
             description="연락처를 입력하세요.">
@@ -125,8 +116,21 @@ export default {
     // 부모 component로 부터 전달받은 type 정보를 받아옴
     type: { type: String },
   },
+  data() {
+    return {
+      authOption: [
+        { text: "관리자", value: 1 },
+        { text: "일반사용자", value: 0 },
+      ],
+    };
+  },
   methods: {
-    ...mapActions(adminStore, ["createUser", "modifyUser", "getUser"]),
+    ...mapActions(adminStore, [
+      "createUser",
+      "modifyUser",
+      "getUser",
+      "getUsers",
+    ]),
     validate() {
       let isValid = true;
       let errMsg = "";
@@ -150,10 +154,20 @@ export default {
         alert(errMsg);
       } else {
         if (this.type == "create") {
-          this.createUser(this.input);
+          this.createUser({
+            userInfo: this.input,
+            callback: () => {
+              this.getUsers({ pgno: 1, key: "", word: "" });
+            },
+          });
           this.moveList();
         } else {
-          this.modifyUser(this.input);
+          this.modifyUser({
+            userInfo: this.input,
+            callback: () => {
+              this.getUsers({ pgno: 1, key: "", word: "" });
+            },
+          });
           this.moveList();
         }
       }
@@ -165,10 +179,6 @@ export default {
         this.$router.push({ name: "Map" });
       }
     },
-  },
-  created() {
-    // console.log("사용자 등록 누르면 나오는 loginUser", this.loginUser.userAuth);
-    console.log("writeForm", this.$route.params.userId);
   },
   computed: {
     ...mapGetters(userStore, ["loginUser"]),
@@ -197,4 +207,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.form-group {
+  margin-bottom: 0;
+}
+</style>

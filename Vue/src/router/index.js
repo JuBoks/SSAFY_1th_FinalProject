@@ -16,6 +16,7 @@ const onlyAuthUser = async (to, from, next) => {
   }
   if (!checkToken || checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
+    
     // next({ name: "login" });
     router.push({ name: "login" });
   } else {
@@ -33,6 +34,7 @@ const routes = [
   {
     path: "/MyInfo",
     name: "MyInfo",
+    beforeEnter: onlyAuthUser,
     component: () => import("@/components/common/MyInfo"),
   },
   {

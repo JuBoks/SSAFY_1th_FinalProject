@@ -27,14 +27,15 @@ export default {
   },
 
   methods: {
-    ...mapActions(adminStore, ["deleteUser", "modifyUser"]),
+    ...mapActions(adminStore, ["deleteUser", "modifyUser", "getUsers"]),
     deleteu() {
-      this.deleteUser(this.user.userId);
+      this.deleteUser({
+        userId: this.user.userId,
+        callback: () => {
+          this.getUsers({ pgno: 1, key: "", word: "" });
+        },
+      });
     },
-    // modifyu() {
-    //   // user 수정 후 callback 함수 필요시 지정해야함
-    //   this.modifyUser(this.user);
-    // },
 
     moveModifyUser() {
       this.$router.push({

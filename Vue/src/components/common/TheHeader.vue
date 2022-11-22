@@ -19,12 +19,12 @@
       </b-navbar-nav>
       <!-- right nav items -->
       <b-navbar-nav class="ml-auto">
-        <template v-if="avail">
+        <template v-if="loginUser">
           <b-nav-item
             ><span>반갑습니다.{{ this.loginUser.userId }}님</span></b-nav-item
           >
-          <b-nav-item v-if="this.loginUser.userAuth"
-            ><span @click="moveAdmin"> 회원관리</span></b-nav-item
+          <b-nav-item v-if="this.loginUser.userAuth == 1"
+            ><span @click="moveAdmin">회원관리</span></b-nav-item
           >
           <b-nav-item><span @click="moveInfo">내정보</span></b-nav-item>
           <b-nav-item
@@ -71,7 +71,6 @@ const userStore = "userStore";
 export default {
   data() {
     return {
-      avail: "",
       input: {
         userId: "",
         userPwd: "",
@@ -99,9 +98,8 @@ export default {
         })
         .then((value) => {
           if (value) {
-            this.avail = "";
             console.log("userId", this.input.userId);
-            this.userLogout(this.input.userId);
+            this.userLogout(this.loginUser.userId);
           }
         });
     },
@@ -115,7 +113,6 @@ export default {
         await this.getUserInfo(token);
         const auth = this.loginUser.userAuth;
         console.log("이사람의 현재권한", auth);
-        this.avail = "yes";
         // console.log("4. confirm() userInfo :: ", this.userInfo);
         this.hideModalLogin();
       }

@@ -35,9 +35,9 @@ const userStore = {
     SET_IS_VALID_TOKEN: (state, isValidToken) => {
       state.isValidToken = isValidToken;
     },
-    SET_USER_INFO: (state, loginUser) => {
-      state.isLogin = true;
-      state.loginUser = loginUser;
+    SET_USER_INFO: (state, payload) => {
+      state.isLogin = payload.isLogin;
+      state.loginUser = payload.loginUser;
     },
   },
   actions: {
@@ -77,7 +77,11 @@ const userStore = {
         decodeToken.userid,
         ({ data }) => {
           if (data.message === "success") {
-            commit("SET_USER_INFO", data.userInfo);
+            commit({
+              type: "SET_USER_INFO",
+              loginUser: data.userInfo,
+              isLogin: true,
+            });
             console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
@@ -123,14 +127,22 @@ const userStore = {
                 }
                 alert("RefreshToken 기간 만료!!! 다시 로그인해 주세요.");
                 commit("SET_IS_LOGIN", false);
-                commit("SET_USER_INFO", null);
+                commit({
+                  type: "SET_USER_INFO",
+                  loginUser: null,
+                  isLogin: false,
+                });
                 commit("SET_IS_VALID_TOKEN", false);
                 router.push({ name: "login" });
               },
               (error) => {
                 console.log(error);
                 commit("SET_IS_LOGIN", false);
-                commit("SET_USER_INFO", null);
+                commit({
+                  type: "SET_USER_INFO",
+                  loginUser: null,
+                  isLogin: false,
+                });
               }
             );
           }
@@ -144,7 +156,11 @@ const userStore = {
         ({ data }) => {
           if (data.message === "success") {
             commit("SET_IS_LOGIN", false);
-            commit("SET_USER_INFO", null);
+            commit({
+              type: "SET_USER_INFO",
+              loginUser: null,
+              isLogin: false,
+            });
             commit("SET_IS_VALID_TOKEN", false);
           } else {
             console.log("유저 정보 없음!!!!");

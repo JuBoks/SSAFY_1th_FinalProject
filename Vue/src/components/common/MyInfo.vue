@@ -8,7 +8,11 @@
     <b-row class="mb-1">
       <b-col class="text-left">
         <b-form>
-          <b-form-group label-cols="12" label="권한:" label-for="userAuth">
+          <b-form-group
+            v-if="loginUser.userAuth == 1"
+            label-cols="12"
+            label="권한:"
+            label-for="userAuth">
             <b-form-input
               disabled
               v-model="input.userAuth"
@@ -80,8 +84,9 @@ export default {
       this.$router.push({ name: "Map" });
     },
   },
-  created() {
-    console.log(this.input);
+  async created() {
+    let token = sessionStorage.getItem("access-token");
+    await this.getUserInfo(token);
   },
   computed: {
     ...mapGetters(userStore, ["loginUser"]),
