@@ -1,22 +1,23 @@
 <template>
   <b-container class="bv-example-row">
     <b-row>
-      <b-col class="m-2">
+      <b-col class="m-5">
         <b-card
-          border-variant="primary"
-          header="메뉴"
-          header-bg-variant="primary"
-          header-text-variant="white"
-          align="center">
-          <b-card
-            title="집 보러 가자!"
-            :img-src="require('@/assets/img/Home.jpg')"
-            img-alt="Image"
-            img-top>
-          </b-card>
+          title="당신에게 딱 맞는 집!"
+          :img-src="require('@/assets/img/Home.jpg')"
+          img-alt="Image"
+          img-top
+          tag="article"
+          style="max-width: 20rem"
+          class="mb-6">
+          <b-button href="#" variant="primary">바로 검색</b-button>
         </b-card>
       </b-col>
-      <b-col style="overflow: hidden"> 오른쪽 </b-col>
+      <b-col>
+        <div>
+          <img class="i" src="@/assets/img/LOCAL.jpg" />
+        </div>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -34,5 +35,12 @@ video {
   z-index: -100;
   background-size: cover;
   overflow: hidden;
+}
+.i {
+  margin: 10px;
+  float: left;
+  width: 500px;
+  height: 500px;
+  object-fit: cover;
 }
 </style>
