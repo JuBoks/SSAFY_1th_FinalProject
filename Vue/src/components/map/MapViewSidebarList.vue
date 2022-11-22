@@ -7,8 +7,7 @@
       @row-unhovered="onRowUnhovered"
       @row-clicked="onRowClicked"
       :items="aptInfoList"
-      :fields="fields"
-    ></b-table>
+      :fields="fields"></b-table>
     <template v-else>
       <div class="text-center">검색 결과가 없습니다.</div>
     </template>
@@ -41,7 +40,11 @@ export default {
     ...mapGetters(mapStore, ["aptInfoList"]),
   },
   methods: {
-    ...mapActions(mapStore, ["getAptDealGroup", "setAptSelected"]),
+    ...mapActions(mapStore, [
+      "getAptDealGroup",
+      "setSelectedApt",
+      "getSelectedAptDealAvg",
+    ]),
     onRowHovered(item) {
       item.position && window.map.panTo(item.position);
       item.onHover && item.onHover();
@@ -50,7 +53,8 @@ export default {
       item.onHoverout && item.onHoverout();
     },
     async onRowClicked(item) {
-      this.setAptSelected(item);
+      this.setSelectedApt(item);
+      this.getSelectedAptDealAvg(item.aptCode);
       this.getAptDealGroup(item.aptCode);
       this.$router.push({ name: "MapInfo" });
     },

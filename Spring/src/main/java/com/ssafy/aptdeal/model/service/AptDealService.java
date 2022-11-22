@@ -1,6 +1,7 @@
 package com.ssafy.aptdeal.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ssafy.aptdeal.model.dto.AptDealDto;
 
@@ -17,5 +18,9 @@ public interface AptDealService {
 	boolean update(AptDealDto aptDealDto) throws Exception;
 	
 	boolean delete(Long no) throws Exception;
+
+	String getAptDealAvgByMonth(Integer aptCode) throws Exception;
+
+	List<AptDealDto> getAptDealByMonth(Map<String, Object> param) throws Exception;
 	
 }

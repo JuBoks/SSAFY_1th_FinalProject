@@ -1,6 +1,7 @@
 package com.ssafy.aptdeal.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,16 @@ public class AptDealServiceImpl implements AptDealService {
 	@Override
 	public boolean delete(Long no) throws Exception {
 		return aptDealDao.delete(no) == 1;
+	}
+
+	@Override
+	public String getAptDealAvgByMonth(Integer aptCode) throws Exception {
+		return aptDealDao.getAptDealAvgByMonth(aptCode);
+	}
+
+	@Override
+	public List<AptDealDto> getAptDealByMonth(Map<String, Object> param) throws Exception {
+		return aptDealDao.getAptDealByMonth(param);
 	}
 
 }

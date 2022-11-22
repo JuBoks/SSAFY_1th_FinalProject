@@ -1,10 +1,16 @@
 <template>
-  <GChart :type="type" :data="data" :options="options" :events="events" />
+  <GChart
+    class="gchart"
+    ref="gchart"
+    :type="type"
+    :data="data"
+    :options="options"
+    :events="events" />
 </template>
 
 <script>
 import { GChart } from "vue-google-charts/legacy";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 const mapStore = "mapStore";
 
@@ -16,7 +22,7 @@ export default {
   data() {
     return {
       type: "LineChart",
-      data: this.aptDealInfoGroup,
+      data: this.aptDealInfoGroupChart,
       options: {
         curveType: "function",
         legend: { position: "bottom" },
@@ -26,24 +32,59 @@ export default {
           trigger: "both",
           orientation: "vertical",
         },
+        hAxis: {
+          textStyle: {
+            color: "black",
+            fontSize: 8,
+          },
+          slantedText: true,
+          slantedTextAngle: 50,
+        },
+        vAxis: { format: "#,###억" },
+        tooltip: {
+          textStyle: {
+            color: "black",
+            fontSize: 10,
+          },
+        },
       },
       events: {
-        select: (el1, el2, el3) => {
-          console.log(el1, el2, el3);
+        select: () => {
+          const selectedRow =
+            this.$refs.gchart.chartObject.getSelection()[0].row + 1;
+          const [dealYear, dealMonth] = this.data[selectedRow][0].split(".");
+          const aptCode = this.aptSelected.aptCode;
+
+          this.getAptDealByMonth({
+            aptCode,
+            dealYear,
+            dealMonth,
+          });
         },
       },
     };
   },
   computed: {
-    ...mapGetters(mapStore, ["aptDealInfoGroup"]),
+    ...mapGetters(mapStore, [
+      "aptDealInfoGroup",
+      "aptDealInfoGroupChart",
+      "aptSelected",
+      "aptSelectedDealByMonth",
+    ]),
   },
-  created() {
-    this.data = this.aptDealInfoGroup;
+  mounted() {
+    let filter = [];
+    for (let i = 0; i < 13; i++) {
+      if (this.aptDealInfoGroupChart[i]) {
+        filter.push(this.aptDealInfoGroupChart[i]);
+      } else {
+        break;
+      }
+    }
+    this.data = filter;
   },
   methods: {
-    selectRow(el1, el2, el3) {
-      console.log("select row", el1, el2, el3);
-    },
+    ...mapActions(mapStore, ["getAptDealByMonth"]),
   },
 };
 </script>

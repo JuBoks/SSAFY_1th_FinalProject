@@ -16,6 +16,25 @@
 		GROUP BY dealYear, dealMonth
 	</select>
 	
+	<select id="getAptDealAvgByMonth" parameterType="int" resultType="string">
+		SELECT  ROUND(AVG(a.dealAmount), 2) dealAvg
+		FROM (
+			SELECT	 dealAmount
+			FROM	 apt_deal
+			WHERE	 aptCode = #{aptCode}
+			ORDER BY dealYear DESC, dealMonth DESC
+			LIMIT 30
+		) a
+	</select>
+	
+	<select id="getAptDealByMonth" parameterType="map" resultType="aptDealDto">
+		SELECT 	 no, dealAmount, dealYear, dealMonth, dealDay, area, floor, cancelDealDay, aptCode
+		FROM	 apt_deal
+		WHERE	 aptCode = #{aptCode}
+		AND	     dealYear = #{dealYear}
+		AND	     dealMonth = #{dealMonth}
+	</select>
+	
 	<select id="search" parameterType="long" resultType="aptDealDto">
 		SELECT 	no, dealAmount, dealYear, dealMonth, dealDay, area, floor, cancelDealDay, aptCode
 		FROM	apt_deal

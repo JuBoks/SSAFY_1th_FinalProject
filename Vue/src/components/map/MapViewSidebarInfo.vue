@@ -2,6 +2,7 @@
   <div class="rv-container">
     <div ref="rv" class="wh100"></div>
     <google-chart></google-chart>
+    <map-view-sidebar-info-table></map-view-sidebar-info-table>
   </div>
 </template>
 
@@ -14,12 +15,13 @@ export default {
   components: {
     "google-chart": () =>
       import("@/components/map/MapViewSidebarInfoChart.vue"),
+    "map-view-sidebar-info-table": () =>
+      import("@/components/map/MapViewSidebarInfoTable.vue"),
   },
   computed: {
     ...mapGetters(mapStore, ["aptSelected"]),
   },
   mounted() {
-    console.log("aptSelected", this.aptSelected);
     window.mapInstance &&
       window.mapInstance.createRoadView(
         this.$refs.rv,

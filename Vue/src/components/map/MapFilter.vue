@@ -1,29 +1,6 @@
 <template>
   <b-navbar class="map-nav" toggleable="md" variant="light">
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-    <!-- <b-navbar-nav class="dateSel">
-      <b-nav-item>
-        <b-form-select
-          id="dealYear"
-          class="mb-2 mr-sm-2 mb-sm-0"
-          :options="year"
-          v-model="ys"
-          :value="ysVal"
-          @change="onYearSelectChanged"
-        ></b-form-select>
-      </b-nav-item>
-      <b-nav-item>
-        <b-form-select
-          id="dealMonth"
-          class="mb-2 mr-sm-2 mb-sm-0"
-          :options="month"
-          v-model="ms"
-          :value="msVal"
-          @change="onMonthSelectChanged"
-        ></b-form-select>
-      </b-nav-item>
-    </b-navbar-nav> -->
-
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item>

@@ -73,10 +73,9 @@ export default {
     // 카카오 맵 생성
     this.map = new Kakao.Map();
     window.mapInstance = this.map;
-    //this.map.setCenterAddr();
   },
   methods: {
-    ...mapActions(mapStore, ["updateAptInfoList", "setPanelOpen"]),
+    ...mapActions(mapStore, ["updateAptInfoList", "setPanelOpen", "init"]),
 
     async onSidoChanged() {
       this.gugun = [{ text: "구/군", value: null }];
@@ -148,6 +147,9 @@ export default {
       return items == "" ? [] : items.item;
     },
     async search() {
+      // init
+      this.init();
+
       // 1. validation
       if (!this.validateSearch()) return;
 
@@ -159,8 +161,6 @@ export default {
 
       // 3. 좌측 리스트 정보 출력
       this.updateAptInfoList(aptData);
-
-      console.log("아파트", aptData);
 
       // 4. 맵에 마커 표시하기
       if (aptData.length > 0) {

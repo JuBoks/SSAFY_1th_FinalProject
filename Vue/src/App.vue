@@ -19,7 +19,7 @@ export default {
 @import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
 * {
   font-famliy: "NanumSquare", san-serif;
-  font-size: 17px;
+  /* font-size: 17px; */
   line-height: 1.5;
   box-sizing: border-box;
 }
