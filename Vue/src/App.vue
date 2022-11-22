@@ -42,7 +42,12 @@ export default {
   width: 100%;
   height: 100%;
 }
+/* chart error popup 숨기기 */
 div[id^="google-visualization-errors"] {
   display: none !important;
+}
+/* 거래 상세 정보 테이블 */
+.b-table-empty-row {
+  text-align: center;
 }
 </style>
