@@ -43,7 +43,6 @@ public class AdminRestController {
 	@GetMapping
 	public ResponseEntity<?> listUsers(@RequestParam Map<String, Object> map) {
 		try {
-			System.out.println("리스트 들어옴");
 			List<UserDto> listUser = userService.getUserList(map);
 			return new ResponseEntity<List<UserDto>>(listUser, HttpStatus.OK);
 		}
