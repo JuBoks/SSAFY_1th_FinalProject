@@ -30,7 +30,6 @@ const newsStore = {
   },
   actions: {
     getAllNews(context) {
-      console.log("시작", context);
       http.get("/news").then((response) => {
         switch (response.status) {
           case 200:

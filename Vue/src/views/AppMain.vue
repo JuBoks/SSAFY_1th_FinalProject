@@ -13,11 +13,28 @@
           <b-button @click="movePage" variant="primary">바로 검색</b-button>
         </b-card>
       </b-col>
+
       <b-col>
-        <div>
-          <img class="i" src="@/assets/img/LOCAL.jpg" />
-        </div>
+        <li v-for="(Newsone, index) in this.news" :key="index">
+          <b-card no-body class="overflow-hidden" style="max-width: 1000px">
+            <b-row no-gutters>
+              <b-col md="6">
+                <b-card-img :src="Newsone.img" class="rounded-0"></b-card-img>
+              </b-col>
+              <b-col md="6">
+                <b-card-body :title="Newsone.subject">
+                  <b-card-text>
+                    <a :href="Newsone.url" target="_blank">{{
+                      Newsone.contents
+                    }}</a>
+                  </b-card-text>
+                </b-card-body>
+              </b-col>
+            </b-row>
+          </b-card>
+        </li>
       </b-col>
+      <!-- <img class="i" src="@/assets/img/LOCAL.jpg" /> -->
     </b-row>
   </b-container>
 </template>
