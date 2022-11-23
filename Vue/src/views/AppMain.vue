@@ -23,11 +23,23 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+const newsStore = "newsStore";
 export default {
+  computed: {
+    ...mapGetters(newsStore, ["news"]),
+  },
   methods: {
+    ...mapActions(newsStore, ["getAllNews"]),
     movePage() {
       this.$router.push({ name: "Home" });
     },
+  },
+
+  created() {
+    console.log("화면띄우고");
+    this.getAllNews();
+    console.log(this.news);
   },
 };
 </script>
