@@ -35,8 +35,8 @@ public class CommentRestController {
 		logger.debug("listComment - 호출");
 
 		try {
+			System.out.println("??asdasdasdas");
 			List<Comment> listComment = commentService.list(articleNo);
-			System.out.println(listComment);
 			return new ResponseEntity<List<Comment>>(listComment, HttpStatus.OK);
 		}
 		catch (Exception e) {
@@ -51,10 +51,11 @@ public class CommentRestController {
 
 		try {
 			System.out.println(commentDto);
-			System.out.println("아아아아아ㅏ");
+			
 			boolean isWrite = commentService.create(commentDto);
 			
 			if (isWrite) {
+
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			}
 			else {

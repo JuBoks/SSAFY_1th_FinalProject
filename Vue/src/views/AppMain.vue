@@ -10,7 +10,7 @@
           tag="article"
           style="max-width: 20rem"
           class="mb-6">
-          <b-button href="#" variant="primary">바로 검색</b-button>
+          <b-button @click="movePage" variant="primary">바로 검색</b-button>
         </b-card>
       </b-col>
       <b-col>
@@ -23,7 +23,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    movePage() {
+      this.$router.push({ name: "Home" });
+    },
+  },
+};
 </script>
 
 <style>

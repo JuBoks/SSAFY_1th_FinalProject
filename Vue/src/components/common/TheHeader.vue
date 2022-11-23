@@ -13,6 +13,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item><router-link to="/main">홈</router-link></b-nav-item>
+        <b-nav-item><router-link to="/notice">공지사항</router-link></b-nav-item> 
         <b-nav-item><router-link to="/map">매물</router-link></b-nav-item>
         <!-- <b-nav-item><router-link to="/admin">관리자</router-link></b-nav-item> -->
         <b-nav-item><router-link to="/board">QnA</router-link></b-nav-item>

@@ -120,6 +120,40 @@ const routes = [
       },
     ],
   },
+
+  {
+    path: "/notice",
+    name: "Notice",
+    component: () => import("@/views/AppNotice"),
+    redirect: "/notice/list",
+    children: [
+      {
+        path: "list",
+        name: "NoticeList",
+        component: () => import("@/components/notice/NoticeList.vue"),
+      },
+      {
+        path: "write",
+        name: "NoticeCreate",
+        component: () => import("@/components/notice/NoticeCreate.vue"),
+      },
+      {
+        path: "detail/:articleNo",
+        name: "NoticeDetail",
+        component: () => import("@/components/notice/NoticeDetail.vue"),
+      },
+      {
+        path: "modify/:articleNo",
+        name: "NoticeModify",
+        component: () => import("@/components/notice/NoticeModify.vue"),
+      },
+      {
+        path: "delete/:articleNo",
+        name: "NoticeDelete",
+        component: () => import("@/components/notice/NoticeDelete.vue"),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

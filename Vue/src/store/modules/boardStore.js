@@ -195,6 +195,7 @@ const boardStore = {
     },
     createComment(context, payload) {
       console.log(payload.comment);
+      console.log("??");
       http.post("/comment", payload.comment).then((response) => {
         switch (response.status) {
           case 200:
