@@ -80,9 +80,8 @@ export default {
       currentPage: 1, // 현재 조회중인 페이지 번호
       searchOption: [
         { text: "검색조건", value: null },
-        { text: "제목", value: "subject" },
-        { text: "작성자", value: "userid" },
-        { text: "정확도", value: "precise" },
+        { text: "아이디", value: "userId" },
+        { text: "핸드폰번호", value: "userPhone" },
       ],
     };
   },

@@ -230,4 +230,23 @@ public class UserRestController {
 		}
 	}
 	
+	@GetMapping("/findPwd/{userId}")
+	public ResponseEntity<?> findPwd(@PathVariable("userId") String userId,
+			HttpSession session) {
+
+		try {
+			userService.sendEmail(userId);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+//			if (isDelete) {
+//				session.invalidate();
+//				return new ResponseEntity<Void>(HttpStatus.OK);
+//			}
+//			else {
+//				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//			}
+		}
+		catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

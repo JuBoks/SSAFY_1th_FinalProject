@@ -12,7 +12,7 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <!-- <b-nav-item><router-link to="/main">홈</router-link></b-nav-item> -->
+        <b-nav-item><router-link to="/main">홈</router-link></b-nav-item>
         <b-nav-item><router-link to="/map">매물</router-link></b-nav-item>
         <!-- <b-nav-item><router-link to="/admin">관리자</router-link></b-nav-item> -->
         <b-nav-item><router-link to="/board">QnA</router-link></b-nav-item>
@@ -58,6 +58,7 @@
       </div>
       <!-- 수정 모달 창 Footer 작성 -->
       <div class="text-right">
+        <b-button variant="warning" @click="findPwd">비밀번호찾기</b-button>
         <b-button variant="primary" @click="confirm">로그인</b-button>
       </div>
     </b-modal>
@@ -66,6 +67,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import { findPwd } from "@/api/user";
 
 const userStore = "userStore";
 export default {
@@ -84,6 +86,31 @@ export default {
 
   methods: {
     ...mapActions(userStore, ["login", "userLogout"]),
+    ...mapActions(userStore, ["userConfirm", "getUserInfo"]),
+    async confirm() {
+      await this.userConfirm(this.input);
+      let token = sessionStorage.getItem("access-token");
+      // console.log("1. confirm() token >> " + token);
+      if (this.isLogin) {
+        await this.getUserInfo(token);
+        const auth = this.loginUser.userAuth;
+        console.log("이사람의 현재권한", auth);
+        // console.log("4. confirm() userInfo :: ", this.userInfo);
+        this.hideModalLogin();
+      }
+    },
+
+    findPwd() {
+      findPwd(
+        this.input.userId,
+        () => {
+          alert("임시 비밀번호가 발송되었습니다.");
+        },
+        () => {
+          alert("서버 오류입니다.");
+        }
+      );
+    },
 
     showModalLogin() {
       this.$refs["modalLogin"].show();
@@ -104,19 +131,6 @@ export default {
         });
     },
 
-    ...mapActions(userStore, ["userConfirm", "getUserInfo"]),
-    async confirm() {
-      await this.userConfirm(this.input);
-      let token = sessionStorage.getItem("access-token");
-      // console.log("1. confirm() token >> " + token);
-      if (this.isLogin) {
-        await this.getUserInfo(token);
-        const auth = this.loginUser.userAuth;
-        console.log("이사람의 현재권한", auth);
-        // console.log("4. confirm() userInfo :: ", this.userInfo);
-        this.hideModalLogin();
-      }
-    },
     movePage() {
       this.$router.push({ name: "AdminJoin" });
     },

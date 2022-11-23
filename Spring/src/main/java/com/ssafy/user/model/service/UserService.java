@@ -34,5 +34,7 @@ public interface UserService {
 
 	Object getRefreshToken(String userId) throws SQLException;
 	
+	void sendEmail(String userId) throws Exception;
+	
 }
 
