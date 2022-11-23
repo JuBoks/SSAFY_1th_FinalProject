@@ -8,11 +8,11 @@
 <script>
 import { mapActions } from "vuex";
 
-const boardStore = "boardStore";
+const noticeStore = "noticeStore";
 
 export default {
   methods: {
-    ...mapActions(boardStore, ["deleteArticle"]),
+    ...mapActions(noticeStore, ["deleteArticle"]),
   },
   created() {
     if (confirm("삭제하시겠습니까?")) {
@@ -20,7 +20,7 @@ export default {
       const payload = {
         articleNo: articleNo,
         callback: () => {
-          this.$router.push({ name: "BoardList" });
+          this.$router.push({ name: "NoticeList" });
         },
       };
 

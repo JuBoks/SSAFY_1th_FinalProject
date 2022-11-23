@@ -4,7 +4,7 @@
     <b-th>
       <router-link
         :to="{
-          name: 'BoardDetail',
+          name: 'NoticeDetail',
           params: { articleNo: articleNo },
         }"
         >{{ subject }}</router-link

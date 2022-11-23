@@ -13,14 +13,13 @@ function alertMessage(statusCode) {
   }
 }
 
-const boardStore = {
+const noticeStore = {
   namespaced: true,
   state: {
     articles: [],
     article: {},
     articlesPerPage: 10, // 한 페이지의 글의 개수(안바뀜)
     totalArticles: 0, // 총 글의 개수
-    comments: [],
   },
   getters: {
     articles(state) {
@@ -34,9 +33,6 @@ const boardStore = {
     },
     totalArticles(state) {
       return state.totalArticles;
-    },
-    comments(state) {
-      return state.comments;
     },
   },
   mutations: {
@@ -70,7 +66,7 @@ const boardStore = {
     getArticles(context, payload) {
       http
         .get(
-          "/board?pgno=" +
+          "/notice?pgno=" +
             payload.pgno +
             "&key=" +
             payload.key +
@@ -92,7 +88,7 @@ const boardStore = {
         });
     },
     createArticle(context, payload) {
-      http.post("/board", payload.article).then((response) => {
+      http.post("/notice", payload.article).then((response) => {
         switch (response.status) {
           case 200:
             alert("등록 되었습니다.");
@@ -108,7 +104,7 @@ const boardStore = {
       });
     },
     getArticle(context, articleNo) {
-      http.get(`/board/${articleNo}`).then((response) => {
+      http.get(`/notice/${articleNo}`).then((response) => {
         switch (response.status) {
           case 200:
             //this.book = response.data;
@@ -126,7 +122,7 @@ const boardStore = {
       });
     },
     getArticleCount(context, payload) {
-      const url = `/board/count?key=${payload.key}&word=${payload.word}`;
+      const url = `/notice/count?key=${payload.key}&word=${payload.word}`;
       http.get(url).then((response) => {
         switch (response.status) {
           case 200:
@@ -145,7 +141,7 @@ const boardStore = {
     },
     modifyArticle(context, payload) {
       http
-        .put(`/board/${payload.article.articleNo}`, payload.article)
+        .put(`/notice/${payload.article.articleNo}`, payload.article)
         .then((response) => {
           switch (response.status) {
             case 200:
@@ -161,8 +157,7 @@ const boardStore = {
         });
     },
     deleteArticle(context, payload) {
-      console.log("삭제api");
-      http.delete(`/board/${payload.articleNo}`).then((response) => {
+      http.delete(`/notice/${payload.articleNo}`).then((response) => {
         switch (response.status) {
           case 200:
             alert("삭제가 완료되었습니다.");
@@ -194,56 +189,8 @@ const boardStore = {
         }
       });
     },
-    createComment(context, payload) {
-      console.log(payload.comment);
-      console.log("??");
-      http.post("/comment", payload.comment).then((response) => {
-        switch (response.status) {
-          case 200:
-            payload.callback();
-            break;
-
-          case 400:
-          case 500:
-            alertMessage(response.status);
-            break;
-        }
-      });
-    },
-
-    modifyComment(context, payload) {
-      console.log(payload, "modify_action");
-      http
-        .put(`/comment/${payload.comment.commentNo}`, payload.comment)
-        .then((response) => {
-          switch (response.status) {
-            case 200:
-              payload.callback();
-              break;
-
-            case 400:
-            case 500:
-              alertMessage(response.status);
-              break;
-          }
-        });
-    },
-
-    deleteComment(context, payload) {
-      http.delete(`/comment/${payload.commentNo}`).then((response) => {
-        switch (response.status) {
-          case 200:
-            payload.callback();
-            break;
-
-          case 400:
-          case 500:
-            alertMessage(response.status);
-            break;
-        }
-      });
-    },
+  
   },
 };
 
-export default boardStore;
+export default noticeStore;

@@ -94,6 +94,7 @@ public class BoardRestController {
 	@DeleteMapping("/{articleno}")
 	public ResponseEntity<?> deleteArticle(@PathVariable("articleno") int articleno) {
 
+		System.out.println("??");
 		try {
 			boolean isDelete = boardService.deleteArticle(articleno);
 

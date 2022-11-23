@@ -18,28 +18,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.ssafy.board.model.dto.BoardDto;
-import com.ssafy.board.model.service.BoardService;
+import com.ssafy.notice.model.dto.NoticeDto;
+import com.ssafy.notice.model.service.NoticeService;
+
 
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/notice")
 @CrossOrigin("*")
-public class BoardRestController {
+public class NoticeRestController {
 
-	private static final Logger logger = LoggerFactory.getLogger(BoardRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(NoticeRestController.class);
 	
 
 	@Autowired
-	private BoardService boardService;
+	private NoticeService noticeService;
 
 	@GetMapping
 	public ResponseEntity<?> listArticle(@RequestParam Map<String, Object> map) {
 		try {
-			List<BoardDto> listArticle = boardService.listArticle(map);
-			return new ResponseEntity<List<BoardDto>>(listArticle, HttpStatus.OK);
+			List<NoticeDto> listArticle = noticeService.listArticle(map);
+			return new ResponseEntity<List<NoticeDto>>(listArticle, HttpStatus.OK);
 		}
 		catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,7 +50,7 @@ public class BoardRestController {
 	public ResponseEntity<?> getArticleCount(@RequestParam Map<String, Object> map) {
 		try {
 			System.out.println(map.keySet());
-			int count = boardService.getCountBoardList(map);
+			int count = noticeService.getCountNoticeList(map);
 			return new ResponseEntity<Integer>(count, HttpStatus.OK);
 		}
 		catch (Exception e) {
@@ -62,9 +62,9 @@ public class BoardRestController {
 	public ResponseEntity<?> getArticle(@PathVariable("articleno") int articleno) {
 
 		try {
-			boardService.updateHit(articleno);
-			BoardDto article = boardService.getArticle(articleno);
-			return new ResponseEntity<BoardDto>(article, HttpStatus.OK);
+			noticeService.updateHit(articleno);
+			NoticeDto article = noticeService.getArticle(articleno);
+			return new ResponseEntity<NoticeDto>(article, HttpStatus.OK);
 		}
 		catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,11 +73,11 @@ public class BoardRestController {
 
 	@PutMapping("/{articleno}")
 	public ResponseEntity<?> modifyArticle(@PathVariable("articleno") int articleno,
-			@RequestBody BoardDto boardDto) {
+			@RequestBody NoticeDto noticeDto) {
 
 		try {
-			boardDto.setArticleNo(articleno);
-			boolean isModify = boardService.modifyArticle(boardDto);
+			noticeDto.setArticleNo(articleno);
+			boolean isModify = noticeService.modifyArticle(noticeDto);
 
 			if (isModify) {
 				return new ResponseEntity<Void>(HttpStatus.OK);
@@ -95,7 +95,7 @@ public class BoardRestController {
 	public ResponseEntity<?> deleteArticle(@PathVariable("articleno") int articleno) {
 
 		try {
-			boolean isDelete = boardService.deleteArticle(articleno);
+			boolean isDelete = noticeService.deleteArticle(articleno);
 
 			if (isDelete) {
 				return new ResponseEntity<Void>(HttpStatus.OK);
@@ -110,10 +110,10 @@ public class BoardRestController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> writeArticle(@RequestBody BoardDto boardDto) {
+	public ResponseEntity<?> writeArticle(@RequestBody NoticeDto noticeDto) {
 
 		try {
-			boolean isWrite = boardService.writeArticle(boardDto);
+			boolean isWrite = noticeService.writeArticle(noticeDto);
 
 			if (isWrite) {
 				return new ResponseEntity<Void>(HttpStatus.OK);

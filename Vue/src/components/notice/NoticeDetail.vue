@@ -7,7 +7,7 @@
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-left">
-        <b-button variant="outline-primary" class="w-30" @click="listBoard"
+        <b-button variant="outline-primary" class="w-30" @click="listNotice"
           >목록</b-button
         >
       </b-col>
@@ -43,36 +43,34 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-const boardStore = "boardStore";
+const noticeStore = "noticeStore";
 
 export default {
   // Dynamic module loading을 통해 component를 불러옴
   components: {
-    "view-detail": () => import("@/components/board/include/ViewDetail.vue"),
-    "comment-write": () => import("@/components/board/include/CommentWrite"),
-    "comment-row": () => import("@/components/board/include/CommentRow.vue"),
+    "view-detail": () => import("@/components/notice/include/ViewDetail.vue"),
   },
   // 서버로부터 isbn 번호 받기 전에는 0으로 설정
   methods: {
-    ...mapActions(boardStore, ["getArticle", "getComments"]),
-    listBoard() {
-      this.$router.push({ name: "BoardList" });
+    ...mapActions(noticeStore, ["getArticle", "getComments"]),
+    listNotice() {
+      this.$router.push({ name: "NoticeList" });
     },
     moveModifyArticle() {
       this.$router.push({
-        name: "BoardModify",
+        name: "NoticeModify",
         params: this.article.articleNo ? this.article.articleNo : 0,
       });
     },
     deleteArticle() {
       this.$router.push({
-        name: "BoardDelete",
+        name: "NoticeDelete",
         params: this.article.articleNo ? this.article.articleNo : 0,
       });
     },
   },
   computed: {
-    ...mapGetters(boardStore, ["article", "comments"]),
+    ...mapGetters(noticeStore, ["article", "comments"]),
   },
   created() {
     const articleNo = this.$route.params.articleNo;

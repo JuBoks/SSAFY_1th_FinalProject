@@ -8,7 +8,7 @@
 export default {
   // Dynamic module loading을 통해 component를 불러옴
   components: {
-    "write-form": () => import("@/components/board/include/WriteForm.vue"),
+    "write-form": () => import("@/components/notice/include/WriteForm.vue"),
   },
 };
 </script>
