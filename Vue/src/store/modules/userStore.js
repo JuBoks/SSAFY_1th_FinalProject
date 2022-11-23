@@ -1,5 +1,6 @@
 import jwtDecode from "jwt-decode";
 import { login, findById, tokenRegeneration, logout } from "@/api/user";
+import { removeUser } from "@/api/admin";
 import router from "@/router";
 
 const userStore = {
@@ -142,6 +143,20 @@ const userStore = {
         }
       );
     },
+
+    deleteUser({ commit }, payload) {
+      removeUser(payload.userId, () => {
+        commit("SET_IS_LOGIN", false);
+        commit({
+          type: "SET_USER_INFO",
+          loginUser: null,
+          isLogin: false,
+        });
+        commit("SET_IS_VALID_TOKEN", false);
+        payload.callback();
+      });
+    },
+
     async userLogout({ commit }, userid) {
       await logout(
         userid,

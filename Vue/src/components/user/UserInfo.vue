@@ -57,6 +57,9 @@
 
           <b-row class="mb-1">
             <b-col class="text-right">
+              <b-button variant="danger" class="m-1" @click="withdraw"
+                >탈퇴</b-button
+              >
               <b-button variant="success" class="m-1" @click="Modify"
                 >수정</b-button
               >
@@ -75,10 +78,11 @@
 import { mapActions, mapGetters } from "vuex";
 const userStore = "userStore";
 const adminStore = "adminStore";
+
 export default {
   methods: {
     ...mapActions(adminStore, ["modifyUser", "getUser"]),
-    ...mapActions(userStore, ["getUserInfo"]),
+    ...mapActions(userStore, ["getUserInfo", "deleteUser"]),
     moveMap() {
       this.$router.push({ name: "Map" });
     },
@@ -89,6 +93,15 @@ export default {
           let token = sessionStorage.getItem("access-token");
           this.getUserInfo(token);
           this.$router.push({ name: "Map" });
+        },
+      });
+    },
+    async withdraw() {
+      this.deleteUser({
+        userId: this.input.userId,
+        callback: () => {
+          alert("탈퇴되었습니다.");
+          this.$router.push({ name: "Home" });
         },
       });
     },
