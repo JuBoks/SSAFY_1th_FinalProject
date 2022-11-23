@@ -1,6 +1,6 @@
 <template>
   <div class="map-container">
-    <map-view-sidebar :panelFlag="panelFlag"></map-view-sidebar>
+    <map-view-sidebar :panelOpen="panelOpen"></map-view-sidebar>
     <div class="wh100">
       <map-kakao></map-kakao>
     </div>
@@ -14,6 +14,7 @@ import { mapActions, mapGetters } from "vuex";
 const mapStore = "mapStore";
 
 export default {
+  props: ["panelOpen"],
   components: {
     MapKakao,
     MapViewSidebar: () => import("@/components/map/MapViewSidebar.vue"),
@@ -31,12 +32,6 @@ export default {
   },
   created() {
     this.updateAptInfoList([]);
-    this.$on("onPanelOpen", () => {
-      this.panelFlag = true;
-    });
-    this.$on("onPanelClose", () => {
-      this.panelFlag = false;
-    });
   },
 };
 </script>

@@ -4,6 +4,11 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item>
+          <b-button variant="outline-primary" @click="showFavoriteAreaList">
+            관심지역 보기</b-button
+          >
+        </b-nav-item>
+        <b-nav-item>
           <b-button
             pill
             variant="outline-primary"
@@ -165,6 +170,12 @@ export default {
   },
   methods: {
     ...mapActions(mapStore, ["toggleAptFilter"]),
+
+    showFavoriteAreaList() {
+      this.$emit("onPanelOpen");
+      this.$router.push({ name: "MapArea" }).catch(() => {});
+    },
+
     getServiceInstance() {
       if (this.service == null) {
         this.service = new Service();

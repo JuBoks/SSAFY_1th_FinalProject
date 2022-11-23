@@ -66,6 +66,11 @@ const routes = [
         name: "MapInfo",
         component: () => import("@/components/map/MapViewSidebarInfo"),
       },
+      {
+        path: "area",
+        name: "MapArea",
+        component: () => import("@/components/map/MapViewSidebarArea"),
+      },
     ],
   },
   {

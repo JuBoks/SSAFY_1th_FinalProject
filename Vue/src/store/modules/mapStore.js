@@ -1,9 +1,14 @@
 import {
+  apiGetAptInfo,
   apiGetAptDealAvg,
   apiGetAptDealGroup,
   apiGetAptDealInfo,
   apiGetAptDealByMonth,
+  apiRegistFavoriteArea,
+  apiDeleteFavoriteArea,
+  apiGetFavoriteAreaList,
 } from "@/api/map";
+import * as Kakao from "@/util/kakao.js";
 
 const mapStore = {
   namespaced: true,
@@ -16,7 +21,10 @@ const mapStore = {
     aptFilterBtn: true, // 아파트 마커 보여줄 버튼 활성화 여부
     aptDealInfoGroup: [], // 한 아파트에 대한 년월 기준으로 평균 매매값
     aptDealInfoGroupChart: [["년도", "매매평균값"]], // 한 아파트에 대한 거래 정보들 (차트용)
+    bookmark: false, // 관심지역 추가 체크박스
+    favoriteAreas: [], // 관심지역 리스트
   },
+
   getters: {
     aptSelected(state) {
       return state.aptSelected;
@@ -41,6 +49,12 @@ const mapStore = {
     },
     aptDealInfoGroupChart(state) {
       return state.aptDealInfoGroupChart;
+    },
+    bookmark(state) {
+      return state.bookmark;
+    },
+    favoriteAreas(state) {
+      return state.favoriteAreas;
     },
   },
   mutations: {
@@ -68,6 +82,12 @@ const mapStore = {
     APT_DEAL_INFO_GROUP_CHART(state, payload) {
       state.aptDealInfoGroupChart = payload.aptDealInfoGroupChart;
     },
+    BOOKMARK(state, payload) {
+      state.bookmark = payload.bookmark;
+    },
+    FAVORITE_AREAS(state, payload) {
+      state.favoriteAreas = payload.favoriteAreas;
+      }
   },
   actions: {
     setSelectedApt({ commit }, aptSelected) {
@@ -165,6 +185,55 @@ const mapStore = {
       commit({
         type: "APT_DEAL_INFO_GROUP_CHART",
         aptDealInfoGroupChart: [],
+      });
+    },
+    searchArea({ dispatch }, payload) {
+      // 1. 초기화
+      dispatch("init");
+
+      // 2. 아파트 정보 가져오기
+      apiGetAptInfo(payload.dongCode, async ({ data }) => {
+        const aptData = data;
+          // 3. 좌측 리스트 정보 출력
+        dispatch("updateAptInfoList", aptData);
+        // 4. 맵에 마커 표시하기
+        if (aptData.length > 0) {
+          // 매물정보가 있으면 마커가 다 표시할 수 있도록 맵을 이동
+          const aptMarkers = await Kakao.AptMarkers(aptData);
+          payload.map.addAptCluster(aptMarkers);
+        } else {
+          // 매물정보가 없으면 임의로 이동
+          const addr = `${payload.selectedSido.name} ${payload.selectedGugun.name} ${payload.selectedDong.name}`;
+          payload.map.setCenterAddr(addr, 3);
+        }
+        // 5. callback
+        payload.callback();
+      });
+    },
+    /* 관심지역 */
+    registFavoriteArea({commit}, payload) {
+      apiRegistFavoriteArea(payload, ({ data }) => {
+        commit({
+          type: "FAVORITE_AREAS",
+          favoriteAreas: data,
+        });
+      });
+    },
+    deleteFavoriteArea({ commit }, payload) {
+      apiDeleteFavoriteArea(payload, ({ data }) => {
+        commit({
+          type: "FAVORITE_AREAS",
+          favoriteAreas: data,
+        });
+      });
+    },
+    selectFavoriteArea({commit}, payload) {
+      apiGetFavoriteAreaList(payload.userId, ({ data }) => {
+        commit({
+          type: "FAVORITE_AREAS",
+          favoriteAreas: data,
+        });
+        payload.callback();
       });
     },
   },

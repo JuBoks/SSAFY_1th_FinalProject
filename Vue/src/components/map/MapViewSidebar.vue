@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'nav-open': panelFlag }" id="mySidebar" class="sidebar">
+  <div :class="{ 'nav-open': panelOpen }" id="mySidebar" class="sidebar">
     <div class="sidebar-header">
       <a href="javascript:void(0)" @click="goback">
         <span class="sidebar-header-btn">←</span>
@@ -21,7 +21,7 @@ import { mapActions, mapGetters } from "vuex";
 const mapStore = "mapStore";
 
 export default {
-  props: ["panelFlag"],
+  props: ["panelOpen"],
   computed: {
     ...mapGetters(mapStore, ["aptSelected"]),
   },

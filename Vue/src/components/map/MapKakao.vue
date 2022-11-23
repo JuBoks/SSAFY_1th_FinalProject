@@ -1,6 +1,11 @@
 <template>
   <div class="map-wrap wh100">
     <b-form inline class="map-search">
+      <b-form-checkbox
+        v-model="check"
+        @change="onChangeBookmark"
+        size="lg"
+      ></b-form-checkbox>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedSido"
@@ -28,7 +33,6 @@
         :value="null"
         @change="onDongChanged"
       ></b-form-select>
-      <!-- <b-button @click="search()">검색</b-button> -->
     </b-form>
 
     <div id="map" style="width: 100%; height: 100%"></div>
@@ -38,9 +42,10 @@
 <script>
 import * as http from "@/util/http-common";
 import * as Kakao from "@/util/kakao.js";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 const mapStore = "mapStore";
+const userStore = "userStore";
 
 export default {
   props: {
@@ -54,13 +59,22 @@ export default {
       gugun: [{ text: "구/군", value: null }],
       dong: [{ text: "동", value: null }],
 
+      check: false,
+
       selectedSidoName: null,
       selectedSido: null,
       selectedGugun: null,
       selectedDong: null,
     };
   },
+  computed: {
+    ...mapGetters(mapStore, ["bookmark", "favoriteAreas"]),
+    ...mapGetters(userStore, ["loginUser"]),
+  },
   async mounted() {
+    // bookmark 와 연결
+    this.check = this.bookmark;
+
     // 시/도 초기화
     const sidoData = await http.get("/area/sido");
     sidoData.forEach((el) => {
@@ -78,7 +92,44 @@ export default {
     window.mapInstance = this.map;
   },
   methods: {
-    ...mapActions(mapStore, ["updateAptInfoList", "init"]),
+    ...mapActions(mapStore, [
+      "updateAptInfoList",
+      "init",
+      "registFavoriteArea",
+      "deleteFavoriteArea",
+      "selectFavoriteArea",
+      "searchArea",
+    ]),
+
+    onChangeBookmark(checked) {
+      let isValid = true;
+      let errMsg = "";
+
+      !this.loginUser
+        ? ((errMsg = "로그인이 필요한 서비스입니다."), (isValid = false))
+        : !this.selectedDong
+        ? ((errMsg = "동을 선택해주세요."), (isValid = false))
+        : (isValid = true);
+
+      if (!isValid) {
+        alert(errMsg);
+        this.check = false;
+        return;
+      }
+
+      const payload = {
+        userId: this.loginUser.userId,
+        dongCode: this.selectedDong.code,
+      };
+
+      if (checked) {
+        // 관심지역에 추가
+        this.registFavoriteArea(payload);
+      } else {
+        // 관심지역 삭제
+        this.deleteFavoriteArea(payload);
+      }
+    },
 
     async onSidoChanged() {
       this.gugun = [{ text: "구/군", value: null }];
@@ -118,6 +169,19 @@ export default {
     },
     onDongChanged() {
       this.search();
+      if (this.loginUser) {
+        this.selectFavoriteArea({
+          userId: this.loginUser.userId,
+          callback: () => {
+            for (let el of this.favoriteAreas) {
+              if (el.dongCode == this.selectedDong.code) {
+                this.check = true;
+                break;
+              }
+            }
+          },
+        });
+      }
     },
     validateSearch() {
       let err = true;
@@ -150,34 +214,48 @@ export default {
       return items == "" ? [] : items.item;
     },
     async search() {
-      // init
-      this.init();
-
       // 1. validation
       if (!this.validateSearch()) return;
 
-      // 2. 아파트들 데이터 가져오기
-      const [aptData] = await Promise.all([
-        this.getAptData(),
-        //this.getAllianceData(),
-      ]);
+      const payload = {
+        dongCode: this.selectedDong.code,
+        map: this.map,
+        selectedSido: this.selectedSido,
+        selectedGugun: this.selectedGugun,
+        selectedDong: this.selectedDong,
+        callback: () => {
+          this.$route.name != "MapList" &&
+            this.$router.push({ name: "MapList" });
+          this.$parent.$emit("onPanelOpen");
+        },
+      };
 
-      // 3. 좌측 리스트 정보 출력
-      this.updateAptInfoList(aptData);
+      this.searchArea(payload);
+      // init
+      // this.init();
 
-      // 4. 맵에 마커 표시하기
-      if (aptData.length > 0) {
-        // 매물정보가 있으면 마커가 다 표시할 수 있도록 맵을 이동
-        const aptMarkers = await Kakao.AptMarkers(aptData);
-        this.map.addAptCluster(aptMarkers);
-      } else {
-        // 매물정보가 없으면 임의로 이동
-        const addr = `${this.selectedSido.name} ${this.selectedGugun.name} ${this.selectedDong.name}`;
-        this.map.setCenterAddr(addr, 3);
-      }
+      // // 2. 아파트들 데이터 가져오기
+      // const [aptData] = await Promise.all([
+      //   this.getAptData(),
+      //   //this.getAllianceData(),
+      // ]);
 
-      this.$route.name != "MapList" && this.$router.push({ name: "MapList" });
-      this.$parent.$emit("onPanelOpen");
+      // // 3. 좌측 리스트 정보 출력
+      // this.updateAptInfoList(aptData);
+
+      // // 4. 맵에 마커 표시하기
+      // if (aptData.length > 0) {
+      //   // 매물정보가 있으면 마커가 다 표시할 수 있도록 맵을 이동
+      //   const aptMarkers = await Kakao.AptMarkers(aptData);
+      //   this.map.addAptCluster(aptMarkers);
+      // } else {
+      //   // 매물정보가 없으면 임의로 이동
+      //   const addr = `${this.selectedSido.name} ${this.selectedGugun.name} ${this.selectedDong.name}`;
+      //   this.map.setCenterAddr(addr, 3);
+      // }
+
+      // this.$route.name != "MapList" && this.$router.push({ name: "MapList" });
+      // this.$parent.$emit("onPanelOpen");
     },
   },
 };
