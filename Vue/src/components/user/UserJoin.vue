@@ -14,15 +14,12 @@ export default {
     return {
       type: "create",
       isAdmin: false,
-      title: "회원정보 등록",
-      btnText: "등록하기",
+      title: "회원가입",
+      btnText: "회원가입",
     };
   },
   components: {
     "user-form": () => import("@/components/common/UserForm.vue"),
-  },
-  created() {
-    this.isAdmin = this.loginUser && this.loginUser.userAuth == 1;
   },
 };
 </script>
