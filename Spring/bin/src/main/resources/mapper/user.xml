@@ -45,8 +45,11 @@
 		SELECT USER_ID, USER_NAME, USER_ADDR, USER_PHONE, USER_AUTH
 		FROM user
 		<where>
-			<if test="userId != null and userId !=''">
-				AND USER_ID LIKE CONCAT('%', #{userId} ,'%')
+			<if test="key != null and key == 'userId'">
+				AND USER_ID = #{word}
+			</if>
+			<if test="key != null and key == 'userPhone'">
+				AND USER_PHONE = #{word}
 			</if>
 		</where>
 		ORDER BY USER_AUTH ASC, USER_ID ASC
@@ -93,5 +96,11 @@
 		FROM user
 		WHERE USER_ID = #{userid}
 	</select>
+	
+	<update id="updatePwd" parameterType="map">
+		UPDATE	user
+		SET		USER_PWD = #{userPwd}
+		WHERE	USER_ID = #{userId} 
+	</update>
 	
 </mapper>

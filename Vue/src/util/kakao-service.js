@@ -3,23 +3,14 @@
 export function Service() {
   this.ps = new kakao.maps.services.Places(window.map);
   this.markers = [];
-  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  //this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.contentNode = document.createElement("div");
   this.contentNode.className = "placeinfo_wrap";
-  // 커스텀 오버레이의 컨텐츠 노드에 mousedown, touchstart 이벤트가 발생했을때
-  // 지도 객체에 이벤트가 전달되지 않도록 이벤트 핸들러로 kakao.maps.event.preventMap 메소드를 등록합니다
-  // addEventHandle(
-  //   this.contentNode,
-  //   "mousedown",
-  //   kakao.maps.event.preventMap
-  // );
-  // addEventHandle(
-  //   this.contentNode,
-  //   "touchstart",
-  //   kakao.maps.event.preventMap
-  // );
+  this.markerObj = null;
 
-  this.searchPlaces = function (category) {
+  this.searchPlaces = function (markerObj) {
+    this.markerObj = markerObj;
+    const category = markerObj.category;
     if (!category) return;
     this.ps.categorySearch(category, this.placesSearchCB, {
       useMapBounds: true,
@@ -35,27 +26,32 @@ export function Service() {
       // 에러로 인해 검색결과가 나오지 않은 경우 해야할 처리가 있다면 이곳에 작성해 주세요
     }
   };
-  this.displayPlaces = (places) => {
+  this.displayPlaces = async (places) => {
+    let promiseArr = [];
     for (let i = 0; i < places.length; i++) {
-      // 마커를 생성하고 지도에 표시합니다
-      const marker = this.addMarker(
-        new kakao.maps.LatLng(places[i].y, places[i].x)
-      );
-      // 마커와 검색결과 항목을 클릭 했을 때
-      // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
-      ((marker, place) => {
-        kakao.maps.event.addListener(marker, "click", () => {
-          const currContent = this.placeOverlay.getContent();
-          if (currContent == null) {
-            this.displayPlaceInfo(place);
-          } else {
-            this.placeOverlay.setContent(null);
-            this.placeOverlay.setMap(null);
-          }
-        });
-      })(marker, places[i]);
+      promiseArr.push(this.createMarker(places[i]));
     }
+    await Promise.all(promiseArr);
   };
+  this.createMarker = async (p) => {
+    // 마커를 생성하고 지도에 표시합니다
+    const marker = this.addMarker(
+      new kakao.maps.LatLng(p.y, p.x)
+    );
+    // 마커와 검색결과 항목을 클릭 했을 때
+    // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
+    ((marker, place) => {
+      kakao.maps.event.addListener(marker, "click", () => {
+        const currContent = this.markerObj.placeOverlay.getContent();
+        if (currContent == null) {
+          this.displayPlaceInfo(place);
+        } else {
+          this.markerObj.placeOverlay.setContent(null);
+          this.markerObj.placeOverlay.setMap(null);
+        }
+      });
+    })(marker, p);
+  }
   this.displayPlaceInfo = function (place) {
     let content = `
     <div class="placeinfo">
@@ -78,18 +74,23 @@ export function Service() {
     `;
 
     this.contentNode.innerHTML = content;
-    this.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
-    this.placeOverlay.setMap(window.map);
+    this.markerObj.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
+    this.markerObj.placeOverlay.setMap(window.map);
     // 커스텀 오버레이 컨텐츠를 설정합니다
-    this.placeOverlay.setContent(this.contentNode);
+    this.markerObj.placeOverlay.setContent(this.contentNode);
   };
   this.addMarker = function (position) {
-    const imageSrc =
-        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png", // 마커 이미지 url, 스프라이트 이미지를 씁니다
+    // const imageSrc =
+    //     "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png", // 마커 이미지 url, 스프라이트 이미지를 씁니다
+    //   imageSize = new kakao.maps.Size(27, 28), // 마커 이미지의 크기
+    //   imgOptions = {
+    //     spriteSize: new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
+    //     spriteOrigin: new kakao.maps.Point(46, 5 * 36), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+    //     offset: new kakao.maps.Point(11, 28), // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+    //   },
+    const imageSrc = this.markerObj.image,
       imageSize = new kakao.maps.Size(27, 28), // 마커 이미지의 크기
       imgOptions = {
-        spriteSize: new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
-        spriteOrigin: new kakao.maps.Point(46, 5 * 36), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
         offset: new kakao.maps.Point(11, 28), // 마커 좌표에 일치시킬 이미지 내에서의 좌표
       },
       markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
@@ -99,14 +100,70 @@ export function Service() {
       });
 
     marker.setMap(window.map); // 지도 위에 마커를 표출합니다
-    this.markers.push(marker); // 배열에 생성된 마커를 추가합니다
+    this.markerObj.markers.push(marker);
+    //this.markers.push(marker); // 배열에 생성된 마커를 추가합니다
 
     return marker;
   };
-  this.removeMarker = function () {
-    for (let i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
+  this.removeMarker = function (markerObj) {
+    for (let i = 0; i < markerObj.markers.length; i++) {
+      markerObj.markers[i].setMap(null);
     }
-    this.markers = [];
+    markerObj.markers = [];
   };
 }
+
+export function Mart() { // 대형마트
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/mart_marker.png");
+  this.category = "MT1";
+  this.markers = [];
+} 
+export function Hospital() { // 병원
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/hospital_marker.png");
+  this.category = "HP8";
+  this.markers = [];
+}
+export function ConvStore() { // 편의점
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/convenience_marker.png");
+  this.category = "CS2";
+  this.markers = [];
+}
+export function School() { // 학교
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/school_marker.png");
+  this.category = "SC4";
+  this.markers = [];
+} 
+export function ParkingLot() { // 주차장
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/parkinglot_marker.png");
+  this.category = "PK6";
+  this.markers = [];
+} 
+export function GasStation() { // 주유소
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/gasstation_marker.png");
+  this.category = "OL7";
+  this.markers = [];
+} 
+export function Subway() { // 지하철역
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/subway_marker.png");
+  this.category = "SW8";
+  this.markers = [];
+} 
+export function Bank() { // 은행
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/bank_marker.png");
+  this.category = "PK6";
+  this.markers = [];
+} 
+export function Pharmacy() { // 약국
+  this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+  this.image = require("@/assets/img/pharmacy_marker.png");
+  this.category = "PM9";
+  this.markers = [];
+} 

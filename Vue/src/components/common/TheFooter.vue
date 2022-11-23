@@ -14,7 +14,7 @@ export default {};
 footer {
   background-color: #eee;
   width: 100%;
-  height: calc(100% - 870px);
+  height: 5rem;
   float: left;
   align-items: center;
   justify-content: space-around;

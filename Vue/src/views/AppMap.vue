@@ -3,7 +3,8 @@
     <map-filter></map-filter>
     <map-view
       :yearSelected="yearSelected"
-      :monthSelected="monthSelected"></map-view>
+      :monthSelected="monthSelected"
+    ></map-view>
   </div>
 </template>
 
@@ -33,4 +34,5 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
