@@ -31,4 +31,19 @@ async function checkTempNum(userid, tmpNum, success, fail) {
     .catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, findPwd, checkTempNum };
+async function modifyPwd(userid, userPwd, success, fail) {
+  await api
+    .put(`/user/modifyPwd/${userid}`, { userPwd })
+    .then(success)
+    .catch(fail);
+}
+
+export {
+  login,
+  findById,
+  tokenRegeneration,
+  logout,
+  findPwd,
+  checkTempNum,
+  modifyPwd,
+};

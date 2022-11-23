@@ -155,8 +155,8 @@ public class UserServiceImpl implements UserService {
 		String hostSMTPpwd = "wogh1017";
 
 		// 보내는 사람 EMail, 제목, 내용
-		String fromEmail = "구해줘홈즈@naver.com";
-		String fromName = "관리자";
+		String fromEmail = "ptjtest1017@naver.com";
+		String fromName = "ptjtest1017";
 		String subject = "[구해줘홈즈] 임시 비밀번호 입니다.";
 		String msg = "";
 
@@ -203,6 +203,11 @@ public class UserServiceImpl implements UserService {
 		}	
         	
     	return resultNum;
+	}
+
+	@Override
+	public boolean modifyPwd(Map<String, String> param) throws Exception {
+		return userDao.updatePwd(param) == 1;
 	}
 
 

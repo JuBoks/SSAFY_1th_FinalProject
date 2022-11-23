@@ -44,6 +44,11 @@ const routes = [
         name: "UserJoin",
         component: () => import("@/components/user/UserJoin"),
       },
+      {
+        path: "modifypwd/:userId",
+        name: "UserModifypwd",
+        component: () => import("@/components/user/UserModifypwd"),
+      },
     ],
   },
   {

@@ -1,7 +1,5 @@
 package com.ssafy.user.model.service;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,17 +10,17 @@ public interface UserService {
 
 	boolean join(UserDto userDto) throws Exception;
 
-	UserDto login(UserDto userDto) throws SQLException;
+	UserDto login(UserDto userDto) throws Exception;
 
-	UserDto getDetail(String id) throws SQLException;
+	UserDto getDetail(String id) throws Exception;
 
-	boolean modify(UserDto userDto) throws SQLException;
+	boolean modify(UserDto userDto) throws Exception;
 
-	boolean remove(String userId) throws SQLException;
+	boolean remove(String userId) throws Exception;
 
-	public List<UserDto> getUserList(Map<String, Object> map) throws SQLException;
+	public List<UserDto> getUserList(Map<String, Object> map) throws Exception;
 
-	int getUserCount() throws SQLException;
+	int getUserCount() throws Exception;
 
 	PageNavigation makePageNavigation(Map<String, Object> map) throws Exception;
 
@@ -30,11 +28,13 @@ public interface UserService {
 
 	UserDto userInfo(String userid) throws Exception;
 
-	void deleRefreshToken(String userid) throws SQLException;
+	void deleRefreshToken(String userid) throws Exception;
 
-	Object getRefreshToken(String userId) throws SQLException;
+	Object getRefreshToken(String userId) throws Exception;
 	
 	void insertTmpNumAndSendEmail(UserDto userDto) throws Exception;
+
+	boolean modifyPwd(Map<String, String> param) throws Exception;
 	
 }
 

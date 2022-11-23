@@ -261,4 +261,23 @@ public class UserRestController {
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@PutMapping("/modifyPwd/{userId}")
+	public ResponseEntity<?> modifyPwd(@PathVariable("userId") String userId, @RequestBody Map<String, String> param) {
+
+		try {
+			param.put("userId", userId);
+			boolean isModify = userService.modifyPwd(param);
+			
+			if (isModify) {
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			}
+		}
+		catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

@@ -13,7 +13,9 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item><router-link to="/main">홈</router-link></b-nav-item>
-        <b-nav-item><router-link to="/notice">공지사항</router-link></b-nav-item> 
+        <b-nav-item
+          ><router-link to="/notice">공지사항</router-link></b-nav-item
+        >
         <b-nav-item><router-link to="/map">매물</router-link></b-nav-item>
         <!-- <b-nav-item><router-link to="/admin">관리자</router-link></b-nav-item> -->
         <b-nav-item><router-link to="/board">QnA</router-link></b-nav-item>
@@ -50,6 +52,7 @@
       <!-- 수정 모달 창 body 작성 -->
       <div>
         <b-form-input
+          ref="userId"
           v-model="input.userId"
           placeholder="아이디 입력 ..."></b-form-input>
         <b-form-input
@@ -126,6 +129,20 @@ export default {
     },
 
     findPwd() {
+      let isValid = true;
+      let errMsg = "";
+
+      !this.input.userId
+        ? ((isValid = false),
+          (errMsg = "아이디를 입력해주세요."),
+          this.$refs.userId.focus())
+        : (isValid = true);
+
+      if (!isValid) {
+        alert(errMsg);
+        return;
+      }
+
       findPwd(
         this.input.userId,
         () => {
@@ -138,14 +155,25 @@ export default {
       );
     },
     checkNum() {
-      console.log(this.input.userId, this.tmpNum);
-      checkTempNum(this.input.userId, this.tmpNum, ({ data }) => {
-        console.log("data", data);
+      const userId = this.input.userId;
+      checkTempNum(userId, this.tmpNum, ({ data }) => {
+        if (data) {
+          this.hideModalTmpNum();
+          this.$router.push({
+            name: "UserModifypwd",
+            params: {
+              userId,
+            },
+          });
+        }
       });
     },
 
     showModalTmpNum() {
       this.$refs["modalTmpNum"].show();
+    },
+    hideModalTmpNum() {
+      this.$refs["modalTmpNum"].hide();
     },
     showModalLogin() {
       this.$refs["modalLogin"].show();
