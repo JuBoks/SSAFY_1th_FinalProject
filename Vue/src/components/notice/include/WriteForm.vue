@@ -66,7 +66,11 @@ export default {
     type: { type: String },
   },
   methods: {
-    ...mapActions(noticeStore, ["createArticle", "modifyArticle", "getArticle"]),
+    ...mapActions(noticeStore, [
+      "createArticle",
+      "modifyArticle",
+      "getArticle",
+    ]),
     validate() {
       let isValid = true;
       let errMsg = "";

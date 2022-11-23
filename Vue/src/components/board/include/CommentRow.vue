@@ -108,7 +108,6 @@ export default {
           centered: true,
         })
         .then((value) => {
-          console.log(value);
           if (value) {
             this.delete();
           }

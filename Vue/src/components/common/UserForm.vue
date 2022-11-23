@@ -2,14 +2,14 @@
   <b-container class="bv-example-row mt-3">
     <b-row>
       <b-col class="text-center">
-        <h3 v-if="type == 'create'" class="underline">회원정보 등록</h3>
-        <h3 v-else class="underline">회원정보 수정</h3>
+        <h3 class="underline">{{ title }}</h3>
       </b-col>
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-left">
         <b-form>
           <b-form-group
+            v-if="isAdmin"
             label-cols="12"
             label="권한:"
             label-for="userAuth"
@@ -63,16 +63,16 @@
           </b-form-group>
           <b-form-group
             label-cols="12"
-            label="주소:"
-            label-for="subject"
-            description="주소를 입력하세요.">
+            label="이메일:"
+            label-for="userAddr"
+            description="이메일를 입력하세요.">
             <b-form-input
               id="userAddr"
               ref="userAddr"
               v-model="input.userAddr"
               type="text"
               required
-              placeholder="이름 변경..." />
+              placeholder="이메일 변경..." />
           </b-form-group>
           <b-form-group
             label-cols="12"
@@ -88,19 +88,20 @@
               placeholder="연락처 변경..." />
           </b-form-group>
 
-          <b-button
-            v-if="type == 'create'"
-            variant="primary"
-            class="m-1"
-            @click="validate"
-            >사용자 등록</b-button
-          >
-          <b-button v-else variant="success" class="m-1" @click="validate"
-            >사용자 수정</b-button
-          >
-          <b-button variant="primary" class="m-1" @click="moveList"
-            >목록</b-button
-          >
+          <b-row class="mb-1">
+            <b-col class="text-right">
+              <b-button variant="success" class="m-1" @click="validate">
+                {{ btnText }}
+              </b-button>
+              <b-button
+                v-if="isAdmin"
+                variant="primary"
+                class="m-1"
+                @click="moveList"
+                >목록</b-button
+              >
+            </b-col>
+          </b-row>
         </b-form>
       </b-col>
     </b-row>
@@ -113,8 +114,10 @@ const adminStore = "adminStore";
 const userStore = "userStore";
 export default {
   props: {
-    // 부모 component로 부터 전달받은 type 정보를 받아옴
     type: { type: String },
+    isAdmin: { type: Boolean },
+    title: { type: String },
+    btnText: { type: String },
   },
   data() {
     return {
@@ -185,10 +188,6 @@ export default {
     ...mapGetters(adminStore, ["user"]),
     input() {
       if (this.type == "modify") {
-        // 브라우저 새로고침을 하게되면 state에 저장된 데이터가 사라짐
-        // Vuex의 state.user 객체가 비어있다면  서버에 요청하기
-        //this.getUser(this.$route.params.user);
-
         // 수정화면일 경우
         return { ...this.user }; // Vuex의 state.users 객체에 직접 접근하는걸 막기 위해 Deep Copy
       } else {

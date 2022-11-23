@@ -29,7 +29,7 @@
           <b-form-group label-cols="12" label="비밀번호:">
             <b-form-input
               v-model="input.userPwd"
-              type="text"
+              type="password"
               required
               placeholder="비밀번호 입력..." />
           </b-form-group>
@@ -40,12 +40,12 @@
               required
               placeholder="이름 변경..." />
           </b-form-group>
-          <b-form-group label-cols="12" label="주소:">
+          <b-form-group label-cols="12" label="이메일:">
             <b-form-input
               v-model="input.userAddr"
               type="text"
               required
-              placeholder="주소 변경..." />
+              placeholder="이메일 변경..." />
           </b-form-group>
           <b-form-group label-cols="12" label="연락처:">
             <b-form-input
@@ -55,10 +55,16 @@
               placeholder="연락처 변경..." />
           </b-form-group>
 
-          <b-button variant="" class="m-1" @click="moveMap">나가기</b-button>
-          <b-button variant="success" class="m-1" @click="Modify"
-            >수정</b-button
-          >
+          <b-row class="mb-1">
+            <b-col class="text-right">
+              <b-button variant="success" class="m-1" @click="Modify"
+                >수정</b-button
+              >
+              <b-button variant="" class="m-1" @click="moveMap"
+                >나가기</b-button
+              >
+            </b-col>
+          </b-row>
         </b-form>
       </b-col>
     </b-row>
@@ -77,11 +83,14 @@ export default {
       this.$router.push({ name: "Map" });
     },
     Modify() {
-      console.log(this.input);
-      this.modifyUser(this.input);
-      let token = sessionStorage.getItem("access-token");
-      this.getUserInfo(token);
-      this.$router.push({ name: "Map" });
+      this.modifyUser({
+        userInfo: { ...this.input },
+        callback: () => {
+          let token = sessionStorage.getItem("access-token");
+          this.getUserInfo(token);
+          this.$router.push({ name: "Map" });
+        },
+      });
     },
   },
   async created() {

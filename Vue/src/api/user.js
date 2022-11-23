@@ -24,4 +24,11 @@ async function findPwd(userid, success, fail) {
   await api.get(`/user/findPwd/${userid}`).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, findPwd };
+async function checkTempNum(userid, tmpNum, success, fail) {
+  await api
+    .get(`/user/tempNum/${userid}?tmpNum=${tmpNum}`)
+    .then(success)
+    .catch(fail);
+}
+
+export { login, findById, tokenRegeneration, logout, findPwd, checkTempNum };

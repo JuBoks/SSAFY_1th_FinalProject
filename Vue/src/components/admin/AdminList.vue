@@ -96,7 +96,6 @@ export default {
   methods: {
     ...mapActions(adminStore, ["getUsers", "getUserCount"]), //"getUserCount"넣어줘야함 나중에
     movePage: function () {
-      console.log("사용자 등록 누르면 나오는 loginUser", this.loginUser);
       this.$router.push({ name: "AdminJoin" });
     },
     linkGen(pageNum) {

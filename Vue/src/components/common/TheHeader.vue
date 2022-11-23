@@ -34,7 +34,7 @@
         </template>
         <template v-else>
           <b-nav-item><span @click="showModalLogin">로그인</span></b-nav-item>
-          <b-nav-item><span @click="movePage">회원가입</span></b-nav-item>
+          <b-nav-item><span @click="moveJoin">회원가입</span></b-nav-item>
         </template>
       </b-navbar-nav>
     </b-collapse>
@@ -63,12 +63,39 @@
         <b-button variant="primary" @click="confirm">로그인</b-button>
       </div>
     </b-modal>
+
+    <!-- 인증번호 모달 창 -->
+    <b-modal
+      ref="modalTmpNum"
+      title="비밀번호 찾기"
+      header-bg-variant="dark"
+      header-text-variant="light"
+      centered
+      hide-footer>
+      <!-- 인증번호 모달 창 body 작성 -->
+      <div>
+        <b-form-group
+          label-cols="12"
+          label="인증번호:"
+          label-for="tmpNum"
+          description="이메일로 인증번호가 발송되었습니다. 확인해주세요.">
+          <b-form-input
+            id="tmpNum"
+            v-model="tmpNum"
+            placeholder="인증번호 입력 ..."></b-form-input>
+        </b-form-group>
+      </div>
+      <!-- 인증번호 모달 창 Footer 작성 -->
+      <div class="text-right">
+        <b-button variant="primary" @click="checkNum">확인</b-button>
+      </div>
+    </b-modal>
   </b-navbar>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import { findPwd } from "@/api/user";
+import { findPwd, checkTempNum } from "@/api/user";
 
 const userStore = "userStore";
 export default {
@@ -78,6 +105,7 @@ export default {
         userId: "",
         userPwd: "",
       },
+      tmpNum: "",
     };
   },
   computed: {
@@ -91,12 +119,8 @@ export default {
     async confirm() {
       await this.userConfirm(this.input);
       let token = sessionStorage.getItem("access-token");
-      // console.log("1. confirm() token >> " + token);
       if (this.isLogin) {
         await this.getUserInfo(token);
-        const auth = this.loginUser.userAuth;
-        console.log("이사람의 현재권한", auth);
-        // console.log("4. confirm() userInfo :: ", this.userInfo);
         this.hideModalLogin();
       }
     },
@@ -105,14 +129,24 @@ export default {
       findPwd(
         this.input.userId,
         () => {
-          alert("임시 비밀번호가 발송되었습니다.");
+          this.hideModalLogin();
+          this.showModalTmpNum();
         },
         () => {
           alert("서버 오류입니다.");
         }
       );
     },
+    checkNum() {
+      console.log(this.input.userId, this.tmpNum);
+      checkTempNum(this.input.userId, this.tmpNum, ({ data }) => {
+        console.log("data", data);
+      });
+    },
 
+    showModalTmpNum() {
+      this.$refs["modalTmpNum"].show();
+    },
     showModalLogin() {
       this.$refs["modalLogin"].show();
     },
@@ -126,14 +160,13 @@ export default {
         })
         .then((value) => {
           if (value) {
-            console.log("userId", this.input.userId);
             this.userLogout(this.loginUser.userId);
           }
         });
     },
 
-    movePage() {
-      this.$router.push({ name: "AdminJoin" });
+    moveJoin() {
+      this.$router.push({ name: "UserJoin" });
     },
     moveAdmin() {
       this.$router.push({ name: "AdminList" });
@@ -142,7 +175,7 @@ export default {
       this.$router.push({ name: "Map" });
     },
     moveInfo() {
-      this.$router.push({ name: "MyInfo" });
+      this.$router.push({ name: "UserInfo" });
     },
   },
 };

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.ibatis.session.SqlSession;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.user.model.dao.UserDao;
+import com.ssafy.user.model.dto.TmpNumDto;
 import com.ssafy.user.model.dto.UserDto;
 import com.ssafy.util.PageNavigation;
 import com.ssafy.util.SizeConstant;
@@ -19,12 +21,10 @@ import com.ssafy.util.SizeConstant;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private UserDao userDao;
-	
 	@Autowired
-	private UserServiceImpl(UserDao userDao) {
-		this.userDao = userDao;
-	}
+	private UserDao userDao;
+	@Autowired
+	private TmpNumService tmpNumService;
 
 	@Override
 	public boolean join(UserDto userDto) throws Exception {
@@ -106,9 +106,7 @@ public class UserServiceImpl implements UserService {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userid", userid);
 		map.put("token", refreshToken);
-		System.out.println(userid);
 		userDao.saveRefreshToken(map);
-		System.out.println("DAO로 출발");
 	}
 
 	@Override
@@ -129,8 +127,27 @@ public class UserServiceImpl implements UserService {
 		return userDao.getRefreshToken(userId);
 	}
 
+
 	@Override
-	public void sendEmail(String userId) throws Exception {
+	public void insertTmpNumAndSendEmail(UserDto userDto) throws Exception {
+		// 1. 인증번호 생성
+		String tmpNum = randNum();
+		
+		// 2. 인증번호 DB에 삽입
+		TmpNumDto tmpNumDto = new TmpNumDto(userDto.getUserId(), tmpNum);
+		boolean isInserted = tmpNumService.insert(tmpNumDto);
+		
+		if(isInserted) {
+			sendEmail(userDto, tmpNum);
+		} else {
+			throw new Exception();
+		}
+	}
+	
+	private void sendEmail(UserDto userDto, String tmpNum) throws Exception {
+		String userId = userDto.getUserId();
+		String userEmail = userDto.getUserAddr();
+		
 		// Mail Server 설정
 		String charSet = "utf-8";
 		String hostSMTP = "smtp.naver.com"; //네이버 이용시 smtp.naver.com
@@ -138,20 +155,20 @@ public class UserServiceImpl implements UserService {
 		String hostSMTPpwd = "wogh1017";
 
 		// 보내는 사람 EMail, 제목, 내용
-		String fromEmail = "ptjtest1017@naver.com";
-		String fromName = "ptjtest1017";
+		String fromEmail = "구해줘홈즈@naver.com";
+		String fromName = "관리자";
 		String subject = "[구해줘홈즈] 임시 비밀번호 입니다.";
 		String msg = "";
 
-		subject = "베프마켓 임시 비밀번호 입니다.";
+		subject = "구해줘 홈즈! 인증번호 입니다.";
 		msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
 		msg += "<h3 style='color: blue;'>";
-		msg += userId + "님의 임시 비밀번호 입니다. 비밀번호를 변경하여 사용하세요.</h3>";
-		msg += "<p>임시 비밀번호 : ";
-		msg += 1234 + "</p></div>";
+		msg += userId + "님의 인증번호 입니다.</h3>";
+		msg += "<p>인증번호 : ";
+		msg += tmpNum + "</p></div>";
 
 		// 받는 사람 E-Mail 주소
-		String mail = "pjtest1017@gmail.com";
+		String mail = userEmail;
 		try {
 			HtmlEmail email = new HtmlEmail();
 			email.setDebug(true);
@@ -171,5 +188,22 @@ public class UserServiceImpl implements UserService {
 			System.out.println("메일발송 실패 : " + e);
 		}
 	}
+	
+	private String randNum() {
+		Random random = new Random();		//랜덤 함수 선언
+		int createNum = 0;  			//1자리 난수
+		String ranNum = ""; 			//1자리 난수 형변환 변수
+        int letter    = 6;			//난수 자릿수:6
+		String resultNum = "";  		//결과 난수
+		
+		for (int i=0; i<letter; i++) { 
+			createNum = random.nextInt(9);		//0부터 9까지 올 수 있는 1자리 난수 생성
+			ranNum =  Integer.toString(createNum);  //1자리 난수를 String으로 형변환
+			resultNum += ranNum;			//생성된 난수(문자열)을 원하는 수(letter)만큼 더하며 나열
+		}	
+        	
+    	return resultNum;
+	}
+
 
 }

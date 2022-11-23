@@ -56,8 +56,6 @@ const boardStore = {
       state.totalArticles = payload.count;
     },
     COMMENTS(state, payload) {
-      console.log("페이로드");
-      console.log(payload);
       payload.comments.map((comment) => {
         const obj = moment(comment.commentTime, "YYYY-MM-DD hh:mm:ss"); // 변경 전 양식으로 Moment 객체 생성
         comment.commentTime = obj.format("MM-DD HH:mm"); // 원하는 형식으로 변경 후 commentTime 갱신
@@ -195,8 +193,6 @@ const boardStore = {
       });
     },
     createComment(context, payload) {
-      console.log(payload.comment);
-      console.log("??");
       http.post("/comment", payload.comment).then((response) => {
         switch (response.status) {
           case 200:
@@ -212,7 +208,6 @@ const boardStore = {
     },
 
     modifyComment(context, payload) {
-      console.log(payload, "modify_action");
       http
         .put(`/comment/${payload.comment.commentNo}`, payload.comment)
         .then((response) => {

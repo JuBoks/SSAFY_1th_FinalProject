@@ -8,19 +8,15 @@ const onlyAuthUser = async (to, from, next) => {
   const checkUserInfo = store.getters["userStore/checkUserInfo"];
   const checkToken = store.getters["userStore/checkToken"];
   let token = sessionStorage.getItem("access-token");
-  console.log("로그인 처리 전", checkUserInfo, token);
 
   if (checkUserInfo != null && token) {
-    console.log("토큰 유효성 체크하러 가자!!!!");
     await store.dispatch("userStore/getUserInfo", token);
   }
   if (!checkToken || checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
-    
-    // next({ name: "login" });
+
     router.push({ name: "login" });
   } else {
-    console.log("로그인 했다!!!!!!!!!!!!!.");
     next();
   }
 };
@@ -32,10 +28,23 @@ const routes = [
     redirect: { name: "Map" },
   },
   {
-    path: "/MyInfo",
-    name: "MyInfo",
-    beforeEnter: onlyAuthUser,
-    component: () => import("@/components/common/MyInfo"),
+    path: "/user",
+    name: "User",
+    component: () => import("@/views/AppUser"),
+    redirect: "/user/info",
+    children: [
+      {
+        path: "info",
+        name: "UserInfo",
+        beforeEnter: onlyAuthUser,
+        component: () => import("@/components/user/UserInfo"),
+      },
+      {
+        path: "join",
+        name: "UserJoin",
+        component: () => import("@/components/user/UserJoin"),
+      },
+    ],
   },
   {
     path: "/map",
@@ -43,12 +52,12 @@ const routes = [
     component: () => import("@/views/AppMap"),
     children: [
       {
-        path: "/map/list",
+        path: "list",
         name: "MapList",
         component: () => import("@/components/map/MapViewSidebarList"),
       },
       {
-        path: "/map/info",
+        path: "info",
         name: "MapInfo",
         component: () => import("@/components/map/MapViewSidebarInfo"),
       },

@@ -120,9 +120,12 @@ const mapStore = {
         const filter = data.map((el) => {
           let amount = el.dealAmount.replace(",", "");
           amount = Number(amount);
-          console.log("amount", amount);
           amount /= 10000;
-          return { ...el, dealDate: `${el.dealYear}.${el.dealMonth}`, dealAmount: `${amount}억` };
+          return {
+            ...el,
+            dealDate: `${el.dealYear}.${el.dealMonth}`,
+            dealAmount: `${amount}억`,
+          };
         });
         commit({
           type: "APT_SELECTED_BY_MONTH",

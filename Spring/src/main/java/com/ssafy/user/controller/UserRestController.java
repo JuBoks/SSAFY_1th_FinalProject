@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.user.model.dto.TmpNumDto;
 import com.ssafy.user.model.dto.UserDto;
 import com.ssafy.user.model.service.JwtServiceImpl;
+import com.ssafy.user.model.service.TmpNumService;
 import com.ssafy.user.model.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -35,15 +38,13 @@ public class UserRestController {
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 	
+	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	private TmpNumService tmpNumService;
 	@Autowired
 	private JwtServiceImpl jwtService;
-	
-	@Autowired
-	public UserRestController(UserService userService) {
-		this.userService = userService;
-	}
+
 	
 	@ApiOperation(value = "로그인", notes = "Access-token과 로그인 결과 메세지를 반환한다.", response = Map.class)
 	@PostMapping("/login")
@@ -83,11 +84,9 @@ public class UserRestController {
 	public ResponseEntity<Map<String, Object>> getInfo(
 			@PathVariable("userid") @ApiParam(value = "인증할 회원의 아이디.", required = true) String userid,
 			HttpServletRequest request) {
-//		logger.debug("userid : {} ", userid);
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
 		if (jwtService.checkToken(request.getHeader("access-token"))) {
-			logger.info("사용 가능한 토큰!!!");
 			try {
 //				로그인 사용자 정보.
 				UserDto userdto = userService.userInfo(userid);
@@ -231,19 +230,32 @@ public class UserRestController {
 	}
 	
 	@GetMapping("/findPwd/{userId}")
-	public ResponseEntity<?> findPwd(@PathVariable("userId") String userId,
-			HttpSession session) {
+	public ResponseEntity<?> findPwd(@PathVariable("userId") String userId) {
 
 		try {
-			userService.sendEmail(userId);
+			UserDto userdto = userService.userInfo(userId);
+			userService.insertTmpNumAndSendEmail(userdto);
 			return new ResponseEntity<Void>(HttpStatus.OK);
-//			if (isDelete) {
-//				session.invalidate();
-//				return new ResponseEntity<Void>(HttpStatus.OK);
-//			}
-//			else {
-//				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//			}
+		}
+		catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/tempNum/{userId}")
+	public ResponseEntity<?> checkTepNum(@PathVariable("userId") String userId, @RequestParam String tmpNum) {
+
+		try {
+			TmpNumDto result = tmpNumService.select(userId);
+			String actual = result.getTmpnum();
+			if(actual.equals(tmpNum)) {
+				// 인증 조회 후 인증번호 삭제
+				tmpNumService.delete(userId);
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+			}
+			
 		}
 		catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);

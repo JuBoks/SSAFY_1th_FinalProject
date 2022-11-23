@@ -60,7 +60,6 @@ const adminStore = {
         .then((response) => {
           switch (response.status) {
             case 200:
-              console.log("getUsers", response.data);
               context.commit({ type: "USERS", users: response.data });
               break;
 
