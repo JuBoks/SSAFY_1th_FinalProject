@@ -12,16 +12,16 @@
             아파트</b-button
           >
         </b-nav-item>
-        <!-- <b-nav-item>
+        <b-nav-item>
           <b-button
             pill
             variant="outline-primary"
-            :pressed.sync="allianceToggle"
-            id="filter-alliance"
+            :pressed.sync="testToggle"
+            @click="onClickTest"
+            id="filter-test">
+            마커테스트</b-button
           >
-            연립다세대</b-button
-          >
-        </b-nav-item> -->
+        </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -29,10 +29,17 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { Service } from "@/util/kakao-service";
 
 const mapStore = "mapStore";
 
 export default {
+  data() {
+    return {
+      testToggle: false,
+      service: null,
+    };
+  },
   computed: {
     ...mapGetters(mapStore, ["aptFilterBtn"]),
     aptToggle: {
@@ -44,9 +51,20 @@ export default {
       },
     },
   },
-  mounted() {},
   methods: {
     ...mapActions(mapStore, ["toggleAptFilter"]),
+    onClickTest() {
+      if (this.service == null) {
+        this.service = new Service();
+      }
+
+      this.testToggle != this.testToggle;
+      if (this.testToggle) {
+        this.service.searchPlaces("CS2");
+      } else {
+        this.service.removeMarker();
+      }
+    },
   },
 };
 </script>
