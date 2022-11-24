@@ -247,10 +247,11 @@ public class UserRestController {
 
 		try {
 			boolean isExist = userService.checkId(userId);
+			System.out.println(isExist);
 			if(isExist) {
-				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-			} else {
 				return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 			}
 		}
 		catch (Exception e) {

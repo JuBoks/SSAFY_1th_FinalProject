@@ -166,22 +166,24 @@ export default {
         return;
       }
 
-      const { data } = checkId(this.input.userId);
-      if (!data) {
-        alert("없는 아이디입니다.");
-        return;
-      }
-
-      findPwd(
-        this.input.userId,
-        () => {
-          this.hideModalLogin();
-          this.showModalTmpNum();
-        },
-        () => {
-          alert("서버 오류입니다.");
+      checkId(this.input.userId, ({ data }) => {
+        if (data) {
+          alert("없는 아이디입니다.");
+          this.$refs.userId.focus();
+          return;
         }
-      );
+
+        findPwd(
+          this.input.userId,
+          () => {
+            this.hideModalLogin();
+            this.showModalTmpNum();
+          },
+          () => {
+            alert("서버 오류입니다.");
+          }
+        );
+      });
     },
     checkNum() {
       const userId = this.input.userId;

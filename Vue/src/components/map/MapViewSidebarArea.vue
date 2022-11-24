@@ -73,7 +73,6 @@ export default {
         dongCode: code,
       });
       if (this.dongSelected && this.dongSelected.code == code) {
-        console.log("현재 선택한 동", this.dongSelected);
         this.setBookmark(false);
       }
     },

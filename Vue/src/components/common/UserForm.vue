@@ -171,19 +171,20 @@ export default {
         alert(errMsg);
       } else {
         if (this.type == "create") {
-          const { data } = checkId(this.input.userId);
-          if (!data) {
-            alert("이미 존재하는 아이디입니다.");
-            this.$refs.userId.focus();
-            return;
-          }
-          this.createUser({
-            userInfo: this.input,
-            callback: () => {
-              this.getUsers({ pgno: 1, key: "", word: "" });
-            },
+          checkId(this.input.userId, ({ data }) => {
+            if (!data) {
+              alert("이미 존재하는 아이디입니다.");
+              this.$refs.userId.focus();
+              return;
+            }
+            this.createUser({
+              userInfo: this.input,
+              callback: () => {
+                this.getUsers({ pgno: 1, key: "", word: "" });
+              },
+            });
+            this.moveList();
           });
-          this.moveList();
         } else {
           this.modifyUser({
             userInfo: this.input,

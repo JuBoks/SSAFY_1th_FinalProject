@@ -257,7 +257,6 @@ const mapStore = {
     getAptDealByMonth({ commit }, payload) {
       apiGetAptDealByMonth(payload, ({ data }) => {
         const filter = data.map((el) => {
-          console.log("el", el)
           let amount = el.dealAmount.replace(",", "");
           amount = Number(amount);
           amount /= 10000;

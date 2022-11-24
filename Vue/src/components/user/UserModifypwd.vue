@@ -12,27 +12,31 @@
             label-cols="12"
             label="새 비밀번호:"
             label-for="userPwd"
-            description="새 비밀번호 입력">
+            description="새 비밀번호 입력"
+          >
             <b-form-input
               id="userPwd"
               ref="userPwd"
               v-model="userPwd"
               type="password"
               required
-              placeholder="새 비밀번호 입력..." />
+              placeholder="새 비밀번호 입력..."
+            />
           </b-form-group>
           <b-form-group
             label-cols="12"
             label="새 비밀번호확인:"
             label-for="userPwdConfirm"
-            description="새 비밀번호확인 입력">
+            description="새 비밀번호확인 입력"
+          >
             <b-form-input
               id="userPwdConfirm"
               ref="userPwdConfirm"
               v-model="userPwdConfirm"
               type="password"
               required
-              placeholder="새 비밀번호확인 입력..." />
+              placeholder="새 비밀번호확인 입력..."
+            />
           </b-form-group>
           <b-row class="mb-1">
             <b-col class="text-right">
@@ -60,7 +64,6 @@ export default {
   },
   created() {
     this.userId = this.$route.params.userId;
-    console.log(this.$route.params);
   },
   methods: {
     validate() {

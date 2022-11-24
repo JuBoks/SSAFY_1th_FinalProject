@@ -144,7 +144,6 @@ export default {
       };
 
       this.setBookmark(checked);
-      console.log("checked", checked);
       if (checked) {
         // 관심지역에 추가
         this.registFavoriteArea(payload);

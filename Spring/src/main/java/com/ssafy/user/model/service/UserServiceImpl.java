@@ -222,7 +222,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean checkId(String userId) throws Exception {
-		return userId.equals(userDao.selectId(userId));
+		String result = userDao.selectId(userId);
+		return userId.equals(result);
 	}
 
 
