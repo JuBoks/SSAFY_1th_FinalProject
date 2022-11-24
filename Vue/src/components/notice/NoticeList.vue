@@ -21,7 +21,9 @@
           <b-button variant="primary" @click="doSearch">검색</b-button>
         </b-form>
       </b-col>
-      <b-col class="text-right">
+      <b-col
+        class="text-right"
+        v-if="this.loginUser && this.loginUser.userAuth == 1">
         <b-button variant="outline-primary" @click="movePage">등록</b-button>
       </b-col>
     </b-row>
@@ -72,6 +74,7 @@
 import { mapActions, mapGetters } from "vuex";
 
 const noticeStore = "noticeStore";
+const userStore = "userStore";
 
 export default {
   data() {
@@ -88,7 +91,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(noticeStore, ["articles", "articlesPerPage", "totalArticles"]),
+    ...mapGetters(noticeStore, [
+      "articles",
+      "articlesPerPage",
+      "totalArticles",
+    ]),
+    ...mapGetters(userStore, ["loginUser"]),
   },
   // Dynamic module loading을 통해 component를 불러옴
   components: {

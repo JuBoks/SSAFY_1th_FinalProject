@@ -4,97 +4,102 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="mr-auto">
         <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="aptToggle"
-            id="filter-apt">
-            아파트</b-button
-          >
+          <b-button-group>
+            <div
+              class="badge badge-primary text-wrap text-center"
+              style="
+                width: 3em;
+                font-size: 18px;
+                line-height: 30px;
+                border-radius: 0px;
+                font-weight: 500;
+                border-top-left-radius: 0.3rem;
+                border-bottom-left-radius: 0.3rem;
+              ">
+              매물
+            </div>
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="aptToggle"
+              id="filter-apt">
+              아파트</b-button
+            >
+          </b-button-group>
         </b-nav-item>
       </b-navbar-nav>
+
       <b-navbar-nav>
         <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="toggleMart"
-            @click="onClickMart"
-            id="filter-test">
-            마트</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="toggleHospital"
-            @click="onClickHospital">
-            병원</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="toggleConvStore"
-            @click="onClickConvStore">
-            편의점</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="toggleSchool"
-            @click="onClickSchool">
-            학교</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="toggleParkingLot"
-            @click="onClickParkingLot">
-            주차장</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="toggleGasStation"
-            @click="onClickGasStation">
-            주유소</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="toggleSubway"
-            @click="onClickSubway">
-            지하철역</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="toggleBank"
-            @click="onClickBank">
-            은행</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
-          <b-button
-            pill
-            variant="outline-primary"
-            :pressed.sync="togglePharmacy"
-            @click="onClickPharmacy">
-            약국</b-button
-          >
+          <b-button-group>
+            <div
+              class="badge badge-primary text-wrap text-center"
+              style="
+                width: 6rem;
+                font-size: 18px;
+                line-height: 30px;
+                border-radius: 0;
+                font-weight: 500;
+                border-top-left-radius: 0.3rem;
+                border-bottom-left-radius: 0.3rem;
+              ">
+              주변정보
+            </div>
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="toggleMart"
+              @click="onClickMart"
+              id="filter-test">
+              마트</b-button
+            >
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="toggleHospital"
+              @click="onClickHospital">
+              병원</b-button
+            >
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="toggleConvStore"
+              @click="onClickConvStore">
+              편의점</b-button
+            >
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="toggleSchool"
+              @click="onClickSchool">
+              학교</b-button
+            >
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="toggleParkingLot"
+              @click="onClickParkingLot">
+              주차장</b-button
+            >
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="toggleGasStation"
+              @click="onClickGasStation">
+              주유소</b-button
+            >
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="toggleSubway"
+              @click="onClickSubway">
+              지하철역</b-button
+            >
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="toggleBank"
+              @click="onClickBank">
+              은행</b-button
+            >
+            <b-button
+              variant="outline-primary"
+              :pressed.sync="togglePharmacy"
+              @click="onClickPharmacy">
+              약국</b-button
+            >
+          </b-button-group>
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
