@@ -257,13 +257,17 @@ const mapStore = {
     getAptDealByMonth({ commit }, payload) {
       apiGetAptDealByMonth(payload, ({ data }) => {
         const filter = data.map((el) => {
+          console.log("el", el)
           let amount = el.dealAmount.replace(",", "");
           amount = Number(amount);
           amount /= 10000;
+          const year = String(el.dealYear).substring(2);
+          let isCancel = el.cancelDealDay == null ? "완료" : "해제";
           return {
             ...el,
-            dealDate: `${el.dealYear}.${el.dealMonth}`,
+            dealDate: `${year}.${el.dealMonth}.${el.dealDay}`,
             dealAmount: `${amount}억`,
+            isCancel: isCancel
           };
         });
         commit({

@@ -27,18 +27,27 @@ export default {
         {
           label: "계약일",
           key: "dealDate",
+          class: "text-center",
         },
         {
           label: "매매가격",
           key: "dealAmount",
+          class: "text-center",
         },
         {
           label: "면적(㎡)",
           key: "area",
+          class: "text-center",
         },
         {
           label: "층",
           key: "floor",
+          class: "text-center",
+        },
+        {
+          label: "계약상태",
+          key: "isCancel",
+          class: "text-center",
         },
       ],
     };
