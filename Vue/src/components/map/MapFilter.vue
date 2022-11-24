@@ -13,8 +13,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="aptToggle"
-            id="filter-apt"
-          >
+            id="filter-apt">
             아파트</b-button
           >
         </b-nav-item>
@@ -24,8 +23,7 @@
             variant="outline-primary"
             :pressed.sync="toggleMart"
             @click="onClickMart"
-            id="filter-test"
-          >
+            id="filter-test">
             마트</b-button
           >
         </b-nav-item>
@@ -34,8 +32,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="toggleHospital"
-            @click="onClickHospital"
-          >
+            @click="onClickHospital">
             병원</b-button
           >
         </b-nav-item>
@@ -44,8 +41,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="toggleConvStore"
-            @click="onClickConvStore"
-          >
+            @click="onClickConvStore">
             편의점</b-button
           >
         </b-nav-item>
@@ -54,8 +50,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="toggleSchool"
-            @click="onClickSchool"
-          >
+            @click="onClickSchool">
             학교</b-button
           >
         </b-nav-item>
@@ -64,8 +59,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="toggleParkingLot"
-            @click="onClickParkingLot"
-          >
+            @click="onClickParkingLot">
             주차장</b-button
           >
         </b-nav-item>
@@ -74,8 +68,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="toggleGasStation"
-            @click="onClickGasStation"
-          >
+            @click="onClickGasStation">
             주유소</b-button
           >
         </b-nav-item>
@@ -84,8 +77,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="toggleSubway"
-            @click="onClickSubway"
-          >
+            @click="onClickSubway">
             지하철역</b-button
           >
         </b-nav-item>
@@ -94,8 +86,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="toggleBank"
-            @click="onClickBank"
-          >
+            @click="onClickBank">
             은행</b-button
           >
         </b-nav-item>
@@ -104,8 +95,7 @@
             pill
             variant="outline-primary"
             :pressed.sync="togglePharmacy"
-            @click="onClickPharmacy"
-          >
+            @click="onClickPharmacy">
             약국</b-button
           >
         </b-nav-item>
@@ -169,9 +159,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(mapStore, ["toggleAptFilter"]),
+    ...mapActions(mapStore, ["toggleAptFilter", "init"]),
 
     showFavoriteAreaList() {
+      this.init();
       this.$emit("onPanelOpen");
       this.$router.push({ name: "MapArea" }).catch(() => {});
     },

@@ -9,6 +9,8 @@ public interface AptDealService {
 
 	List<AptDealDto> listAptDeal(int aptCode) throws Exception;
 	
+	List<AptDealDto> listAptDealCancelByYM(int aptCode) throws Exception;
+	
 	List<AptDealDto> listAptDealByYM(int aptCode) throws Exception;
 	
 	AptDealDto search(Long no) throws Exception;

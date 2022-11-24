@@ -55,4 +55,9 @@ public class AptDealServiceImpl implements AptDealService {
 		return aptDealDao.getAptDealByMonth(param);
 	}
 
+	@Override
+	public List<AptDealDto> listAptDealCancelByYM(int aptCode) throws Exception {
+		return aptDealDao.listAptDealCancelByYM(aptCode);
+	}
+
 }

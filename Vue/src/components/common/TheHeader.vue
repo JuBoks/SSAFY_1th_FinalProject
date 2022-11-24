@@ -5,6 +5,7 @@
         src="@/assets/img/logo_w.png"
         alt="logo"
         @click="moveMap"
+        style="cursor: pointer"
         width="100px" />
     </b-navbar-brand>
 

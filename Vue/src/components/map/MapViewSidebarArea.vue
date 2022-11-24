@@ -1,11 +1,14 @@
 <template>
   <b-list-group>
+    <template v-if="favoriteAreas.length == 0">
+      <h7 class="text-center">관심지역을 추가해주세요.</h7>
+    </template>
     <b-list-group
+      v-else
       class="row"
       horizontal
       v-for="(el, idx) in favoriteAreas"
-      :key="idx"
-    >
+      :key="idx">
       <b-list-group-item
         class="col-9 text-center"
         button
@@ -59,5 +62,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

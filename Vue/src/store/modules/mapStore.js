@@ -3,6 +3,7 @@ import {
   apiGetAptDealAvg,
   apiGetAptDealGroup,
   apiGetAptDealInfo,
+  apiGetAptDealCancelInfo,
   apiGetAptDealByMonth,
   apiRegistFavoriteArea,
   apiDeleteFavoriteArea,
@@ -18,11 +19,15 @@ const mapStore = {
     aptSelectedDealByMonth: [], // 선택한 아파트의 특정 년월의 매매 내역
     aptInfoList: [], // 좌측 리스트에 출력할 정보들
     aptDealInfo: [], // 한 아파트에 대한 거래 정보들
+    aptDealCancelInfo: [], // 한 아파트에 대한 해제거래 정보들
     aptFilterBtn: true, // 아파트 마커 보여줄 버튼 활성화 여부
     aptDealInfoGroup: [], // 한 아파트에 대한 년월 기준으로 평균 매매값
-    aptDealInfoGroupChart: [["년도", "매매평균값"]], // 한 아파트에 대한 거래 정보들 (차트용)
+    aptDealInfoGroupChart: [["년도", "매매평균값", "매매해약"]], // 한 아파트에 대한 거래 정보들 (차트용)
     bookmark: false, // 관심지역 추가 체크박스
     favoriteAreas: [], // 관심지역 리스트
+    // sidoSelected: {},
+    // gugunSelected: {},
+    // dongSelected: {},
   },
 
   getters: {
@@ -40,6 +45,9 @@ const mapStore = {
     },
     aptDealInfo(state) {
       return state.aptDealInfo;
+    },
+    aptDealCancelInfo(state) {
+      return state.aptDealCancelInfo;
     },
     aptFilterBtn(state) {
       return state.aptFilterBtn;
@@ -73,6 +81,9 @@ const mapStore = {
     APT_DEAL_INFO(state, payload) {
       state.aptDealInfo = payload.aptDealInfo;
     },
+    APT_DEAL_CANCEL_INFO(state, payload) {
+      state.aptDealCancelInfo = payload.aptDealCancelInfo;
+    },
     APT_FILTER_BTN(state, payload) {
       state.aptFilterBtn = payload.flag;
     },
@@ -87,7 +98,7 @@ const mapStore = {
     },
     FAVORITE_AREAS(state, payload) {
       state.favoriteAreas = payload.favoriteAreas;
-      }
+    },
   },
   actions: {
     setSelectedApt({ commit }, aptSelected) {
@@ -105,26 +116,96 @@ const mapStore = {
       });
     },
     getAptDealGroup({ commit }, aptCode) {
-      apiGetAptDealGroup(aptCode, ({ data }) => {
-        // chart 에 맞게 데이터 넣기
-        let chartData = [["년도", "매매평균값"]];
-        let length = data.length > 12 ? 12 : data.length;
-        for (let i = 0; i < length; i++) {
-          let el = data[i];
-          chartData.push([
-            `${el.dealYear}.${el.dealMonth}`,
-            Number(el.dealAvg) / 10,
-          ]);
-        }
-        commit({
-          type: "APT_DEAL_INFO_GROUP",
-          aptDealInfoGroup: data,
-        });
-        commit({
-          type: "APT_DEAL_INFO_GROUP_CHART",
-          aptDealInfoGroupChart: chartData,
+      console.log("???");
+      apiGetAptDealGroup(aptCode, (response) => {
+        let aptDealData = response.data;
+        apiGetAptDealCancelInfo(aptCode, ({ data }) => {
+          console.log("data", data);
+          let aptDealCancelData = data;
+          console.log("aptDealData", aptDealData);
+          console.log("aptDealCancelData", aptDealCancelData);
+          // chart 에 맞게 데이터 넣기
+          let chartData = [["년도", "매매평균값", "매매해약"]];
+          let lenDeal = aptDealData.length > 12 ? 12 : aptDealData.length;
+          let lenCancel =
+            aptDealCancelData.length > 12 ? 12 : aptDealCancelData.length;
+          // deal 관련 데이터를 먼저 넣음
+          for (let k = 0; k < lenDeal; k++) {
+            let deal = aptDealData[k];
+            let flag = false;
+            for (let i = 0; i < lenCancel; i++) {
+              let cancel = aptDealCancelData[i];
+              if (
+                cancel.dealYear == deal.dealYear &&
+                cancel.dealMonth == deal.dealMonth
+              ) {
+                chartData.push([
+                  `${deal.dealYear}.${deal.dealMonth}`,
+                  Number(deal.dealAvg) / 10,
+                  Number(cancel.dealAvg) / 10,
+                ]);
+                flag = true;
+                break;
+              }
+            }
+            if (!flag) {
+              chartData.push([
+                `${deal.dealYear}.${deal.dealMonth}`,
+                Number(deal.dealAvg) / 10,
+                0,
+              ]);
+            }
+          }
+          commit({
+            type: "APT_DEAL_INFO_GROUP",
+            aptDealInfoGroup: aptDealData,
+          });
+          commit({
+            type: "APT_DEAL_INFO_GROUP_CHART",
+            aptDealInfoGroupChart: aptDealCancelData,
+          });
+          commit({
+            type: "APT_DEAL_INFO_GROUP_CHART",
+            aptDealInfoGroupChart: chartData,
+          });
         });
       });
+      // let aptDealData = await apiGetAptDealGroup(aptCode);
+      // let aptDealCancelData = await apiGetAptDealCancelInfo(aptCode);
+
+      // for (let i = 0; i < lenDeal; i++) {
+      //   let el = aptDealData[i];
+      //   chartData.push([
+      //     `${el.dealYear}.${el.dealMonth}`,
+      //     Number(el.dealAvg) / 10,
+      //   ]);
+      // }
+      // // 해제 관련 데이터를 맞춰 넣음
+      // for (let i = 0; i < lenCancel; i++) {
+      //   let el = aptDealCancelData[i];
+      //   for (let k = 0; k < chartData.length; k++) {}
+      // }
+
+      // apiGetAptDealGroup(aptCode, ({ data }) => {
+      //   // chart 에 맞게 데이터 넣기
+      //   let chartData = [["년도", "매매평균값"]];
+      //   let length = data.length > 12 ? 12 : data.length;
+      //   for (let i = 0; i < length; i++) {
+      //     let el = data[i];
+      //     chartData.push([
+      //       `${el.dealYear}.${el.dealMonth}`,
+      //       Number(el.dealAvg) / 10,
+      //     ]);
+      //   }
+      //   commit({
+      //     type: "APT_DEAL_INFO_GROUP",
+      //     aptDealInfoGroup: data,
+      //   });
+      //   commit({
+      //     type: "APT_DEAL_INFO_GROUP_CHART",
+      //     aptDealInfoGroupChart: chartData,
+      //   });
+      // });
     },
     getAptDealInfo({ commit }, aptCode) {
       apiGetAptDealInfo(aptCode, ({ data }) => {
@@ -135,7 +216,6 @@ const mapStore = {
       });
     },
     getAptDealByMonth({ commit }, payload) {
-      console;
       apiGetAptDealByMonth(payload, ({ data }) => {
         const filter = data.map((el) => {
           let amount = el.dealAmount.replace(",", "");
@@ -194,7 +274,7 @@ const mapStore = {
       // 2. 아파트 정보 가져오기
       apiGetAptInfo(payload.dongCode, async ({ data }) => {
         const aptData = data;
-          // 3. 좌측 리스트 정보 출력
+        // 3. 좌측 리스트 정보 출력
         dispatch("updateAptInfoList", aptData);
         // 4. 맵에 마커 표시하기
         if (aptData.length > 0) {
@@ -211,7 +291,7 @@ const mapStore = {
       });
     },
     /* 관심지역 */
-    registFavoriteArea({commit}, payload) {
+    registFavoriteArea({ commit }, payload) {
       apiRegistFavoriteArea(payload, ({ data }) => {
         commit({
           type: "FAVORITE_AREAS",
@@ -227,7 +307,7 @@ const mapStore = {
         });
       });
     },
-    selectFavoriteArea({commit}, payload) {
+    selectFavoriteArea({ commit }, payload) {
       apiGetFavoriteAreaList(payload.userId, ({ data }) => {
         commit({
           type: "FAVORITE_AREAS",

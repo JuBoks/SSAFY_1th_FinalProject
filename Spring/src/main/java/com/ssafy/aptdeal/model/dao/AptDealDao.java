@@ -11,6 +11,8 @@ public interface AptDealDao {
 	
 	List<AptDealDto> listAptDeal(int aptCode) throws SQLException;
 	
+	List<AptDealDto> listAptDealCancelByYM(int aptCode) throws SQLException;
+	
 	List<AptDealDto> listAptDealByYM(int aptCode) throws SQLException;
 	
 	AptDealDto search(Long no) throws SQLException;

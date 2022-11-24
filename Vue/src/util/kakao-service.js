@@ -3,7 +3,6 @@
 export function Service() {
   this.ps = new kakao.maps.services.Places(window.map);
   this.markers = [];
-  //this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.contentNode = document.createElement("div");
   this.contentNode.className = "placeinfo_wrap";
   this.markerObj = null;
@@ -35,9 +34,7 @@ export function Service() {
   };
   this.createMarker = async (p) => {
     // 마커를 생성하고 지도에 표시합니다
-    const marker = this.addMarker(
-      new kakao.maps.LatLng(p.y, p.x)
-    );
+    const marker = this.addMarker(new kakao.maps.LatLng(p.y, p.x));
     // 마커와 검색결과 항목을 클릭 했을 때
     // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
     ((marker, place) => {
@@ -51,7 +48,7 @@ export function Service() {
         }
       });
     })(marker, p);
-  }
+  };
   this.displayPlaceInfo = function (place) {
     let content = `
     <div class="placeinfo">
@@ -74,7 +71,9 @@ export function Service() {
     `;
 
     this.contentNode.innerHTML = content;
-    this.markerObj.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
+    this.markerObj.placeOverlay.setPosition(
+      new kakao.maps.LatLng(place.y, place.x)
+    );
     this.markerObj.placeOverlay.setMap(window.map);
     // 커스텀 오버레이 컨텐츠를 설정합니다
     this.markerObj.placeOverlay.setContent(this.contentNode);
@@ -113,57 +112,66 @@ export function Service() {
   };
 }
 
-export function Mart() { // 대형마트
+export function Mart() {
+  // 대형마트
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/mart_marker.png");
   this.category = "MT1";
   this.markers = [];
-} 
-export function Hospital() { // 병원
+}
+export function Hospital() {
+  // 병원
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/hospital_marker.png");
   this.category = "HP8";
   this.markers = [];
 }
-export function ConvStore() { // 편의점
+export function ConvStore() {
+  // 편의점
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/convenience_marker.png");
   this.category = "CS2";
   this.markers = [];
 }
-export function School() { // 학교
+export function School() {
+  // 학교
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/school_marker.png");
   this.category = "SC4";
   this.markers = [];
-} 
-export function ParkingLot() { // 주차장
+}
+export function ParkingLot() {
+  // 주차장
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/parkinglot_marker.png");
   this.category = "PK6";
   this.markers = [];
-} 
-export function GasStation() { // 주유소
+}
+export function GasStation() {
+  // 주유소
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/gasstation_marker.png");
   this.category = "OL7";
   this.markers = [];
-} 
-export function Subway() { // 지하철역
+}
+export function Subway() {
+  // 지하철역
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/subway_marker.png");
   this.category = "SW8";
   this.markers = [];
-} 
-export function Bank() { // 은행
+}
+export function Bank() {
+  // 은행
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/bank_marker.png");
   this.category = "PK6";
   this.markers = [];
-} 
-export function Pharmacy() { // 약국
+}
+export function Pharmacy() {
+  // 약국
   this.placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
   this.image = require("@/assets/img/pharmacy_marker.png");
   this.category = "PM9";
   this.markers = [];
-} 
+}

@@ -35,6 +35,18 @@ public class AptDealRestController {
 		}
 	}
 	
+	@GetMapping("/cancel/{aptCode}")
+	public ResponseEntity<?> getAptDealCancelInfo(@PathVariable("aptCode") Integer aptCode) {
+		try {
+			List<AptDealDto> list = aptDealService.listAptDealCancelByYM(aptCode);
+			System.out.println(list);
+			return new ResponseEntity<List<AptDealDto>>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	// Year과 Month 를 Group by 하여 해당 아파트의 거래 내역을 들고옴
 	@GetMapping("/group/{aptCode}")
 	public ResponseEntity<?> getAptDealByYearMonth(@PathVariable("aptCode") Integer aptCode) {
