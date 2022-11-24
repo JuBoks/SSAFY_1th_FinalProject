@@ -2,37 +2,33 @@
   <div class="map-wrap wh100">
     <b-form inline class="map-search">
       <b-form-checkbox
-        v-model="check"
+        v-model="check.checked"
         @change="onChangeBookmark"
-        size="lg"
-      ></b-form-checkbox>
+        size="lg"></b-form-checkbox>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedSido"
         value-field="value"
         text-field="text"
-        :options="sido"
+        :options="sidoOptions"
         :text="selectedSidoName"
-        @change="onSidoChanged"
-      ></b-form-select>
+        @change="onSidoChanged"></b-form-select>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedGugun"
         value-field="value"
         text-field="text"
-        :options="gugun"
+        :options="gugunOptions"
         :value="null"
-        @change="onGugunChanged"
-      ></b-form-select>
+        @change="onGugunChanged"></b-form-select>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedDong"
         value-field="value"
         text-field="text"
-        :options="dong"
+        :options="dongOptions"
         :value="null"
-        @change="onDongChanged"
-      ></b-form-select>
+        @change="onDongChanged"></b-form-select>
     </b-form>
 
     <div id="map" style="width: 100%; height: 100%"></div>
@@ -55,37 +51,43 @@ export default {
   name: "KakaoMap",
   data() {
     return {
-      sido: [{ text: "시/도", value: null }],
-      gugun: [{ text: "구/군", value: null }],
-      dong: [{ text: "동", value: null }],
-
-      check: false,
-
       selectedSidoName: null,
+
       selectedSido: null,
       selectedGugun: null,
       selectedDong: null,
     };
   },
   computed: {
-    ...mapGetters(mapStore, ["bookmark", "favoriteAreas"]),
+    ...mapGetters(mapStore, [
+      "bookmark",
+      "favoriteAreas",
+      "sidoSelected",
+      "gugunSelected",
+      "dongSelected",
+      "sidoOptions",
+      "gugunOptions",
+      "dongOptions",
+    ]),
     ...mapGetters(userStore, ["loginUser"]),
+    check() {
+      return { checked: this.bookmark };
+    },
   },
   async mounted() {
-    // bookmark 와 연결
-    this.check = this.bookmark;
-
     // 시/도 초기화
-    const sidoData = await http.get("/area/sido");
-    sidoData.forEach((el) => {
-      this.sido.push({
-        text: el.sidoName,
-        value: {
-          code: el.dongCode,
-          name: el.sidoName,
-        },
-      });
-    });
+    this.getSidoOptions();
+    this.setGugunOptions([{ text: "구/군", value: null }]);
+    this.setDongOptions([{ text: "동", value: null }]);
+
+    // 선택된 부분 초기화
+    this.setSido(null);
+    this.setGugun(null);
+    this.setDong(null);
+
+    this.selectedSido = this.sidoSelected;
+    this.selectedGugun = this.gugunSelected;
+    this.selectedDong = this.dongSelected;
 
     // 카카오 맵 생성
     this.map = new Kakao.Map();
@@ -99,8 +101,17 @@ export default {
       "deleteFavoriteArea",
       "selectFavoriteArea",
       "searchArea",
+      "setSido",
+      "setGugun",
+      "setDong",
+      "getSidoOptions",
+      "getGugunOptions",
+      "getDongOptions",
+      "setSidoOptions",
+      "setGugunOptions",
+      "setDongOptions",
+      "setBookmark",
     ]),
-
     onChangeBookmark(checked) {
       let isValid = true;
       let errMsg = "";
@@ -122,6 +133,8 @@ export default {
         dongCode: this.selectedDong.code,
       };
 
+      this.setBookmark(checked);
+
       if (checked) {
         // 관심지역에 추가
         this.registFavoriteArea(payload);
@@ -132,43 +145,29 @@ export default {
     },
 
     async onSidoChanged() {
-      this.gugun = [{ text: "구/군", value: null }];
-      this.selectedGugun = null;
-      this.dong = [{ text: "동", value: null }];
-      this.selectedDong = null;
+      // 1 구군, 동 초기화
+      this.setGugun(null);
+      this.setDong(null);
+      this.setGugunOptions([{ text: "구/군", value: null }]);
+      this.setDongOptions([{ text: "동", value: null }]);
 
-      const gugunData = await http.get(
-        `/area/gugun?sidoCode=${this.selectedSido.code}`
-      );
-      gugunData.forEach((el) => {
-        this.gugun.push({
-          text: el.gugunName,
-          value: {
-            code: el.dongCode,
-            name: el.gugunName,
-          },
-        });
-      });
+      // 2. 값 셋팅
+      this.setSido(this.selectedSido);
+      this.getGugunOptions(this.selectedSido.code);
     },
     async onGugunChanged() {
-      this.dong = [{ text: "동", value: null }];
-      this.selectedDong = null;
+      // 1. 동 초기화
+      this.setDong(null);
+      this.setDongOptions([{ text: "동", value: null }]);
 
-      const dongData = await http.get(
-        `/area/dong?gugunCode=${this.selectedGugun.code}`
-      );
-      dongData.forEach((el) => {
-        this.dong.push({
-          text: el.dongName,
-          value: {
-            code: el.dongCode,
-            name: el.dongName,
-          },
-        });
-      });
+      // 2. 동 셋팅
+      this.setGugun(this.selectedGugun);
+      this.getDongOptions(this.selectedGugun.code);
     },
     onDongChanged() {
+      this.setDong(this.selectedDong);
       this.search();
+      // 관심지역 추가 부분
       if (this.loginUser) {
         this.selectFavoriteArea({
           userId: this.loginUser.userId,
@@ -231,31 +230,6 @@ export default {
       };
 
       this.searchArea(payload);
-      // init
-      // this.init();
-
-      // // 2. 아파트들 데이터 가져오기
-      // const [aptData] = await Promise.all([
-      //   this.getAptData(),
-      //   //this.getAllianceData(),
-      // ]);
-
-      // // 3. 좌측 리스트 정보 출력
-      // this.updateAptInfoList(aptData);
-
-      // // 4. 맵에 마커 표시하기
-      // if (aptData.length > 0) {
-      //   // 매물정보가 있으면 마커가 다 표시할 수 있도록 맵을 이동
-      //   const aptMarkers = await Kakao.AptMarkers(aptData);
-      //   this.map.addAptCluster(aptMarkers);
-      // } else {
-      //   // 매물정보가 없으면 임의로 이동
-      //   const addr = `${this.selectedSido.name} ${this.selectedGugun.name} ${this.selectedDong.name}`;
-      //   this.map.setCenterAddr(addr, 3);
-      // }
-
-      // this.$route.name != "MapList" && this.$router.push({ name: "MapList" });
-      // this.$parent.$emit("onPanelOpen");
     },
   },
 };

@@ -1,7 +1,7 @@
 <template>
   <b-list-group>
     <template v-if="favoriteAreas.length == 0">
-      <h7 class="text-center">관심지역을 추가해주세요.</h7>
+      <div class="text-center">관심지역을 추가해주세요.</div>
     </template>
     <b-list-group
       v-else
@@ -30,11 +30,15 @@ const userStore = "userStore";
 
 export default {
   computed: {
-    ...mapGetters(mapStore, ["favoriteAreas"]),
+    ...mapGetters(mapStore, ["favoriteAreas", "dongSelected"]),
     ...mapGetters(userStore, ["loginUser"]),
   },
   methods: {
-    ...mapActions(mapStore, ["deleteFavoriteArea", "searchArea"]),
+    ...mapActions(mapStore, [
+      "deleteFavoriteArea",
+      "searchArea",
+      "setBookmark",
+    ]),
 
     showArea(el) {
       let dongCode = el.dongCode;
@@ -57,6 +61,10 @@ export default {
         userId: this.loginUser.userId,
         dongCode: code,
       });
+      if (this.dongSelected && this.dongSelected.code == code) {
+        console.log("현재 선택한 동", this.dongSelected);
+        this.setBookmark(false);
+      }
     },
   },
 };

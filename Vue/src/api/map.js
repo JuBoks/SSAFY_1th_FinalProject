@@ -3,8 +3,14 @@ import { apiInstance } from "@/util/http-common";
 const api = apiInstance();
 
 // sido, gugun, dong 정보
-async function apiGetSido(dongCode, success, fail) {
-  await api.get(`/aptinfo/${dongCode}`).then(success).catch(fail);
+async function apiGetSido(success, fail) {
+  await api.get("/area/sido").then(success).catch(fail);
+}
+async function apiGetGugun(sidoCode, success, fail) {
+  await api.get(`/area/gugun?sidoCode=${sidoCode}`).then(success).catch(fail);
+}
+async function apiGetDong(gugunCode, success, fail) {
+  await api.get(`/area/dong?gugunCode=${gugunCode}`).then(success).catch(fail);
 }
 // 아파트 정보
 async function apiGetAptInfo(dongCode, success, fail) {
@@ -50,6 +56,8 @@ async function apiDeleteFavoriteArea(payload, success, fail) {
 
 export {
   apiGetSido,
+  apiGetGugun,
+  apiGetDong,
   apiGetAptInfo,
   apiGetAptDealInfo,
   apiGetAptDealCancelInfo,

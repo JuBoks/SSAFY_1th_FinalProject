@@ -1,4 +1,7 @@
 import {
+  apiGetSido,
+  apiGetGugun,
+  apiGetDong,
   apiGetAptInfo,
   apiGetAptDealAvg,
   apiGetAptDealGroup,
@@ -25,9 +28,13 @@ const mapStore = {
     aptDealInfoGroupChart: [["년도", "매매평균값", "매매해약"]], // 한 아파트에 대한 거래 정보들 (차트용)
     bookmark: false, // 관심지역 추가 체크박스
     favoriteAreas: [], // 관심지역 리스트
-    // sidoSelected: {},
-    // gugunSelected: {},
-    // dongSelected: {},
+
+    sidoSelected: null,
+    gugunSelected: null,
+    dongSelected: null,
+    sidoOptions: [{ text: "시/도", value: null }],
+    gugunOptions: [{ text: "구/군", value: null }],
+    dongOptions: [{ text: "동", value: null }],
   },
 
   getters: {
@@ -64,6 +71,24 @@ const mapStore = {
     favoriteAreas(state) {
       return state.favoriteAreas;
     },
+    sidoSelected(state) {
+      return state.sidoSelected;
+    },
+    gugunSelected(state) {
+      return state.gugunSelected;
+    },
+    dongSelected(state) {
+      return state.dongSelected;
+    },
+    sidoOptions(state) {
+      return state.sidoOptions;
+    },
+    gugunOptions(state) {
+      return state.gugunOptions;
+    },
+    dongOptions(state) {
+      return state.dongOptions;
+    },
   },
   mutations: {
     APT_SELECTED(state, payload) {
@@ -98,6 +123,24 @@ const mapStore = {
     },
     FAVORITE_AREAS(state, payload) {
       state.favoriteAreas = payload.favoriteAreas;
+    },
+    SIDO_SELECTED(state, payload) {
+      state.sidoSelected = payload.sidoSelected;
+    },
+    GUGUN_SELECTED(state, payload) {
+      state.gugunSelected = payload.gugunSelected;
+    },
+    DONG_SELECTED(state, payload) {
+      state.dongSelected = payload.dongSelected;
+    },
+    SIDO_OPTIONS(state, payload) {
+      state.sidoOptions = payload.sidoOptions;
+    },
+    GUGUN_OPTIONS(state, payload) {
+      state.gugunOptions = payload.gugunOptions;
+    },
+    DONG_OPTIONS(state, payload) {
+      state.dongOptions = payload.dongOptions;
     },
   },
   actions: {
@@ -287,6 +330,12 @@ const mapStore = {
       });
     },
     /* 관심지역 */
+    setBookmark({ commit }, flag) {
+      commit({
+        type: "BOOKMARK",
+        bookmark: flag,
+      });
+    },
     registFavoriteArea({ commit }, payload) {
       apiRegistFavoriteArea(payload, ({ data }) => {
         commit({
@@ -310,6 +359,88 @@ const mapStore = {
           favoriteAreas: data,
         });
         payload.callback();
+      });
+    },
+    /* 시군구 동 */
+    setSido({ commit }, payload) {
+      commit({
+        type: "SIDO_SELECTED",
+        sidoSelected: payload,
+      });
+    },
+    setGugun({ commit }, payload) {
+      commit({
+        type: "GUGUN_SELECTED",
+        gugunSelected: payload,
+      });
+    },
+    setDong({ commit }, payload) {
+      commit({
+        type: "DONG_SELECTED",
+        dongSelected: payload,
+      });
+    },
+    setSidoOptions({ commit }, sidoOptions) {
+      commit({
+        type: "SIDO_OPTIONS",
+        sidoOptions: sidoOptions,
+      });
+    },
+    getSidoOptions({ dispatch }) {
+      apiGetSido(({ data }) => {
+        let sidoOptions = [{ text: "시/도", value: null }];
+        data.forEach((el) => {
+          sidoOptions.push({
+            text: el.sidoName,
+            value: {
+              code: el.dongCode,
+              name: el.sidoName,
+            },
+          });
+        });
+        dispatch("setSidoOptions", sidoOptions);
+      });
+    },
+    setGugunOptions({ commit }, gugunOptions) {
+      commit({
+        type: "GUGUN_OPTIONS",
+        gugunOptions: gugunOptions,
+      });
+    },
+    getGugunOptions({ dispatch }, sidoCode) {
+      apiGetGugun(sidoCode, ({ data }) => {
+        let gugunOptions = [{ text: "구/군", value: null }];
+        data.forEach((el) => {
+          gugunOptions.push({
+            text: el.gugunName,
+            value: {
+              code: el.dongCode,
+              name: el.gugunName,
+            },
+          });
+        });
+        dispatch("setGugunOptions", gugunOptions);
+      });
+    },
+    setDongOptions({ commit }, dongOptions) {
+      commit({
+        type: "DONG_OPTIONS",
+        dongOptions: dongOptions,
+      });
+    },
+    getDongOptions({ dispatch }, gugunCode) {
+      apiGetDong(gugunCode, ({ data }) => {
+        let dongOptions = [{ text: "동", value: null }];
+        data.forEach((el) => {
+          dongOptions.push({
+            text: el.dongName,
+            value: {
+              code: el.dongCode,
+              name: el.dongName,
+            },
+          });
+        });
+        dispatch("setDongOptions", dongOptions);
       });
     },
   },

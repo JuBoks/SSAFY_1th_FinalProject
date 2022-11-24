@@ -4,11 +4,6 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item>
-          <b-button variant="outline-primary" @click="showFavoriteAreaList">
-            관심지역 보기</b-button
-          >
-        </b-nav-item>
-        <b-nav-item>
           <b-button
             pill
             variant="outline-primary"
@@ -97,6 +92,13 @@
             :pressed.sync="togglePharmacy"
             @click="onClickPharmacy">
             약국</b-button
+          >
+        </b-nav-item>
+      </b-navbar-nav>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item>
+          <b-button variant="outline-primary" @click="showFavoriteAreaList">
+            관심지역 보기</b-button
           >
         </b-nav-item>
       </b-navbar-nav>
@@ -286,12 +288,12 @@ button {
   color: black;
   font-weight: bold;
 }
-#filter-apt::before {
+/* #filter-apt::before {
   content: url("@/assets/img/apartment_b.png");
 }
 #filter-alliance::before {
   content: url("@/assets/img/alliance_b.png");
-}
+} */
 
 .dateSel {
   margin-right: 1rem;
