@@ -12,47 +12,54 @@
             v-if="loginUser.userAuth == 1"
             label-cols="12"
             label="권한:"
-            label-for="userAuth">
+            label-for="userAuth"
+          >
             <b-form-input
               disabled
               v-model="input.userAuth"
               type="text"
-              required />
+              required
+            />
           </b-form-group>
           <b-form-group label-cols="12" label="아이디:" label-for="userName">
             <b-form-input
               disabled
               v-model="input.userId"
               type="text"
-              required />
+              required
+            />
           </b-form-group>
           <b-form-group label-cols="12" label="비밀번호:">
             <b-form-input
               v-model="input.userPwd"
               type="password"
               required
-              placeholder="비밀번호 입력..." />
+              placeholder="비밀번호 입력..."
+            />
           </b-form-group>
           <b-form-group label-cols="12" label="이름:" label-for="userName">
             <b-form-input
               v-model="input.userName"
               type="text"
               required
-              placeholder="이름 변경..." />
+              placeholder="이름 변경..."
+            />
           </b-form-group>
           <b-form-group label-cols="12" label="이메일:">
             <b-form-input
               v-model="input.userAddr"
               type="text"
               required
-              placeholder="이메일 변경..." />
+              placeholder="이메일 변경..."
+            />
           </b-form-group>
           <b-form-group label-cols="12" label="연락처:">
             <b-form-input
               v-model="input.userPhone"
               type="text"
               required
-              placeholder="연락처 변경..." />
+              placeholder="연락처 변경..."
+            />
           </b-form-group>
 
           <b-row class="mb-1">
@@ -90,8 +97,8 @@ export default {
       this.modifyUser({
         userInfo: { ...this.input },
         callback: () => {
-          let token = sessionStorage.getItem("access-token");
-          this.getUserInfo(token);
+          // let token = sessionStorage.getItem("access-token");
+          // this.getUserInfo(token);
           this.$router.push({ name: "Map" });
         },
       });
