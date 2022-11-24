@@ -54,9 +54,7 @@ export default {
   },
 
   created() {
-    console.log("화면띄우고");
     this.getAllNews();
-    console.log(this.news);
   },
 };
 </script>

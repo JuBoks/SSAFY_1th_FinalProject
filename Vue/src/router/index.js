@@ -14,7 +14,7 @@ const onlyAuthUser = async (to, from, next) => {
   }
   if (!checkToken || checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
-
+    this.$router.push({ name: "map" });
     router.push({ name: "login" });
   } else {
     next();
