@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="mt-auto">
     <div class="foo_div">
       <p>주소 : 부산 강서구 녹산동 삼성전기 멀티캠퍼스</p>
     </div>

@@ -116,14 +116,10 @@ const mapStore = {
       });
     },
     getAptDealGroup({ commit }, aptCode) {
-      console.log("???");
       apiGetAptDealGroup(aptCode, (response) => {
         let aptDealData = response.data;
         apiGetAptDealCancelInfo(aptCode, ({ data }) => {
-          console.log("data", data);
           let aptDealCancelData = data;
-          console.log("aptDealData", aptDealData);
-          console.log("aptDealCancelData", aptDealCancelData);
           // chart 에 맞게 데이터 넣기
           let chartData = [["년도", "매매평균값", "매매해약"]];
           let lenDeal = aptDealData.length > 12 ? 12 : aptDealData.length;
