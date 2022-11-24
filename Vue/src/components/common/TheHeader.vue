@@ -48,24 +48,33 @@
       title="로그인"
       header-bg-variant="dark"
       header-text-variant="light"
-      centered
-      hide-footer>
+      centered>
       <!-- 수정 모달 창 body 작성 -->
       <div>
-        <b-form-input
-          ref="userId"
-          v-model="input.userId"
-          placeholder="아이디 입력 ..."></b-form-input>
-        <b-form-input
-          v-model="input.userPwd"
-          type="password"
-          placeholder="패스워드 입력 ..."></b-form-input>
+        <b-form-group label="아이디" :state="idState">
+          <b-form-input
+            ref="userId"
+            v-model="input.userId"
+            placeholder="아이디 입력 ..."></b-form-input>
+        </b-form-group>
+        <b-form-group label="비밀번호" :state="pwdState">
+          <b-form-input
+            v-model="input.userPwd"
+            type="password"
+            placeholder="비밀번호 입력 ..."></b-form-input>
+        </b-form-group>
       </div>
       <!-- 수정 모달 창 Footer 작성 -->
-      <div class="text-right">
+      <template #modal-footer>
+        <div class="w-100 justify-content-between d-flex">
+          <b-button variant="warning" @click="findPwd">비밀번호찾기</b-button>
+          <b-button variant="primary" @click="confirm">로그인</b-button>
+        </div>
+      </template>
+      <!-- <div class="text-right">
         <b-button variant="warning" @click="findPwd">비밀번호찾기</b-button>
         <b-button variant="primary" @click="confirm">로그인</b-button>
-      </div>
+      </div> -->
     </b-modal>
 
     <!-- 인증번호 모달 창 -->
@@ -115,6 +124,12 @@ export default {
   computed: {
     ...mapGetters(userStore, ["loginUser"]),
     ...mapState(userStore, ["isLogin", "isLoginError", "userInfo"]),
+    idState() {
+      return this.input.userId.length >= 4 && this.input.userId.length <= 20;
+    },
+    pwdState() {
+      return this.input.userPwd.length > 0;
+    },
   },
 
   methods: {
