@@ -33,7 +33,6 @@ export default {
   methods: {
     ...mapActions(boardStore, ["createComment", "getComments"]),
     write() {
-      console.log("또잉??");
       const payload = {
         comment: {
           articleNo: this.article.articleNo,

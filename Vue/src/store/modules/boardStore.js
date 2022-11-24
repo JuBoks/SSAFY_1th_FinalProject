@@ -159,7 +159,6 @@ const boardStore = {
         });
     },
     deleteArticle(context, payload) {
-      console.log("삭제api");
       http.delete(`/board/${payload.articleNo}`).then((response) => {
         switch (response.status) {
           case 200:

@@ -13,6 +13,7 @@
       </b-col>
       <b-col class="text-right">
         <b-button
+          v-if="auth == 1"
           variant="outline-info"
           size="sm"
           class="w-30 mr-2"
@@ -20,6 +21,7 @@
           >글수정</b-button
         >
         <b-button
+          v-if="auth == 1"
           variant="outline-danger"
           size="sm"
           class="w-30"
@@ -29,30 +31,26 @@
       </b-col>
     </b-row>
     <view-detail :article="article"></view-detail>
-    <comment-write></comment-write>
-
-    <b-list-group>
-      <comment-row
-        v-for="comment in comments"
-        :key="comment.commentNo"
-        :articleNo="article.articleNo"
-        :comment="comment"></comment-row>
-    </b-list-group>
   </b-container>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 const noticeStore = "noticeStore";
-
+const userStore = "userStore";
 export default {
   // Dynamic module loading을 통해 component를 불러옴
+  data() {
+    return {
+      auth: 0,
+    };
+  },
   components: {
     "view-detail": () => import("@/components/notice/include/ViewDetail.vue"),
   },
   // 서버로부터 isbn 번호 받기 전에는 0으로 설정
   methods: {
-    ...mapActions(noticeStore, ["getArticle", "getComments"]),
+    ...mapActions(noticeStore, ["getArticle"]),
     listNotice() {
       this.$router.push({ name: "NoticeList" });
     },
@@ -70,13 +68,19 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(noticeStore, ["article", "comments"]),
+    ...mapGetters(noticeStore, ["article"]),
+    ...mapGetters(userStore, ["loginUser"]),
   },
   created() {
+    if (this.loginUser) {
+      if (this.loginUser.userAuth == 1) {
+        this.auth = 1;
+      }
+    }
+
     const articleNo = this.$route.params.articleNo;
     // action 함수 호출
     this.getArticle(articleNo);
-    this.getComments(articleNo);
   },
 };
 </script>
