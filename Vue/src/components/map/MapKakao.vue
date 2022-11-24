@@ -3,6 +3,7 @@
     <b-form inline class="map-search">
       <b-form-checkbox
         v-model="check.checked"
+        ref="test"
         @change="onChangeBookmark"
         size="lg"></b-form-checkbox>
       <b-form-select
@@ -124,7 +125,7 @@ export default {
 
       if (!isValid) {
         alert(errMsg);
-        this.check = false;
+        this.$refs.test.value = false;
         return;
       }
 
