@@ -66,7 +66,7 @@
               v-model="input.userName"
               type="text"
               required
-              placeholder="이름 변경..."
+              placeholder="이름 입력..."
             />
           </b-form-group>
           <b-form-group
@@ -81,7 +81,7 @@
               v-model="input.userAddr"
               type="text"
               required
-              placeholder="이메일 변경..."
+              placeholder="이메일 입력..."
             />
           </b-form-group>
           <b-form-group
@@ -96,7 +96,7 @@
               v-model="input.userPhone"
               type="text"
               required
-              placeholder="연락처 변경..."
+              placeholder="연락처 입력..."
             />
           </b-form-group>
 
