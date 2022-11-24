@@ -358,7 +358,7 @@ const mapStore = {
           type: "FAVORITE_AREAS",
           favoriteAreas: data,
         });
-        payload.callback();
+        payload.callback && payload.callback();
       });
     },
     /* 시군구 동 */
@@ -407,7 +407,7 @@ const mapStore = {
         gugunOptions: gugunOptions,
       });
     },
-    getGugunOptions({ dispatch }, sidoCode) {
+    async getGugunOptions({ dispatch }, sidoCode) {
       apiGetGugun(sidoCode, ({ data }) => {
         let gugunOptions = [{ text: "구/군", value: null }];
         data.forEach((el) => {

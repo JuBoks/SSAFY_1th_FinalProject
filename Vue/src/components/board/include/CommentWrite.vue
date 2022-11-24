@@ -1,16 +1,17 @@
 <template>
   <div class="box p-3">
-    <b-input-group style="width: 240px" prepend="작성자">
+    <!-- <b-input-group style="width: 240px" prepend="작성자">
       <b-form-input
         placeholder="작성자 입력..."
         v-model="userId"></b-form-input>
-    </b-input-group>
+    </b-input-group> -->
     <b-input-group>
       <b-form-textarea
         placeholder="댓글 입력..."
         rows="3"
         max-rows="6"
-        v-model="comment"></b-form-textarea>
+        v-model="comment"
+      ></b-form-textarea>
       <b-input-group-append>
         <b-button variant="secondary" @click="write">등록</b-button>
       </b-input-group-append>
@@ -22,6 +23,7 @@
 import { mapActions, mapGetters } from "vuex";
 
 const boardStore = "boardStore";
+const userStore = "userStore";
 
 export default {
   data() {
@@ -36,7 +38,7 @@ export default {
       const payload = {
         comment: {
           articleNo: this.article.articleNo,
-          userId: this.userId,
+          userId: this.loginUser.userId,
           comment: this.comment,
         },
         callback: () => {
@@ -63,12 +65,15 @@ export default {
   },
   computed: {
     ...mapGetters(boardStore, ["article"]),
+    ...mapGetters(userStore, ["loginUser"]),
   },
 };
 </script>
 
 <style scoped>
 .box {
-  background-color: rgba(27, 177, 231, 1);
+  border: 1px solid #eee;
+  background-color: #eee;
+  border-radius: 0.3rem;
 }
 </style>

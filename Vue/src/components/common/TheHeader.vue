@@ -6,7 +6,8 @@
         alt="logo"
         @click="moveMap"
         style="cursor: pointer"
-        width="100px" />
+        width="100px"
+      />
     </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -25,7 +26,7 @@
       <b-navbar-nav class="ml-auto">
         <template v-if="loginUser">
           <b-nav-item
-            ><span>반갑습니다.{{ this.loginUser.userId }}님</span></b-nav-item
+            ><span>{{ this.loginUser.userId }}님 어서오세요.</span></b-nav-item
           >
           <b-nav-item v-if="this.loginUser.userAuth == 1"
             ><span @click="moveAdmin">회원관리</span></b-nav-item
@@ -48,20 +49,23 @@
       title="로그인"
       header-bg-variant="dark"
       header-text-variant="light"
-      centered>
+      centered
+    >
       <!-- 수정 모달 창 body 작성 -->
       <div>
         <b-form-group label="아이디" :state="idState">
           <b-form-input
             ref="userId"
             v-model="input.userId"
-            placeholder="아이디 입력 ..."></b-form-input>
+            placeholder="아이디 입력 ..."
+          ></b-form-input>
         </b-form-group>
         <b-form-group label="비밀번호" :state="pwdState">
           <b-form-input
             v-model="input.userPwd"
             type="password"
-            placeholder="비밀번호 입력 ..."></b-form-input>
+            placeholder="비밀번호 입력 ..."
+          ></b-form-input>
         </b-form-group>
       </div>
       <!-- 수정 모달 창 Footer 작성 -->
@@ -84,18 +88,21 @@
       header-bg-variant="dark"
       header-text-variant="light"
       centered
-      hide-footer>
+      hide-footer
+    >
       <!-- 인증번호 모달 창 body 작성 -->
       <div>
         <b-form-group
           label-cols="12"
           label="인증번호:"
           label-for="tmpNum"
-          description="이메일로 인증번호가 발송되었습니다. 확인해주세요.">
+          description="이메일로 인증번호가 발송되었습니다. 확인해주세요."
+        >
           <b-form-input
             id="tmpNum"
             v-model="tmpNum"
-            placeholder="인증번호 입력 ..."></b-form-input>
+            placeholder="인증번호 입력 ..."
+          ></b-form-input>
         </b-form-group>
       </div>
       <!-- 인증번호 모달 창 Footer 작성 -->

@@ -1,6 +1,9 @@
 <template>
   <b-list-group>
-    <template v-if="favoriteAreas.length == 0">
+    <template v-if="!this.loginUser">
+      <div class="text-center">로그인 후 사용가능한 서비스입니다.</div>
+    </template>
+    <template v-else-if="favoriteAreas.length == 0">
       <div class="text-center">관심지역을 추가해주세요.</div>
     </template>
     <b-list-group
@@ -8,7 +11,8 @@
       class="row"
       horizontal
       v-for="(el, idx) in favoriteAreas"
-      :key="idx">
+      :key="idx"
+    >
       <b-list-group-item
         class="col-9 text-center"
         button
@@ -33,8 +37,15 @@ export default {
     ...mapGetters(mapStore, ["favoriteAreas", "dongSelected"]),
     ...mapGetters(userStore, ["loginUser"]),
   },
+  created() {
+    this.loginUser &&
+      this.selectFavoriteArea({
+        userId: this.loginUser.userId,
+      });
+  },
   methods: {
     ...mapActions(mapStore, [
+      "selectFavoriteArea",
       "deleteFavoriteArea",
       "searchArea",
       "setBookmark",

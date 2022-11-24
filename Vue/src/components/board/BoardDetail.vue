@@ -11,7 +11,10 @@
           >목록</b-button
         >
       </b-col>
-      <b-col class="text-right">
+      <b-col
+        v-if="this.loginUser.userId == this.article.userId"
+        class="text-right"
+      >
         <b-button
           variant="outline-info"
           size="sm"
@@ -36,7 +39,8 @@
         v-for="comment in comments"
         :key="comment.commentNo"
         :articleNo="article.articleNo"
-        :comment="comment"></comment-row>
+        :comment="comment"
+      ></comment-row>
     </b-list-group>
   </b-container>
 </template>
@@ -44,6 +48,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 const boardStore = "boardStore";
+const userStore = "userStore";
 
 export default {
   // Dynamic module loading을 통해 component를 불러옴
@@ -73,6 +78,7 @@ export default {
   },
   computed: {
     ...mapGetters(boardStore, ["article", "comments"]),
+    ...mapGetters(userStore, ["loginUser"]),
   },
   created() {
     const articleNo = this.$route.params.articleNo;

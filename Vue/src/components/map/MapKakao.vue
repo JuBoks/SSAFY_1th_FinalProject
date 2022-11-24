@@ -5,7 +5,8 @@
         v-model="check.checked"
         ref="test"
         @change="onChangeBookmark"
-        size="lg"></b-form-checkbox>
+        size="lg"
+      ></b-form-checkbox>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedSido"
@@ -13,7 +14,8 @@
         text-field="text"
         :options="sidoOptions"
         :text="selectedSidoName"
-        @change="onSidoChanged"></b-form-select>
+        @change="onSidoChanged"
+      ></b-form-select>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedGugun"
@@ -21,7 +23,8 @@
         text-field="text"
         :options="gugunOptions"
         :value="null"
-        @change="onGugunChanged"></b-form-select>
+        @change="onGugunChanged"
+      ></b-form-select>
       <b-form-select
         class="mb-2 mr-sm-2 mb-sm-0"
         v-model="selectedDong"
@@ -29,7 +32,8 @@
         text-field="text"
         :options="dongOptions"
         :value="null"
-        @change="onDongChanged"></b-form-select>
+        @change="onDongChanged"
+      ></b-form-select>
     </b-form>
 
     <div id="map" style="width: 100%; height: 100%"></div>
@@ -74,6 +78,9 @@ export default {
     check() {
       return { checked: this.bookmark };
     },
+  },
+  created() {
+    this.setBookmark(false);
   },
   async mounted() {
     // 시/도 초기화
@@ -125,7 +132,9 @@ export default {
 
       if (!isValid) {
         alert(errMsg);
-        this.$refs.test.value = false;
+        //this.$refs.test.value = false;
+        // this.setBookmark(false);
+        // this.check.checked = false;
         return;
       }
 
@@ -135,7 +144,7 @@ export default {
       };
 
       this.setBookmark(checked);
-
+      console.log("checked", checked);
       if (checked) {
         // 관심지역에 추가
         this.registFavoriteArea(payload);
@@ -147,10 +156,12 @@ export default {
 
     async onSidoChanged() {
       // 1 구군, 동 초기화
-      this.setGugun(null);
-      this.setDong(null);
       this.setGugunOptions([{ text: "구/군", value: null }]);
       this.setDongOptions([{ text: "동", value: null }]);
+      this.setGugun(null);
+      this.setDong(null);
+      this.selectedGugun = this.gugunSelected;
+      this.selectedDong = this.dongSelected;
 
       // 2. 값 셋팅
       this.setSido(this.selectedSido);
@@ -158,14 +169,16 @@ export default {
     },
     async onGugunChanged() {
       // 1. 동 초기화
-      this.setDong(null);
       this.setDongOptions([{ text: "동", value: null }]);
+      this.setDong(null);
+      this.selectedDong = this.dongSelected;
 
       // 2. 동 셋팅
       this.setGugun(this.selectedGugun);
       this.getDongOptions(this.selectedGugun.code);
     },
     onDongChanged() {
+      this.setBookmark(false);
       this.setDong(this.selectedDong);
       this.search();
       // 관심지역 추가 부분
@@ -175,7 +188,8 @@ export default {
           callback: () => {
             for (let el of this.favoriteAreas) {
               if (el.dongCode == this.selectedDong.code) {
-                this.check = true;
+                // this.check.checked = true;
+                this.setBookmark(true);
                 break;
               }
             }

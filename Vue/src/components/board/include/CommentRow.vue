@@ -8,7 +8,7 @@
     <p :inner-html.prop="comment.comment | filterEnterToBr"></p>
 
     <div class="text-right">
-      <b-button-group>
+      <b-button-group v-if="this.loginUser.userId == this.comment.userId">
         <b-button variant="secondary" @click="showModalModify">수정</b-button>
         <b-button variant="outline-secondary" @click="showModalDelete"
           >삭제</b-button
@@ -23,20 +23,22 @@
       header-bg-variant="dark"
       header-text-variant="light"
       centered
-      hide-footer>
+      hide-footer
+    >
       <!-- 수정 모달 창 Body 작성 -->
       <div>
-        <b-input-group style="width: 240px" prepend="작성자">
+        <!-- <b-input-group style="width: 240px" prepend="작성자">
           <b-form-input
             v-model="input.userName"
             placeholder="작성자 입력..."
             readonly></b-form-input>
-        </b-input-group>
+        </b-input-group> -->
         <b-form-textarea
           v-model="input.comment"
           placeholder="댓글 입력..."
           rows="3"
-          max-rows="6"></b-form-textarea>
+          max-rows="6"
+        ></b-form-textarea>
       </div>
 
       <!-- 수정 모달 창 Footer 작성 -->
@@ -51,14 +53,21 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 const boardStore = "boardStore";
+const userStore = "userStore";
 
 export default {
   props: {
     articleNo: Number,
     comment: Object,
+  },
+  computed: {
+    ...mapGetters(userStore, ["loginUser"]),
+    input() {
+      return { ...this.comment }; // Vuex의 state.comments 객체에 직접 접근하는걸 막기 위해 Deep Copy
+    },
   },
   methods: {
     ...mapActions(boardStore, [
@@ -134,11 +143,6 @@ export default {
       };
 
       this.deleteComment(payload);
-    },
-  },
-  computed: {
-    input() {
-      return { ...this.comment }; // Vuex의 state.comments 객체에 직접 접근하는걸 막기 위해 Deep Copy
     },
   },
 };

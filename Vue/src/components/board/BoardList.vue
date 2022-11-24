@@ -12,16 +12,18 @@
             id="inline-form-custom-select-pref"
             class="mb-2 mr-sm-1 mb-sm-0"
             :options="searchOption"
-            v-model="selected"></b-form-select>
+            v-model="selected"
+          ></b-form-select>
           <b-form-input
             v-model="word"
             class="mr-sm-1"
             placeholder="검색어..."
-            @keydown.native="search"></b-form-input>
+            @keydown.native="search"
+          ></b-form-input>
           <b-button variant="primary" @click="doSearch">검색</b-button>
         </b-form>
       </b-col>
-      <b-col class="text-right">
+      <b-col v-if="this.loginUser" class="text-right">
         <b-button variant="outline-primary" @click="movePage">등록</b-button>
       </b-col>
     </b-row>
@@ -45,7 +47,8 @@
               :hit="article.hit"
               :registerTime="article.registerTime"
               :subject="article.subject"
-              :userId="article.userId"></list-row>
+              :userId="article.userId"
+            ></list-row>
           </tbody>
         </b-table-simple>
       </b-col>
@@ -64,7 +67,8 @@
       :per-page="articlesPerPage"
       @page-click="pageClick"
       first-number
-      last-number></b-pagination>
+      last-number
+    ></b-pagination>
   </b-container>
 </template>
 
@@ -72,6 +76,7 @@
 import { mapActions, mapGetters } from "vuex";
 
 const boardStore = "boardStore";
+const userStore = "userStore";
 
 export default {
   data() {
@@ -89,6 +94,7 @@ export default {
   },
   computed: {
     ...mapGetters(boardStore, ["articles", "articlesPerPage", "totalArticles"]),
+    ...mapGetters(userStore, ["loginUser"]),
   },
   // Dynamic module loading을 통해 component를 불러옴
   components: {
