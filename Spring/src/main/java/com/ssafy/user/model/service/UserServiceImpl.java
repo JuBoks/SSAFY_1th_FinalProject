@@ -11,7 +11,10 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.favoritearea.model.dao.FavoriteAreaDao;
+import com.ssafy.user.model.dao.TmpNumDao;
 import com.ssafy.user.model.dao.UserDao;
 import com.ssafy.user.model.dto.TmpNumDto;
 import com.ssafy.user.model.dto.UserDto;
@@ -23,6 +26,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private TmpNumDao tmpNumDao;
+	@Autowired
+	private FavoriteAreaDao favoriteAreaDao;
 	@Autowired
 	private TmpNumService tmpNumService;
 
@@ -47,7 +54,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public boolean remove(String userId) throws SQLException {
+		tmpNumDao.delete(userId);
+		favoriteAreaDao.deleteByUser(userId);
 		return userDao.delete(userId) == 1;
 	}
 

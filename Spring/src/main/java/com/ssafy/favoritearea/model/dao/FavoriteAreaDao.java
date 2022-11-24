@@ -13,4 +13,6 @@ public interface FavoriteAreaDao {
 	
 	int delete(FavoriteAreaDto favoriteAreaDto) throws SQLException;
 	
+	int deleteByUser(String userId) throws SQLException;
+	
 }
