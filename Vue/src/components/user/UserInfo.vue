@@ -97,8 +97,8 @@ export default {
       this.modifyUser({
         userInfo: { ...this.input },
         callback: () => {
-          // let token = sessionStorage.getItem("access-token");
-          // this.getUserInfo(token);
+          let token = sessionStorage.getItem("access-token");
+          this.getUserInfo(token);
           this.$router.push({ name: "Map" });
         },
       });
