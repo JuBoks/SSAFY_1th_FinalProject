@@ -242,6 +242,22 @@ public class UserRestController {
 		}
 	}
 	
+	@GetMapping("/checkId/{userId}")
+	public ResponseEntity<?> checkId(@PathVariable("userId") String userId) {
+
+		try {
+			boolean isExist = userService.checkId(userId);
+			if(isExist) {
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+			}
+		}
+		catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@GetMapping("/tempNum/{userId}")
 	public ResponseEntity<?> checkTepNum(@PathVariable("userId") String userId, @RequestParam String tmpNum) {
 

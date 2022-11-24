@@ -35,6 +35,8 @@ public interface UserService {
 	void insertTmpNumAndSendEmail(UserDto userDto) throws Exception;
 
 	boolean modifyPwd(Map<String, String> param) throws Exception;
+
+	boolean checkId(String userId) throws Exception;
 	
 }
 

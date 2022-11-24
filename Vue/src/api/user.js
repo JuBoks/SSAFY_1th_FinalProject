@@ -10,6 +10,10 @@ async function findById(userid, success, fail) {
   await api.get(`/user/info/${userid}`).then(success).catch(fail);
 }
 
+async function checkId(userid, success, fail) {
+  await api.get(`/user/checkId/${userid}`).then(success).catch(fail);
+}
+
 async function tokenRegeneration(user, success, fail) {
   api.defaults.headers["refresh-token"] =
     sessionStorage.getItem("refresh-token"); //axios header에 refresh-token 셋팅
@@ -41,6 +45,7 @@ async function modifyPwd(userid, userPwd, success, fail) {
 export {
   login,
   findById,
+  checkId,
   tokenRegeneration,
   logout,
   findPwd,

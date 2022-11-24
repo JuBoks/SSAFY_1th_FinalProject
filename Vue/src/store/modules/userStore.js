@@ -57,6 +57,7 @@ const userStore = {
             sessionStorage.setItem("access-token", accessToken);
             sessionStorage.setItem("refresh-token", refreshToken);
           } else {
+            alert("아이디 혹은 비밀번호를 다시 확인해주세요.");
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
             commit("SET_IS_VALID_TOKEN", false);

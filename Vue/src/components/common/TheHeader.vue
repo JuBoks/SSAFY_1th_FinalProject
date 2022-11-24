@@ -115,7 +115,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import { findPwd, checkTempNum } from "@/api/user";
+import { findPwd, checkId, checkTempNum } from "@/api/user";
 
 const userStore = "userStore";
 export default {
@@ -151,7 +151,7 @@ export default {
       }
     },
 
-    findPwd() {
+    async findPwd() {
       let isValid = true;
       let errMsg = "";
 
@@ -163,6 +163,12 @@ export default {
 
       if (!isValid) {
         alert(errMsg);
+        return;
+      }
+
+      const { data } = checkId(this.input.userId);
+      if (!data) {
+        alert("없는 아이디입니다.");
         return;
       }
 

@@ -220,5 +220,10 @@ public class UserServiceImpl implements UserService {
 		return userDao.updatePwd(param) == 1;
 	}
 
+	@Override
+	public boolean checkId(String userId) throws Exception {
+		return userId.equals(userDao.selectId(userId));
+	}
+
 
 }

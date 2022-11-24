@@ -37,4 +37,6 @@ public interface UserDao {
 	Object getRefreshToken(String userId) throws SQLException;
 
 	int updatePwd(Map<String, String> map) throws SQLException;
+
+	String selectId(String userId) throws SQLException;
 }

@@ -13,79 +13,91 @@
             label-cols="12"
             label="권한:"
             label-for="userAuth"
-            description="사용자권한 선택">
+            description="사용자권한 선택"
+          >
             <b-form-select
               id="userAuth"
               ref="userAuth"
               v-model="input.userAuth"
               :options="authOption"
-              required />
+              required
+            />
           </b-form-group>
           <b-form-group
             v-if="type == 'create'"
             label-cols="12"
             label="아이디:"
             label-for="userName"
-            description="아이디 입력">
+            description="아이디 입력"
+          >
             <b-form-input
               id="userId"
               ref="userId"
               v-model="input.userId"
               type="text"
               required
-              placeholder="아이디 입력..." />
+              placeholder="아이디 입력..."
+            />
           </b-form-group>
           <b-form-group
             label-cols="12"
             label="비밀번호:"
             label-for="userPwd"
-            description="비밀번호 입력">
+            description="비밀번호 입력"
+          >
             <b-form-input
               id="userPwd"
               ref="userPwd"
               v-model="input.userPwd"
               type="password"
               required
-              placeholder="비밀번호 입력..." />
+              placeholder="비밀번호 입력..."
+            />
           </b-form-group>
           <b-form-group
             label-cols="12"
             label="이름:"
             label-for="userName"
-            description="이름 변경">
+            description="이름 변경"
+          >
             <b-form-input
               id="userName"
               ref="userName"
               v-model="input.userName"
               type="text"
               required
-              placeholder="이름 변경..." />
+              placeholder="이름 변경..."
+            />
           </b-form-group>
           <b-form-group
             label-cols="12"
             label="이메일:"
             label-for="userAddr"
-            description="이메일를 입력하세요.">
+            description="이메일를 입력하세요."
+          >
             <b-form-input
               id="userAddr"
               ref="userAddr"
               v-model="input.userAddr"
               type="text"
               required
-              placeholder="이메일 변경..." />
+              placeholder="이메일 변경..."
+            />
           </b-form-group>
           <b-form-group
             label-cols="12"
             label="연락처:"
             label-for="userPhone"
-            description="연락처를 입력하세요.">
+            description="연락처를 입력하세요."
+          >
             <b-form-input
               id="userPhone"
               ref="userPhone"
               v-model="input.userPhone"
               type="text"
               required
-              placeholder="연락처 변경..." />
+              placeholder="연락처 변경..."
+            />
           </b-form-group>
 
           <b-row class="mb-1">
@@ -110,6 +122,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { checkId } from "@/api/user";
+
 const adminStore = "adminStore";
 const userStore = "userStore";
 export default {
@@ -157,6 +171,12 @@ export default {
         alert(errMsg);
       } else {
         if (this.type == "create") {
+          const { data } = checkId(this.input.userId);
+          if (!data) {
+            alert("이미 존재하는 아이디입니다.");
+            this.$refs.userId.focus();
+            return;
+          }
           this.createUser({
             userInfo: this.input,
             callback: () => {
