@@ -23,4 +23,9 @@
 		AND			dongCode = #{dongCode}
 	</delete>
 	
+	<delete id="deleteByUser" parameterType="string">
+		DELETE FROM favoritearea
+		WHERE		user_id = #{userId}
+	</delete>
+	
 </mapper>
