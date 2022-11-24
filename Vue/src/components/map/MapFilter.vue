@@ -2,7 +2,7 @@
   <b-navbar class="map-nav" toggleable="md" variant="light">
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav>
+      <b-navbar-nav class="mr-auto">
         <b-nav-item>
           <b-button
             pill
@@ -12,6 +12,8 @@
             아파트</b-button
           >
         </b-nav-item>
+      </b-navbar-nav>
+      <b-navbar-nav>
         <b-nav-item>
           <b-button
             pill
