@@ -1,6 +1,5 @@
 /* global kakao */
-const KAKAO_MAP_API_KEY = "fb37ee426ff3d4073d98482866d2228b";
-const KAKAO_MAP_URL = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${KAKAO_MAP_API_KEY}&libraries=services,clusterer,drawing`;
+const KAKAO_MAP_URL = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_KAKAO_MAP_API_KEY}&libraries=services,clusterer,drawing`;
 const APT_MARKER_IMG = require("@/assets/img/apartment_marker.png");
 const MARKER_WIDTH = 40;
 const MARKER_HEIGHT = 40;
@@ -84,13 +83,6 @@ export class Map {
     });
   }
 
-  // clearAllianceMarkers() {
-  //   window.allianceMarkers.forEach((el) => {
-  //     el.setMap(null);
-  //   });
-  //   window.allianceMarkers = [];
-  // }
-
   // 맵에 표시된 모든 마커 제거
   clearAllMarkers() {
     this.clearAptMarkers();
@@ -98,20 +90,11 @@ export class Map {
     window.clusters.clear();
   }
 
-  // addMarker(marker) {
-  //   window.markers.push(marker);
-  //   marker.setMap(window.map);
-  // }
-
   addAptCluster(markerList) {
     window.aptMarkers.push(...markerList);
     window.clusters.addMarkers(markerList);
   }
 
-  // addAllianceCluster(markerList) {
-  //   window.allianceMarkers.push(...markerList);
-  //   window.clusters.addMarkers(markerList);
-  // }
   createRoadView(roadviewContainer, position) {
     const roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
     const roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체

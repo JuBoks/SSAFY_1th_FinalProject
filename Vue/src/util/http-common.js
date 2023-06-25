@@ -2,7 +2,7 @@ import axios from "axios";
 
 const ERROR_MSG_SERVER = "서버 오류입니다.";
 const http = axios.create({
-  baseURL: "http://localhost:9999",
+  baseURL: process.env.VUE_APP_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
