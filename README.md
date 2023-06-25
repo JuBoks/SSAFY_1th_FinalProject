@@ -31,4 +31,4 @@ https://www.youtube.com/watch?v=_ERO1F2lcho
 - https://docs.google.com/spreadsheets/d/1OGLzLOjwNU6aKRS445Vac1VyPdrGQwlOJAPp4nw9YtI/edit?usp=sharing
 
 # 🌠 깨달은 점
-- 데이터를 가져와서 가공하고 DB에 넣는 작업이 많이 힘들었다. 처음에 레코드를 넣을 때 ID를 시도코드+구군코드+동코드+개수 같이 의미있는 아이디로 사용해보고 싶어서 프로시저를 만들고 했지만 시간이 너무 오래 걸려서 하지 못했다. 다음에 시도할 때는 쿼리 플랜을 중점으로 개선해보고자 한다. (관련코드: )
+- 데이터를 가져와서 가공하고 DB에 넣는 작업이 많이 힘들었다. 처음에 레코드를 넣을 때 ID를 시도코드+구군코드+동코드+개수 같이 의미있는 아이디로 사용해보고 싶어서 프로시저를 만들고 했지만 시간이 너무 오래 걸려서 하지 못했다. 다음에 시도할 때는 쿼리 플랜을 중점으로 개선해보고자 한다. (관련코드: https://github.com/JuBoks/SSAFY_1th_FinalProject/tree/master/sql/%EC%8B%A4%ED%8C%A8)
